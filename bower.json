@@ -1,0 +1,14 @@
+{
+  "name": "information_visualization",
+  "version": "0.0.0",
+  "description": "",
+  "main": "index.html",
+  "moduleType": [],
+  "license": "MIT",
+  "homepage": "",
+  "private": true,
+  "dependencies": {},
+  "devDependencies": {
+    "d3": "~3.5.6"
+  }
+}
