@@ -44,9 +44,9 @@ angular.module('timelineModule', ['angularAwesomeSlider'])
             }
         };
 
-        genVis($scope.yearValues);
+        genVisYearTimeline($scope.yearValues);
     }]);
 
-function genVis(data) {
+function genVisYearTimeline(data) {
 	console.log(data);
 }
