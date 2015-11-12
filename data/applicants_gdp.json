@@ -20,7 +20,7 @@
     }, {
         "applicants_population": 985.9275277538599,
         "country": "Belgium",
-        "GDP": 46927,
+        "GDP": 48561,
         "year": 2008,
         "applicants": 11100,
         "iso2": "BE",
@@ -29,7 +29,7 @@
     }, {
         "applicants_population": 1474.894288139896,
         "country": "Belgium",
-        "GDP": 46927,
+        "GDP": 44999,
         "year": 2009,
         "applicants": 16605,
         "iso2": "BE",
@@ -38,7 +38,7 @@
     }, {
         "applicants_population": 1914.5646721382388,
         "country": "Belgium",
-        "GDP": 46927,
+        "GDP": 44361,
         "year": 2010,
         "applicants": 21555,
         "iso2": "BE",
@@ -47,7 +47,7 @@
     }, {
         "applicants_population": 2252.08941136929,
         "country": "Belgium",
-        "GDP": 46927,
+        "GDP": 47802,
         "year": 2011,
         "applicants": 25355,
         "iso2": "BE",
@@ -56,7 +56,7 @@
     }, {
         "applicants_population": 1628.5568667898217,
         "country": "Belgium",
-        "GDP": 46927,
+        "GDP": 44818,
         "year": 2012,
         "applicants": 18335,
         "iso2": "BE",
@@ -92,7 +92,7 @@
     }, {
         "applicants_population": 82.61366877167221,
         "country": "Bulgaria",
-        "GDP": 7499,
+        "GDP": 7116,
         "year": 2008,
         "applicants": 595,
         "iso2": "BG",
@@ -101,7 +101,7 @@
     }, {
         "applicants_population": 97.19255149608495,
         "country": "Bulgaria",
-        "GDP": 7499,
+        "GDP": 6738,
         "year": 2009,
         "applicants": 700,
         "iso2": "BG",
@@ -110,7 +110,7 @@
     }, {
         "applicants_population": 118.7137593273609,
         "country": "Bulgaria",
-        "GDP": 7499,
+        "GDP": 6581,
         "year": 2010,
         "applicants": 855,
         "iso2": "BG",
@@ -119,7 +119,7 @@
     }, {
         "applicants_population": 97.88678400677126,
         "country": "Bulgaria",
-        "GDP": 7499,
+        "GDP": 7589,
         "year": 2011,
         "applicants": 705,
         "iso2": "BG",
@@ -128,7 +128,7 @@
     }, {
         "applicants_population": 171.4754301395213,
         "country": "Bulgaria",
-        "GDP": 7499,
+        "GDP": 7199,
         "year": 2012,
         "applicants": 1235,
         "iso2": "BG",
@@ -164,7 +164,7 @@
     }, {
         "applicants_population": 1834.5008294104841,
         "country": "Switzerland",
-        "GDP": 84733,
+        "GDP": 72120,
         "year": 2008,
         "applicants": 15110,
         "iso2": "CH",
@@ -173,7 +173,7 @@
     }, {
         "applicants_population": 1749.5140272538106,
         "country": "Switzerland",
-        "GDP": 84733,
+        "GDP": 69672,
         "year": 2009,
         "applicants": 14410,
         "iso2": "CH",
@@ -182,7 +182,7 @@
     }, {
         "applicants_population": 1629.3184070608006,
         "country": "Switzerland",
-        "GDP": 84733,
+        "GDP": 74277,
         "year": 2010,
         "applicants": 13420,
         "iso2": "CH",
@@ -191,7 +191,7 @@
     }, {
         "applicants_population": 2334.101816374359,
         "country": "Switzerland",
-        "GDP": 84733,
+        "GDP": 88003,
         "year": 2011,
         "applicants": 19225,
         "iso2": "CH",
@@ -200,7 +200,7 @@
     }, {
         "applicants_population": 3130.5495622997573,
         "country": "Switzerland",
-        "GDP": 84733,
+        "GDP": 83295,
         "year": 2012,
         "applicants": 25785,
         "iso2": "CH",
@@ -236,7 +236,7 @@
     }, {
         "applicants_population": 4628.055461105444,
         "country": "Cyprus",
-        "GDP": 27911,
+        "GDP": 34950,
         "year": 2008,
         "applicants": 3920,
         "iso2": "CY",
@@ -245,7 +245,7 @@
     }, {
         "applicants_population": 3778.0044580452604,
         "country": "Cyprus",
-        "GDP": 27911,
+        "GDP": 31673,
         "year": 2009,
         "applicants": 3200,
         "iso2": "CY",
@@ -254,7 +254,7 @@
     }, {
         "applicants_population": 3347.075824549473,
         "country": "Cyprus",
-        "GDP": 27911,
+        "GDP": 30439,
         "year": 2010,
         "applicants": 2835,
         "iso2": "CY",
@@ -263,7 +263,7 @@
     }, {
         "applicants_population": 2060.193056027806,
         "country": "Cyprus",
-        "GDP": 27911,
+        "GDP": 31837,
         "year": 2011,
         "applicants": 1745,
         "iso2": "CY",
@@ -272,7 +272,7 @@
     }, {
         "applicants_population": 1871.292833125543,
         "country": "Cyprus",
-        "GDP": 27911,
+        "GDP": 28868,
         "year": 2012,
         "applicants": 1585,
         "iso2": "CY",
@@ -308,7 +308,7 @@
     }, {
         "applicants_population": 100.11126109349016,
         "country": "Czech Republic",
-        "GDP": 19858,
+        "GDP": 22649,
         "year": 2008,
         "applicants": 1055,
         "iso2": "CZ",
@@ -317,7 +317,7 @@
     }, {
         "applicants_population": 58.83315817816483,
         "country": "Czech Republic",
-        "GDP": 19858,
+        "GDP": 19698,
         "year": 2009,
         "applicants": 620,
         "iso2": "CZ",
@@ -326,7 +326,7 @@
     }, {
         "applicants_population": 37.00795433787788,
         "country": "Czech Republic",
-        "GDP": 19858,
+        "GDP": 19764,
         "year": 2010,
         "applicants": 390,
         "iso2": "CZ",
@@ -335,7 +335,7 @@
     }, {
         "applicants_population": 45.54825149277277,
         "country": "Czech Republic",
-        "GDP": 19858,
+        "GDP": 21656,
         "year": 2011,
         "applicants": 480,
         "iso2": "CZ",
@@ -344,7 +344,7 @@
     }, {
         "applicants_population": 47.92055625802136,
         "country": "Czech Republic",
-        "GDP": 19858,
+        "GDP": 19670,
         "year": 2012,
         "applicants": 505,
         "iso2": "CZ",
@@ -380,7 +380,7 @@
     }, {
         "applicants_population": 262.76886687855716,
         "country": "Germany",
-        "GDP": 46255,
+        "GDP": 45633,
         "year": 2008,
         "applicants": 21330,
         "iso2": "DE",
@@ -389,7 +389,7 @@
     }, {
         "applicants_population": 339.6407716756597,
         "country": "Germany",
-        "GDP": 46255,
+        "GDP": 41671,
         "year": 2009,
         "applicants": 27570,
         "iso2": "DE",
@@ -398,7 +398,7 @@
     }, {
         "applicants_population": 508.10604380713033,
         "country": "Germany",
-        "GDP": 46255,
+        "GDP": 41726,
         "year": 2010,
         "applicants": 41245,
         "iso2": "DE",
@@ -407,7 +407,7 @@
     }, {
         "applicants_population": 562.8033606819918,
         "country": "Germany",
-        "GDP": 46255,
+        "GDP": 45868,
         "year": 2011,
         "applicants": 45685,
         "iso2": "DE",
@@ -416,7 +416,7 @@
     }, {
         "applicants_population": 793.5422672284229,
         "country": "Germany",
-        "GDP": 46255,
+        "GDP": 43932,
         "year": 2012,
         "applicants": 64415,
         "iso2": "DE",
@@ -452,7 +452,7 @@
     }, {
         "applicants_population": 414.3318170614598,
         "country": "Denmark",
-        "GDP": 59819,
+        "GDP": 64182,
         "year": 2008,
         "applicants": 2345,
         "iso2": "DK",
@@ -461,7 +461,7 @@
     }, {
         "applicants_population": 657.2769123533606,
         "country": "Denmark",
-        "GDP": 59819,
+        "GDP": 57896,
         "year": 2009,
         "applicants": 3720,
         "iso2": "DK",
@@ -470,7 +470,7 @@
     }, {
         "applicants_population": 894.0379506741947,
         "country": "Denmark",
-        "GDP": 59819,
+        "GDP": 57648,
         "year": 2010,
         "applicants": 5060,
         "iso2": "DK",
@@ -479,7 +479,7 @@
     }, {
         "applicants_population": 697.031564310217,
         "country": "Denmark",
-        "GDP": 59819,
+        "GDP": 61304,
         "year": 2011,
         "applicants": 3945,
         "iso2": "DK",
@@ -488,7 +488,7 @@
     }, {
         "applicants_population": 1068.074982574211,
         "country": "Denmark",
-        "GDP": 59819,
+        "GDP": 57636,
         "year": 2012,
         "applicants": 6045,
         "iso2": "DK",
@@ -524,7 +524,7 @@
     }, {
         "applicants_population": 3.8072873001840444,
         "country": "Estonia",
-        "GDP": 18877,
+        "GDP": 18088,
         "year": 2008,
         "applicants": 5,
         "iso2": "EE",
@@ -533,7 +533,7 @@
     }, {
         "applicants_population": 30.458298401472355,
         "country": "Estonia",
-        "GDP": 18877,
+        "GDP": 14718,
         "year": 2009,
         "applicants": 40,
         "iso2": "EE",
@@ -542,7 +542,7 @@
     }, {
         "applicants_population": 22.843723801104264,
         "country": "Estonia",
-        "GDP": 18877,
+        "GDP": 14632,
         "year": 2010,
         "applicants": 30,
         "iso2": "EE",
@@ -551,7 +551,7 @@
     }, {
         "applicants_population": 53.30202220257662,
         "country": "Estonia",
-        "GDP": 18877,
+        "GDP": 17177,
         "year": 2011,
         "applicants": 70,
         "iso2": "EE",
@@ -560,7 +560,7 @@
     }, {
         "applicants_population": 57.10930950276067,
         "country": "Estonia",
-        "GDP": 18877,
+        "GDP": 17132,
         "year": 2012,
         "applicants": 75,
         "iso2": "EE",
@@ -596,7 +596,7 @@
     }, {
         "applicants_population": 861.5055195081751,
         "country": "Greece",
-        "GDP": 21966,
+        "GDP": 25962,
         "year": 2011,
         "applicants": 9315,
         "iso2": "EL",
@@ -605,7 +605,7 @@
     }, {
         "applicants_population": 885.5518356726545,
         "country": "Greece",
-        "GDP": 21966,
+        "GDP": 22494,
         "year": 2012,
         "applicants": 9575,
         "iso2": "EL",
@@ -641,7 +641,7 @@
     }, {
         "applicants_population": 54.80205540653608,
         "country": "Spain",
-        "GDP": 29881,
+        "GDP": 30738,
         "year": 2010,
         "applicants": 2545,
         "iso2": "ES",
@@ -650,7 +650,7 @@
     }, {
         "applicants_population": 63.953675661065674,
         "country": "Spain",
-        "GDP": 29881,
+        "GDP": 31973,
         "year": 2011,
         "applicants": 2970,
         "iso2": "ES",
@@ -659,7 +659,7 @@
     }, {
         "applicants_population": 50.71074282215814,
         "country": "Spain",
-        "GDP": 29881,
+        "GDP": 28985,
         "year": 2012,
         "applicants": 2355,
         "iso2": "ES",
@@ -695,7 +695,7 @@
     }, {
         "applicants_population": 530.9084675423031,
         "country": "Finland",
-        "GDP": 49310,
+        "GDP": 47416,
         "year": 2012,
         "applicants": 2905,
         "iso2": "FI",
@@ -731,7 +731,7 @@
     }, {
         "applicants_population": 634.0381998445303,
         "country": "France",
-        "GDP": 42628,
+        "GDP": 41631,
         "year": 2009,
         "applicants": 42070,
         "iso2": "FR",
@@ -740,7 +740,7 @@
     }, {
         "applicants_population": 723.786178928775,
         "country": "France",
-        "GDP": 42628,
+        "GDP": 40706,
         "year": 2010,
         "applicants": 48025,
         "iso2": "FR",
@@ -749,7 +749,7 @@
     }, {
         "applicants_population": 785.7281090775989,
         "country": "France",
-        "GDP": 42628,
+        "GDP": 43807,
         "year": 2011,
         "applicants": 52135,
         "iso2": "FR",
@@ -758,7 +758,7 @@
     }, {
         "applicants_population": 817.8294013445076,
         "country": "France",
-        "GDP": 42628,
+        "GDP": 40850,
         "year": 2012,
         "applicants": 54265,
         "iso2": "FR",
@@ -821,7 +821,7 @@
     }, {
         "applicants_population": 6.091989034419738,
         "country": "Hungary",
-        "GDP": 13487,
+        "GDP": 13983,
         "year": 2011,
         "applicants": 60,
         "iso2": "HU",
@@ -857,7 +857,7 @@
     }, {
         "applicants_population": 819.3026847835604,
         "country": "Ireland",
-        "GDP": 50470,
+        "GDP": 60969,
         "year": 2008,
         "applicants": 3790,
         "iso2": "IE",
@@ -866,7 +866,7 @@
     }, {
         "applicants_population": 573.944229050225,
         "country": "Ireland",
-        "GDP": 50470,
+        "GDP": 51497,
         "year": 2009,
         "applicants": 2655,
         "iso2": "IE",
@@ -875,7 +875,7 @@
     }, {
         "applicants_population": 415.0557136634395,
         "country": "Ireland",
-        "GDP": 50470,
+        "GDP": 47904,
         "year": 2010,
         "applicants": 1920,
         "iso2": "IE",
@@ -884,7 +884,7 @@
     }, {
         "applicants_population": 276.7038091089597,
         "country": "Ireland",
-        "GDP": 50470,
+        "GDP": 51948,
         "year": 2011,
         "applicants": 1280,
         "iso2": "IE",
@@ -893,7 +893,7 @@
     }, {
         "applicants_population": 202.1234855600604,
         "country": "Ireland",
-        "GDP": 50470,
+        "GDP": 48391,
         "year": 2012,
         "applicants": 935,
         "iso2": "IE",
@@ -929,7 +929,7 @@
     }, {
         "applicants_population": 495.7594636928731,
         "country": "Italy",
-        "GDP": 35477,
+        "GDP": 40660,
         "year": 2008,
         "applicants": 30140,
         "iso2": "IT",
@@ -938,7 +938,7 @@
     }, {
         "applicants_population": 290.0702767824757,
         "country": "Italy",
-        "GDP": 35477,
+        "GDP": 36995,
         "year": 2009,
         "applicants": 17635,
         "iso2": "IT",
@@ -947,7 +947,7 @@
     }, {
         "applicants_population": 164.56779808384854,
         "country": "Italy",
-        "GDP": 35477,
+        "GDP": 35878,
         "year": 2010,
         "applicants": 10005,
         "iso2": "IT",
@@ -956,7 +956,7 @@
     }, {
         "applicants_population": 663.2880017722332,
         "country": "Italy",
-        "GDP": 35477,
+        "GDP": 38365,
         "year": 2011,
         "applicants": 40325,
         "iso2": "IT",
@@ -965,7 +965,7 @@
     }, {
         "applicants_population": 282.4216984607376,
         "country": "Italy",
-        "GDP": 35477,
+        "GDP": 34854,
         "year": 2012,
         "applicants": 17170,
         "iso2": "IT",
@@ -1001,7 +1001,7 @@
     }, {
         "applicants_population": 73.59832839368738,
         "country": "Lithuania",
-        "GDP": 15689,
+        "GDP": 11837,
         "year": 2009,
         "applicants": 215,
         "iso2": "LT",
@@ -1010,7 +1010,7 @@
     }, {
         "applicants_population": 128.3691774308501,
         "country": "Lithuania",
-        "GDP": 15689,
+        "GDP": 11977,
         "year": 2010,
         "applicants": 375,
         "iso2": "LT",
@@ -1019,7 +1019,7 @@
     }, {
         "applicants_population": 138.6387116253181,
         "country": "Lithuania",
-        "GDP": 15689,
+        "GDP": 14360,
         "year": 2011,
         "applicants": 405,
         "iso2": "LT",
@@ -1028,7 +1028,7 @@
     }, {
         "applicants_population": 189.98638259765815,
         "country": "Lithuania",
-        "GDP": 15689,
+        "GDP": 14333,
         "year": 2012,
         "applicants": 555,
         "iso2": "LT",
@@ -1064,7 +1064,7 @@
     }, {
         "applicants_population": 1154.6154420045546,
         "country": "Luxembourg",
-        "GDP": 110665,
+        "GDP": 102863,
         "year": 2010,
         "applicants": 650,
         "iso2": "LU",
@@ -1073,7 +1073,7 @@
     }, {
         "applicants_population": 3401.6747252903415,
         "country": "Luxembourg",
-        "GDP": 110665,
+        "GDP": 113732,
         "year": 2011,
         "applicants": 1915,
         "iso2": "LU",
@@ -1082,7 +1082,7 @@
     }, {
         "applicants_population": 3543.7812412293633,
         "country": "Luxembourg",
-        "GDP": 110665,
+        "GDP": 106023,
         "year": 2012,
         "applicants": 1995,
         "iso2": "LU",
@@ -1118,7 +1118,7 @@
     }, {
         "applicants_population": 25.1750167162111,
         "country": "Latvia",
-        "GDP": 15357,
+        "GDP": 16383,
         "year": 2008,
         "applicants": 50,
         "iso2": "LV",
@@ -1127,7 +1127,7 @@
     }, {
         "applicants_population": 22.65751504458999,
         "country": "Latvia",
-        "GDP": 15357,
+        "GDP": 12212,
         "year": 2009,
         "applicants": 45,
         "iso2": "LV",
@@ -1136,7 +1136,7 @@
     }, {
         "applicants_population": 27.69251838783221,
         "country": "Latvia",
-        "GDP": 15357,
+        "GDP": 11379,
         "year": 2010,
         "applicants": 55,
         "iso2": "LV",
@@ -1145,7 +1145,7 @@
     }, {
         "applicants_population": 171.1901136702355,
         "country": "Latvia",
-        "GDP": 15357,
+        "GDP": 13749,
         "year": 2011,
         "applicants": 340,
         "iso2": "LV",
@@ -1154,7 +1154,7 @@
     }, {
         "applicants_population": 95.66506352160218,
         "country": "Latvia",
-        "GDP": 15357,
+        "GDP": 14032,
         "year": 2012,
         "applicants": 190,
         "iso2": "LV",
@@ -1190,7 +1190,7 @@
     }, {
         "applicants_population": 6067.395841097115,
         "country": "Malta",
-        "GDP": 22776,
+        "GDP": 20896,
         "year": 2008,
         "applicants": 2605,
         "iso2": "MT",
@@ -1199,7 +1199,7 @@
     }, {
         "applicants_population": 5566.631884922113,
         "country": "Malta",
-        "GDP": 22776,
+        "GDP": 19636,
         "year": 2009,
         "applicants": 2390,
         "iso2": "MT",
@@ -1208,7 +1208,7 @@
     }, {
         "applicants_population": 337.7245285831408,
         "country": "Malta",
-        "GDP": 22776,
+        "GDP": 19694,
         "year": 2010,
         "applicants": 145,
         "iso2": "MT",
@@ -1217,7 +1217,7 @@
     }, {
         "applicants_population": 4367.127524781993,
         "country": "Malta",
-        "GDP": 22776,
+        "GDP": 22348,
         "year": 2011,
         "applicants": 1875,
         "iso2": "MT",
@@ -1226,7 +1226,7 @@
     }, {
         "applicants_population": 4798.017440560483,
         "country": "Malta",
-        "GDP": 22776,
+        "GDP": 21176,
         "year": 2012,
         "applicants": 2060,
         "iso2": "MT",
@@ -1262,7 +1262,7 @@
     }, {
         "applicants_population": 791.0902762402042,
         "country": "Netherlands",
-        "GDP": 50793,
+        "GDP": 56629,
         "year": 2008,
         "applicants": 13370,
         "iso2": "NL",
@@ -1271,7 +1271,7 @@
     }, {
         "applicants_population": 879.8438599619922,
         "country": "Netherlands",
-        "GDP": 50793,
+        "GDP": 51910,
         "year": 2009,
         "applicants": 14870,
         "iso2": "NL",
@@ -1280,7 +1280,7 @@
     }, {
         "applicants_population": 786.6525970541147,
         "country": "Netherlands",
-        "GDP": 50793,
+        "GDP": 50341,
         "year": 2010,
         "applicants": 13295,
         "iso2": "NL",
@@ -1289,7 +1289,7 @@
     }, {
         "applicants_population": 683.9942852159132,
         "country": "Netherlands",
-        "GDP": 50793,
+        "GDP": 53537,
         "year": 2011,
         "applicants": 11560,
         "iso2": "NL",
@@ -1298,7 +1298,7 @@
     }, {
         "applicants_population": 571.8689244473876,
         "country": "Netherlands",
-        "GDP": 50793,
+        "GDP": 49128,
         "year": 2012,
         "applicants": 9665,
         "iso2": "NL",
@@ -1334,7 +1334,7 @@
     }, {
         "applicants_population": 2717.874204237793,
         "country": "Norway",
-        "GDP": 102832,
+        "GDP": 96881,
         "year": 2008,
         "applicants": 14040,
         "iso2": "NO",
@@ -1343,7 +1343,7 @@
     }, {
         "applicants_population": 3190.211316655187,
         "country": "Norway",
-        "GDP": 102832,
+        "GDP": 80018,
         "year": 2009,
         "applicants": 16480,
         "iso2": "NO",
@@ -1352,7 +1352,7 @@
     }, {
         "applicants_population": 1794.493865618543,
         "country": "Norway",
-        "GDP": 102832,
+        "GDP": 87646,
         "year": 2010,
         "applicants": 9270,
         "iso2": "NO",
@@ -1361,7 +1361,7 @@
     }, {
         "applicants_population": 1649.3082777853274,
         "country": "Norway",
-        "GDP": 102832,
+        "GDP": 100575,
         "year": 2011,
         "applicants": 8520,
         "iso2": "NO",
@@ -1370,7 +1370,7 @@
     }, {
         "applicants_population": 1783.8469225107738,
         "country": "Norway",
-        "GDP": 102832,
+        "GDP": 101564,
         "year": 2012,
         "applicants": 9215,
         "iso2": "NO",
@@ -1406,7 +1406,7 @@
     }, {
         "applicants_population": 189.4456961016338,
         "country": "Poland",
-        "GDP": 13829,
+        "GDP": 13906,
         "year": 2008,
         "applicants": 7200,
         "iso2": "PL",
@@ -1415,7 +1415,7 @@
     }, {
         "applicants_population": 254.30453511420708,
         "country": "Poland",
-        "GDP": 13829,
+        "GDP": 11441,
         "year": 2009,
         "applicants": 9665,
         "iso2": "PL",
@@ -1424,7 +1424,7 @@
     }, {
         "applicants_population": 114.06209619452537,
         "country": "Poland",
-        "GDP": 13829,
+        "GDP": 12530,
         "year": 2010,
         "applicants": 4335,
         "iso2": "PL",
@@ -1433,7 +1433,7 @@
     }, {
         "applicants_population": 131.16483264814508,
         "country": "Poland",
-        "GDP": 13829,
+        "GDP": 13776,
         "year": 2011,
         "applicants": 4985,
         "iso2": "PL",
@@ -1442,7 +1442,7 @@
     }, {
         "applicants_population": 241.41170301840143,
         "country": "Poland",
-        "GDP": 13829,
+        "GDP": 13036,
         "year": 2012,
         "applicants": 9175,
         "iso2": "PL",
@@ -1478,7 +1478,7 @@
     }, {
         "applicants_population": 14.940015356408043,
         "country": "Portugal",
-        "GDP": 21508,
+        "GDP": 24816,
         "year": 2008,
         "applicants": 155,
         "iso2": "PT",
@@ -1487,7 +1487,7 @@
     }, {
         "applicants_population": 13.012271439452165,
         "country": "Portugal",
-        "GDP": 21508,
+        "GDP": 23064,
         "year": 2009,
         "applicants": 135,
         "iso2": "PT",
@@ -1496,7 +1496,7 @@
     }, {
         "applicants_population": 14.940015356408043,
         "country": "Portugal",
-        "GDP": 21508,
+        "GDP": 22540,
         "year": 2010,
         "applicants": 155,
         "iso2": "PT",
@@ -1505,7 +1505,7 @@
     }, {
         "applicants_population": 26.02454287890433,
         "country": "Portugal",
-        "GDP": 21508,
+        "GDP": 23195,
         "year": 2011,
         "applicants": 270,
         "iso2": "PT",
@@ -1514,7 +1514,7 @@
     }, {
         "applicants_population": 27.952286795860207,
         "country": "Portugal",
-        "GDP": 21508,
+        "GDP": 20577,
         "year": 2012,
         "applicants": 290,
         "iso2": "PT",
@@ -1550,7 +1550,7 @@
     }, {
         "applicants_population": 85.59312612680833,
         "country": "Romania",
-        "GDP": 9490,
+        "GDP": 9064,
         "year": 2011,
         "applicants": 1700,
         "iso2": "RO",
@@ -1559,7 +1559,7 @@
     }, {
         "applicants_population": 121.84433248639775,
         "country": "Romania",
-        "GDP": 9490,
+        "GDP": 8445,
         "year": 2012,
         "applicants": 2420,
         "iso2": "RO",
@@ -1595,7 +1595,7 @@
     }, {
         "applicants_population": 2489.9062361019987,
         "country": "Sweden",
-        "GDP": 60365,
+        "GDP": 55747,
         "year": 2008,
         "applicants": 24270,
         "iso2": "SE",
@@ -1604,7 +1604,7 @@
     }, {
         "applicants_population": 2422.1955597185083,
         "country": "Sweden",
-        "GDP": 60365,
+        "GDP": 46207,
         "year": 2009,
         "applicants": 23610,
         "iso2": "SE",
@@ -1613,7 +1613,7 @@
     }, {
         "applicants_population": 3260.8846194685634,
         "country": "Sweden",
-        "GDP": 60365,
+        "GDP": 52076,
         "year": 2010,
         "applicants": 31785,
         "iso2": "SE",
@@ -1622,7 +1622,7 @@
     }, {
         "applicants_population": 3039.286042213503,
         "country": "Sweden",
-        "GDP": 60365,
+        "GDP": 59594,
         "year": 2011,
         "applicants": 29625,
         "iso2": "SE",
@@ -1631,7 +1631,7 @@
     }, {
         "applicants_population": 4497.630382806413,
         "country": "Sweden",
-        "GDP": 60365,
+        "GDP": 57134,
         "year": 2012,
         "applicants": 43840,
         "iso2": "SE",
@@ -1667,7 +1667,7 @@
     }, {
         "applicants_population": 116.34253958312529,
         "country": "Slovenia",
-        "GDP": 23297,
+        "GDP": 27502,
         "year": 2008,
         "applicants": 240,
         "iso2": "SI",
@@ -1676,7 +1676,7 @@
     }, {
         "applicants_population": 82.40929887138041,
         "country": "Slovenia",
-        "GDP": 23297,
+        "GDP": 24634,
         "year": 2009,
         "applicants": 170,
         "iso2": "SI",
@@ -1685,7 +1685,7 @@
     }, {
         "applicants_population": 94.5283134112893,
         "country": "Slovenia",
-        "GDP": 23297,
+        "GDP": 23418,
         "year": 2010,
         "applicants": 195,
         "iso2": "SI",
@@ -1694,7 +1694,7 @@
     }, {
         "applicants_population": 147.8519773868884,
         "country": "Slovenia",
-        "GDP": 23297,
+        "GDP": 24965,
         "year": 2011,
         "applicants": 305,
         "iso2": "SI",
@@ -1703,7 +1703,7 @@
     }, {
         "applicants_population": 126.0377512150524,
         "country": "Slovenia",
-        "GDP": 23297,
+        "GDP": 22489,
         "year": 2012,
         "applicants": 260,
         "iso2": "SI",
@@ -1739,7 +1739,7 @@
     }, {
         "applicants_population": 58.1036195972626,
         "country": "Slovakia",
-        "GDP": 18050,
+        "GDP": 16510,
         "year": 2010,
         "applicants": 315,
         "iso2": "SK",
@@ -1748,7 +1748,7 @@
     }, {
         "applicants_population": 59.02589927340963,
         "country": "Slovakia",
-        "GDP": 18050,
+        "GDP": 18066,
         "year": 2011,
         "applicants": 320,
         "iso2": "SK",
@@ -1757,7 +1757,7 @@
     }, {
         "applicants_population": 101.4507643761728,
         "country": "Slovakia",
-        "GDP": 18050,
+        "GDP": 17151,
         "year": 2012,
         "applicants": 550,
         "iso2": "SK",
@@ -1793,7 +1793,7 @@
     }, {
         "applicants_population": 483.11554405349074,
         "country": "United Kingdom",
-        "GDP": 41777,
+        "GDP": 45168,
         "year": 2008,
         "applicants": 31290,
         "iso2": "UK",
@@ -1802,7 +1802,7 @@
     }, {
         "applicants_population": 473.1567864339797,
         "country": "United Kingdom",
-        "GDP": 41777,
+        "GDP": 37077,
         "year": 2009,
         "applicants": 30645,
         "iso2": "UK",
@@ -1811,7 +1811,7 @@
     }, {
         "applicants_population": 349.2513137261093,
         "country": "United Kingdom",
-        "GDP": 41777,
+        "GDP": 38362,
         "year": 2010,
         "applicants": 22620,
         "iso2": "UK",
@@ -1820,7 +1820,7 @@
     }, {
         "applicants_population": 399.5082998524791,
         "country": "United Kingdom",
-        "GDP": 41777,
+        "GDP": 40975,
         "year": 2011,
         "applicants": 25875,
         "iso2": "UK",
@@ -1829,7 +1829,7 @@
     }, {
         "applicants_population": 430.6197674545176,
         "country": "United Kingdom",
-        "GDP": 41777,
+        "GDP": 41051,
         "year": 2012,
         "applicants": 27890,
         "iso2": "UK",

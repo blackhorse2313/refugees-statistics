@@ -1,22 +1,37 @@
-.bar {
-  fill: #2C3E50;
+/* Scatterplot style */
+.name {
+    float:right;
+    color:#27aae1;
 }
-
-.bar:hover {
-  fill: #18BC9C;
-}
-
 .axis {
-  font: 10px sans-serif;
+    fill: none;
+    stroke: #AAA;
+    stroke-width: 1px;
+}
+text {
+    stroke: none;
+    fill: #666666;
+    font-size: .6em;
+    font-family:"Helvetica Neue"
+}
+.label {
+    fill: #414241;
+}
+.dot {
+    opacity: .9;
 }
 
-.axis path,
-.axis line {
-  fill: none;
-  stroke: #000;
-  shape-rendering: crispEdges;
+circle.dot:hover{
+	fill: #128f76 !important;
 }
 
-.x.axis path {
-  display: none;
+div.tooltip {   
+  position: absolute;           
+  text-align: center;                          
+  padding: 2px;             
+  font: 12px sans-serif;        
+  background:  #18bc9c;   
+  border: 0px;      
+  border-radius: 4px;           
+  pointer-events: none;         
 }

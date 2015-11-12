@@ -1,14 +1,14 @@
 <div class="page-header">
     <h1>Correlation between number of refugees and the destination country's GDP</h1>
     <div style="margin-left:50px;">
-        <div  style="width:200px; display: inline-block;">
+        <div style="width:200px; display: inline-block;">
             <table id="countryTable" class="table table-condensed table-bordered">
                 <tbody>
-                    <tr ng-repeat="country in list">
+                    <tr ng-repeat="country in countries">
                         <td>
                             <div class="checkbox checkboxInTable">
                                 <label style="width:100%">
-                                    <input type="checkbox" ng-model="country.value" ng-init="country.value=true" ng-change="myClick(country.iso2)">
+                                    <input type="checkbox" ng-checked="country.selected" ng-click="check(country.iso2)">
                                     <div style="width:36px;display: inline-block;text-align:center;margin-right:5px;"><img class="flag" ng-src="images/flags-normal/{{country.iso2}}.png" style="height:18px;"></div>{{country.country}}</label>
                             </div>
                         </td>
@@ -16,6 +16,15 @@
                 </tbody>
             </table>
         </div>
-        <div id="immigrants_top5" style="display: inline-block;"></div>
+        <div style="display: inline-block;margin-left:50px;">
+            <div id="scatterPlotGDP"></div>
+            <div>
+                <a class="btn btn-primary" ng-click="simulate()" ng-disabled="disabled" style="display: inline-block;"><span class="glyphicon glyphicon-play"></span> Play</a>
+               
+                <div style="display: inline-block; width:400px; margin-left:20px">
+                    <input ng-model="currentYear" type="text" id="timeline" slider options="options" ng-disabled="disabled" ng-change="changeTime()"/>
+                </div>
+            </div>
+        </div>
     </div>
 </div>

@@ -95,3 +95,7 @@ body {
     height: 500px;
     overflow: auto;
 }
+
+.jslider{
+    display: inline-block;
+}

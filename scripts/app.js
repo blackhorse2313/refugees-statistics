@@ -111,4 +111,5 @@ angular.module('ivApp', ['ngRoute', 'angularAwesomeSlider', 'gdpModule','countri
                 }
             }, 1500, scale.length - 1);
         };
-    }]);
+    }])
+    ;

@@ -1,143 +1,272 @@
 angular.module('gdpModule', ['angularAwesomeSlider'])
-    .controller('gdpCtrl', ['$scope', '$http', function($scope, $http) {
+    .controller('gdpCtrl', ['$scope', '$http', '$interval', function($scope, $http, $interval) {
+
+        $scope.dataset = [];
+        $scope.countries = [];
+        $scope.currentYear = 2015;
 
         $http.get('data/applicants_gdp.json')
             .then(function(res) {
-                var table = [];
-                var set = [],
-                    set2 = [];
-                var arr = res.data.data;
-                arr.sort(function(a, b) {
-                    return b.applicants - a.applicants;
-                });
-                for (var i = 0; i < arr.length; i++) {
-                    if (arr[i].year === 2015) {
-                        table.push(arr[i]);
-                    }
+                $scope.dataset = res.data.data;
 
+
+
+                for (var i = 0; i < $scope.dataset.length; i++) {
+                    $scope.dataset[i].selected = false;
+                    if ($scope.dataset[i].population > 1000000) {
+                        $scope.dataset[i].selected = true;
+                    }
+                    if ($scope.dataset[i].year == $scope.currentYear) {
+                        $scope.countries.push($scope.dataset[i]);
+                    }
                 }
-                // select the top 5 values
-                for (var j = 0; j < 10; j++) {
-                    set.push(table[j]);
-                    set2.push(table[j]);
+                var displayData = [];
+                for (var j = 0; j < $scope.dataset.length; j++) {
+                    if ($scope.dataset[j].year == $scope.currentYear && $scope.dataset[j].selected) {
+                        displayData.push($scope.dataset[j]);
+                    }
                 }
-                $scope.list = set2;
-                $scope.countries = set;
-                console.log(set);
-                gen_vis($scope.countries);
+
+                $scope.countries.sort(function(a, b) {
+                    if (a.country < b.country) return -1;
+                    if (a.country > b.country) return 1;
+                    return 0;
+                });
+
+                genVis(displayData);
             });
 
-        $scope.myClick = function(country) {
-            console.log(country);
-            var foundItem = false;
-            for (var i = $scope.countries.length; i--;) {
-                if ($scope.countries[i].iso2 === country) {
-                    $scope.countries.splice(i, 1);
-                    foundItem = true;
-                }
-            }
-            if (!foundItem) {
-                for (var j = $scope.list.length; j--;) {
-                    if ($scope.list[j].iso2 === country) {
-                        $scope.countries.push($scope.list[j]);
+        $scope.check = function(iso) {
+            var displayData = [];
+            for (var j = 0; j < $scope.dataset.length; j++) {
+                if ($scope.dataset[j].iso2 == iso) {
+                    if ($scope.dataset[j].selected) {
+                        $scope.dataset[j].selected = false;
+                    } else {
+                        $scope.dataset[j].selected = true;
                     }
                 }
+                if ($scope.dataset[j].year == $scope.currentYear && $scope.dataset[j].selected) {
+                    displayData.push($scope.dataset[j]);
+                }
+
             }
-            $scope.countries.sort(function(a, b) {
-                    return b.applicants - a.applicants;
-                });
-            $("svg").remove();
-            gen_vis($scope.countries);
+            $('#scatterPlotGDP > svg').remove();
+            genVis(displayData);
         };
+
+
+        var scale = [2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015];
+        $scope.options = {
+            from: 2008,
+            to: 2015,
+            step: 1,
+            scale: scale,
+            css: {
+                before: {
+                    "background-color": "transparent"
+                },
+                default: {
+                    "background-color": "transparent"
+                },
+                pointer: {
+                    "background-color": "#337ab7"
+                },
+                range: {
+                    "background-color": "#149bdf"
+                } // use it if double value
+            }
+        };
+        $scope.disabled = false;
+        $scope.changeTime = function() {
+            var displayData = [];
+            for (var j = 0; j < $scope.dataset.length; j++) {
+                if ($scope.dataset[j].selected && $scope.dataset[j].year == $scope.currentYear) {
+                    displayData.push($scope.dataset[j]);
+                }
+            }
+            //$('#scatterPlotGDP > svg').remove();
+            updateVis(displayData);
+        };
+        $scope.simulate = function() {
+            var i = 0;
+            $scope.disabled = true;
+            $scope.currentYear = scale[i];
+            $scope.changeTime();
+            $interval(function() {
+                i++;
+                $scope.currentYear = scale[i];
+                $scope.changeTime();
+                if (i == scale.length - 1) {
+                    $scope.disabled = false;
+                }
+            }, 1500, scale.length - 1);
+        };
+
 
     }]);
 
+// just to have some space around items. 
+var margins = {
+    "left": 40,
+    "right": 30,
+    "top": 30,
+    "bottom": 30
+};
 
-// d3
-function gen_vis(dataset) {
-    var margin = {
-            top: 20,
-            right: 20,
-            bottom: 30,
-            left: 50
-        },
-        width = 900 - margin.left - margin.right,
-        height = 500 - margin.top - margin.bottom;
+var width = 500;
+var height = 500;
+var svg, tooltip;
 
-    var x = d3.scale.ordinal()
-        .rangeRoundBands([0, width], 0.1);
+function genVis(data) {
 
-    var xAxis = d3.svg.axis()
-        .scale(x)
-        .orient("bottom");
 
-    var y = d3.scale.linear()
-        .range([height, 0]);
+    // this will be our colour scale. An Ordinal scale.
+    var colors = d3.scale.category10();
 
-    var yAxis = d3.svg.axis()
-        .scale(y)
-        .orient("left");
+    // we add the SVG component to the scatterPlotGDP div
+    svg = d3.select("#scatterPlotGDP").append("svg").attr("width", width).attr("height", height).append("g")
+        .attr("transform", "translate(" + margins.left + "," + margins.top + ")");
 
-    /* SVG */
-    var svg = d3.select("#immigrants_top5")
-        .append("svg")
-        .attr("width", width + margin.left + margin.right)
-        .attr("height", height + margin.top + margin.bottom)
-        .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+    // this sets the scale that we're using for the X axis. 
+    // the domain define the min and max variables to show. In this case, it's the min and max prices of items.
+    // this is made a compact piece of code due to d3.extent which gives back the max and min of the price variable within the dataset
+    var x = d3.scale.linear()
+        .domain(d3.extent(data, function(d) {
+            return d.GDP;
+        }))
+        // the range maps the domain to values from 0 to the width minus the left and right margins (used to space out the visualization)
+        .range([0, width - margins.left - margins.right]);
 
-    /* Values for x-axis */
-    x.domain(dataset.map(function(d) {
+    // this does the same as for the y axis but maps from the rating variable to the height to 0. 
+    var y = d3.scale.log()
+        .domain(d3.extent(data, function(d) {
+            return d.applicants_population;
+        }))
+        // Note that height goes first due to the weird SVG coordinate system
+        .range([height - margins.top - margins.bottom, 0]);
+
+    // we add the axes SVG component. At this point, this is just a placeholder. The actual axis will be added in a bit
+    svg.append("g").attr("class", "x axis").attr("transform", "translate(0," + y.range()[0] + ")");
+    svg.append("g").attr("class", "y axis");
+
+    // this is our X axis label. Nothing too special to see here.
+    svg.append("text")
+        .attr("fill", "#414241")
+        .attr("text-anchor", "end")
+        .attr("x", width / 2)
+        .attr("y", height - 35);
+
+
+    // this is the actual definition of our x and y axes. The orientation refers to where the labels appear - for the x axis, below or above the line, and for the y axis, left or right of the line. Tick padding refers to how much space between the tick and the label. There are other parameters too - see https://github.com/mbostock/d3/wiki/SVG-Axes for more information
+    var xAxis = d3.svg.axis().scale(x).orient("bottom").tickPadding(2);
+    var yAxis = d3.svg.axis().scale(y).orient("left").tickPadding(2);
+
+    // this is where we select the axis we created a few lines earlier. See how we select the axis item. in our svg we appended a g element with a x/y and axis class. To pull that back up, we do this svg select, then 'call' the appropriate axis object for rendering.    
+    svg.selectAll("g.y.axis").call(yAxis);
+    svg.selectAll("g.x.axis").call(xAxis);
+
+    // now, we can get down to the data part, and drawing stuff. We are telling D3 that all nodes (g elements with class node) will have data attached to them. The 'key' we use (to let D3 know the uniqueness of items) will be the name. Not usually a great key, but fine for this example.
+    var node = svg.selectAll("g.node").data(data, function(d) {
         return d.country;
-    }));
-    /* Values for y-axis */
-    y.domain([0, d3.max(dataset, function(d) {
-        return d.applicants;
-    })]);
+    });
 
-    svg.append("g")
-        .attr("class", "x axis")
-        .attr("transform", "translate(0," + height + ")")
-        .attr("style", "font: 12px sans-serif;")
-        .call(xAxis);
+    // we 'enter' the data, making the SVG group (to contain a circle and text) with a class node. This corresponds with what we told the data it should be above.
 
-    /*
-    svg.append("g")
-        .attr("class", "y axis")
-        .call(yAxis);
-    */
-
-    /* Bars */
-    var bar = svg.selectAll(".bar")
-        .data(dataset)
-        .enter().append("rect")
-        .attr("class", "bar")
-        .attr("x", function(d) {
-            return x(d.country);
-        })
-        .attr("width", x.rangeBand())
-        .attr("y", function(d) {
-            return y(d.applicants);
-        })
-        .attr("height", function(d) {
-            return height - y(d.applicants);
+    var nodeGroup = node.enter().append("g").attr("class", "node")
+        // this is how we set the position of the items. Translate is an incredibly useful function for rotating and positioning items 
+        .attr('transform', function(d) {
+            return "translate(" + x(d.GDP) + "," + y(d.applicants_population) + ")";
         });
 
-    /* Bar-text */
-    var yTextPadding = 20;
-    svg.selectAll(".bartext")
-        .data(dataset)
-        .enter()
-        .append("text")
-        .attr("class", "bartext")
-        .attr("text-anchor", "middle")
-        .attr("fill", "white")
-        .attr("x", function(d) {
-            return x(d.country) + x.rangeBand() / 2;
+    // add the tooltip area to the webpage
+    tooltip = d3.select("body").append("div")
+        .attr("class", "tooltip")
+        .style("opacity", 0);
+
+    // we add our first graphics element! A circle! 
+    nodeGroup.append("circle")
+        .attr("r", 5)
+        .attr("class", "dot")
+        .style("fill", function(d) {
+            // remember the ordinal scales? We use the colors scale to get a colour for our manufacturer. Now each node will be coloured
+            // by who makes the node. 
+            // return colors(d.manufacturer);
+            return '#2c3e50';
         })
-        .attr("y", function(d) {
-            return y(d.applicants) + 20;
+        .on("mouseover", function(d) {
+            tooltip.transition()
+                .duration(200)
+                .style("opacity", 0.9);
+            tooltip.html(d.country)
+                .style("left", (d3.event.pageX - 10) + "px")
+                .style("top", (d3.event.pageY - 28) + "px");
         })
-        .text(function(d) {
-            return d3.format(",")(d.applicants);
+        .on("mouseout", function(d) {
+            tooltip.transition()
+                .duration(500)
+                .style("opacity", 0);
         });
 }
+
+var updateVis = function(data) {
+    console.log(data);
+    var x = d3.scale.linear()
+        .domain(d3.extent(data, function(d) {
+            return d.GDP;
+        }))
+        // the range maps the domain to values from 0 to the width minus the left and right margins (used to space out the visualization)
+        .range([0, width - margins.left - margins.right]);
+
+    // this does the same as for the y axis but maps from the rating variable to the height to 0. 
+    var y = d3.scale.log()
+        .domain(d3.extent(data, function(d) {
+            return d.applicants_population;
+        }))
+        // Note that height goes first due to the weird SVG coordinate system
+        .range([height - margins.top - margins.bottom, 0]);
+
+    var xAxis = d3.svg.axis().scale(x).orient("bottom").tickPadding(2);
+    var yAxis = d3.svg.axis().scale(y).orient("left").tickPadding(2);
+
+    svg.selectAll("g.y.axis").transition().duration(1000).call(yAxis);
+    svg.selectAll("g.x.axis").transition().duration(1000).call(xAxis);
+
+    var node = svg.selectAll("g.node").data(data, function(d) {
+        return d.country;
+    });
+
+    var nodeEnter = node.enter().append("g").attr("class", "node")
+        .attr('transform', function(d) {
+            return "translate(" + x(d.GDP) + "," + (height + 100) + ")";
+        });
+
+    nodeEnter.append("circle")
+        .attr("r", 5)
+        .attr("class", "dot")
+        .style("fill", function(d) {
+            return '#2c3e50';
+        }).on("mouseover", function(d) {
+            tooltip.transition()
+                .duration(200)
+                .style("opacity", 0.9);
+            tooltip.html(d.country)
+                .style("left", (d3.event.pageX - 10) + "px")
+                .style("top", (d3.event.pageY - 28) + "px");
+        })
+        .on("mouseout", function(d) {
+            tooltip.transition()
+                .duration(500)
+                .style("opacity", 0);
+        });
+
+    node.transition().duration(500)
+        .attr('transform', function(d) {
+            return "translate(" + x(d.GDP) + "," + y(d.applicants_population) + ")";
+        });
+
+
+    var nodeExit = node.exit().remove();
+    nodeExit.selectAll('circle')
+        .attr('r', 0);
+};
