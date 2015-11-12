@@ -72,44 +72,4 @@ angular.module('ivApp', ['ngRoute', 'angularAwesomeSlider', 'gdpModule','countri
             linkName: 'http://ec.europa.eu/eurostat/en'
         }];
     }])
-    // Move to controller for timeline
-    .controller('sliderCtrl', ['$scope', '$interval', function($scope, $interval) {
-        var scale = [2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015];
-        $scope.rangeValue = "2011;2015";
-        $scope.timelineValue = 2015;
-        $scope.options = {
-            from: 2008,
-            to: 2015,
-            step: 1,
-            scale: scale,
-            css: {
-                before: {
-                    "background-color": "transparent"
-                },
-                default: {
-                    "background-color": "transparent"
-                },
-                pointer: {
-                    "background-color": "#337ab7"
-                },
-                range: {
-                    "background-color": "#149bdf"
-                } // use it if double value
-            }
-        };
-
-        $scope.disabled = false;
-        $scope.simulate = function() {
-            var i = 0;
-            $scope.disabled = true;
-            $scope.timelineValue = scale[i];
-            $interval(function() {
-                i++;
-                $scope.timelineValue = scale[i];
-                if (i == scale.length - 1) {
-                    $scope.disabled = false;
-                }
-            }, 1500, scale.length - 1);
-        };
-    }])
     ;
