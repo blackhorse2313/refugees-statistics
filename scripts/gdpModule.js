@@ -32,7 +32,6 @@ angular.module('gdpModule', ['angularAwesomeSlider'])
                     if (a.country > b.country) return 1;
                     return 0;
                 });
-
                 genVis(displayData);
             });
 
@@ -207,10 +206,53 @@ function genVis(data) {
                 .duration(500)
                 .style("opacity", 0);
         });
+
+
+    /* //Trentline
+    var xSeries = [];
+    var ySeries = [];
+    for (var j = 0; j < data.length; j++) {
+        xSeries.push(data[j].GDP);
+        ySeries.push(data[j].applicants_population);
+
+    }
+    var leastSquaresCoeff = leastSquares(xSeries, ySeries);
+    console.log(leastSquaresCoeff);
+    var min = Math.min.apply(null, xSeries),
+        max = Math.max.apply(null, xSeries);
+
+    var x1 = min;
+    var y1 = leastSquaresCoeff[0] * min + leastSquaresCoeff[1];
+    var x2 =max;
+    var y2 = leastSquaresCoeff[0] *max + leastSquaresCoeff[1];
+    var trendData = [
+        [x1, y1, x2, y2]
+    ];
+
+    var trendline = svg.selectAll(".trendline")
+        .data(trendData);
+
+    trendline.enter()
+        .append("line")
+        .attr("class", "trendline")
+        .attr("x1", function(d) {
+            return x(d[0]);
+        })
+        .attr("y1", function(d) {
+            return y(d[1]);
+        })
+        .attr("x2", function(d) {
+            return x(d[2]);
+        })
+        .attr("y2", function(d) {
+            return y(d[3]);
+        })
+        .attr("stroke", "black")
+        .attr("stroke-width", 1);
+        */
 }
 
 var updateVis = function(data) {
-    console.log(data);
     var x = d3.scale.linear()
         .domain(d3.extent(data, function(d) {
             return d.GDP;
@@ -270,3 +312,34 @@ var updateVis = function(data) {
     nodeExit.selectAll('circle')
         .attr('r', 0);
 };
+
+// returns slope, intercept and r-square of the line
+function leastSquares(xSeries, ySeries) {
+    var reduceSumFunc = function(prev, cur) {
+        return prev + cur;
+    };
+
+    var xBar = xSeries.reduce(reduceSumFunc) * 1.0 / xSeries.length;
+    var yBar = ySeries.reduce(reduceSumFunc) * 1.0 / ySeries.length;
+
+    var ssXX = xSeries.map(function(d) {
+            return Math.pow(d - xBar, 2);
+        })
+        .reduce(reduceSumFunc);
+
+    var ssYY = ySeries.map(function(d) {
+            return Math.pow(d - yBar, 2);
+        })
+        .reduce(reduceSumFunc);
+
+    var ssXY = xSeries.map(function(d, i) {
+            return (d - xBar) * (ySeries[i] - yBar);
+        })
+        .reduce(reduceSumFunc);
+
+    var slope = ssXY / ssXX;
+    var intercept = yBar - (xBar * slope);
+    var rSquare = Math.pow(ssXY, 2) / (ssXX * ssYY);
+
+    return [slope, intercept, rSquare];
+}
