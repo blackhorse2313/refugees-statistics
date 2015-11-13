@@ -1,9 +1,32 @@
 angular.module('gdpModule', ['angularAwesomeSlider'])
     .controller('gdpCtrl', ['$scope', '$http', '$interval', function($scope, $http, $interval) {
 
+        var scale = [2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015];
+        var i, j, k; // the iterators
+
         $scope.dataset = [];
         $scope.countries = [];
         $scope.currentYear = 2015;
+
+
+
+        $scope.stats = [];
+        $scope.yearValueList = [];
+        for (i = 0; i < scale.length; i++) {
+            var stat = {
+                year: scale[i],
+                lowerBound: 0,
+                upperBound: 0,
+                median: 0
+            };
+            var yearValueItem = {
+                year: scale[i],
+                valueList: []
+            };
+            $scope.stats.push(stat);
+            $scope.yearValueList.push(yearValueItem);
+
+        }
 
         $http.get('data/applicants_gdp.json')
             .then(function(res) {
@@ -11,19 +34,62 @@ angular.module('gdpModule', ['angularAwesomeSlider'])
 
 
 
-                for (var i = 0; i < $scope.dataset.length; i++) {
-                    $scope.dataset[i].selected = false;
-                    if ($scope.dataset[i].population > 1000000) {
-                        $scope.dataset[i].selected = true;
+                //generate ststistic data for outliers
+                for (i = 0; i < $scope.dataset.length; i++) {
+                    $scope.dataset[i].applicants_population = Math.log10($scope.dataset[i].applicants_population);
+                    $scope.dataset[i].korrel = $scope.dataset[i].GDP / $scope.dataset[i].applicants_population;
+                    for (j = 0; j < scale.length; j++) {
+                        if ($scope.dataset[i].year == $scope.yearValueList[j].year) {
+                            $scope.yearValueList[j].valueList.push($scope.dataset[i].korrel);
+                        }
                     }
+                }
+                for (i = 0; i < scale.length; i++) {
+
+                    var lowerQuantile = d3.quantile($scope.yearValueList[i].valueList.sort(function(a, b) {
+                        return a - b;
+                    }), 0.25);
+                    var median = d3.quantile($scope.yearValueList[i].valueList.sort(function(a, b) {
+                        return a - b;
+                    }), 0.5);
+                    var upperQuantile = d3.quantile($scope.yearValueList[i].valueList.sort(function(a, b) {
+                        return a - b;
+                    }), 0.75);
+                    var iqr = (upperQuantile - lowerQuantile) * 0.45;
+                    $scope.stats[i].lowerBound = lowerQuantile - iqr;
+                    $scope.stats[i].upperBound = upperQuantile + iqr;
+                    $scope.stats[i].median = median;
+                }
+                for (i = 0; i < $scope.dataset.length; i++) {
+                    $scope.dataset[i].selected = true;
+                    if ($scope.dataset[i].population < 1000000) {
+                        $scope.dataset[i].selected = false;
+                    }
+                    for (j = 0; j < scale.length; j++) {
+                        if ($scope.dataset[i].year == $scope.stats[j].year) {
+                            //if ($scope.dataset[i].korrel <= $scope.stats[j].lowerBound || $scope.dataset[i].korrel >= $scope.stats[j].upperBound) {
+                            if ($scope.dataset[i].korrel <= $scope.stats[j].median * 0.4 || $scope.dataset[i].korrel >= $scope.stats[j].median * 1.8) {
+                                $scope.dataset[i].outlier = true;
+                            } else {
+                                $scope.dataset[i].outlier = false;
+                            }
+                        }
+                    }
+                }
+
+
+
+
+                // list
+                for (i = 0; i < $scope.dataset.length; i++) {
                     if ($scope.dataset[i].year == $scope.currentYear) {
                         $scope.countries.push($scope.dataset[i]);
                     }
                 }
                 var displayData = [];
-                for (var j = 0; j < $scope.dataset.length; j++) {
-                    if ($scope.dataset[j].year == $scope.currentYear && $scope.dataset[j].selected) {
-                        displayData.push($scope.dataset[j]);
+                for (i = 0; i < $scope.dataset.length; i++) {
+                    if ($scope.dataset[i].year == $scope.currentYear && $scope.dataset[i].selected) {
+                        displayData.push($scope.dataset[i]);
                     }
                 }
 
@@ -37,16 +103,16 @@ angular.module('gdpModule', ['angularAwesomeSlider'])
 
         $scope.check = function(iso) {
             var displayData = [];
-            for (var j = 0; j < $scope.dataset.length; j++) {
-                if ($scope.dataset[j].iso2 == iso) {
-                    if ($scope.dataset[j].selected) {
-                        $scope.dataset[j].selected = false;
+            for (i = 0; i < $scope.dataset.length; i++) {
+                if ($scope.dataset[i].iso2 == iso) {
+                    if ($scope.dataset[i].selected) {
+                        $scope.dataset[i].selected = false;
                     } else {
-                        $scope.dataset[j].selected = true;
+                        $scope.dataset[i].selected = true;
                     }
                 }
-                if ($scope.dataset[j].year == $scope.currentYear && $scope.dataset[j].selected) {
-                    displayData.push($scope.dataset[j]);
+                if ($scope.dataset[i].year == $scope.currentYear && $scope.dataset[i].selected) {
+                    displayData.push($scope.dataset[i]);
                 }
 
             }
@@ -55,7 +121,8 @@ angular.module('gdpModule', ['angularAwesomeSlider'])
         };
 
 
-        var scale = [2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015];
+
+
         $scope.options = {
             from: 2008,
             to: 2015,
@@ -79,24 +146,24 @@ angular.module('gdpModule', ['angularAwesomeSlider'])
         $scope.disabled = false;
         $scope.changeTime = function() {
             var displayData = [];
-            for (var j = 0; j < $scope.dataset.length; j++) {
-                if ($scope.dataset[j].selected && $scope.dataset[j].year == $scope.currentYear) {
-                    displayData.push($scope.dataset[j]);
+            for (i = 0; i < $scope.dataset.length; i++) {
+                if ($scope.dataset[i].selected && $scope.dataset[i].year == $scope.currentYear) {
+                    displayData.push($scope.dataset[i]);
                 }
             }
-            //$('#scatterPlotGDP > svg').remove();
-            updateVis(displayData);
+            $('#scatterPlotGDP > svg').remove();
+            genVis(displayData);
         };
         $scope.simulate = function() {
-            var i = 0;
+            var s = 0;
             $scope.disabled = true;
-            $scope.currentYear = scale[i];
+            $scope.currentYear = scale[s];
             $scope.changeTime();
             $interval(function() {
-                i++;
-                $scope.currentYear = scale[i];
+                s++;
+                $scope.currentYear = scale[s];
                 $scope.changeTime();
-                if (i == scale.length - 1) {
+                if (s == scale.length - 1) {
                     $scope.disabled = false;
                 }
             }, 1500, scale.length - 1);
@@ -108,7 +175,7 @@ angular.module('gdpModule', ['angularAwesomeSlider'])
 // just to have some space around items. 
 var margins = {
     "left": 40,
-    "right": 30,
+    "right": 80,
     "top": 30,
     "bottom": 30
 };
@@ -118,31 +185,20 @@ var height = 500;
 var svg, tooltip;
 
 function genVis(data) {
-
-
-    // this will be our colour scale. An Ordinal scale.
-    var colors = d3.scale.category10();
-
     // we add the SVG component to the scatterPlotGDP div
     svg = d3.select("#scatterPlotGDP").append("svg").attr("width", width).attr("height", height).append("g")
         .attr("transform", "translate(" + margins.left + "," + margins.top + ")");
 
-    // this sets the scale that we're using for the X axis. 
-    // the domain define the min and max variables to show. In this case, it's the min and max prices of items.
-    // this is made a compact piece of code due to d3.extent which gives back the max and min of the price variable within the dataset
     var x = d3.scale.linear()
         .domain(d3.extent(data, function(d) {
             return d.GDP;
         }))
-        // the range maps the domain to values from 0 to the width minus the left and right margins (used to space out the visualization)
         .range([0, width - margins.left - margins.right]);
 
-    // this does the same as for the y axis but maps from the rating variable to the height to 0. 
     var y = d3.scale.log()
         .domain(d3.extent(data, function(d) {
             return d.applicants_population;
         }))
-        // Note that height goes first due to the weird SVG coordinate system
         .range([height - margins.top - margins.bottom, 0]);
 
     // we add the axes SVG component. At this point, this is just a placeholder. The actual axis will be added in a bit
@@ -165,13 +221,12 @@ function genVis(data) {
     svg.selectAll("g.y.axis").call(yAxis);
     svg.selectAll("g.x.axis").call(xAxis);
 
-    // now, we can get down to the data part, and drawing stuff. We are telling D3 that all nodes (g elements with class node) will have data attached to them. The 'key' we use (to let D3 know the uniqueness of items) will be the name. Not usually a great key, but fine for this example.
+    // now, we can get down to the data part, and drawing stuff. We are telling D3 that all nodes (g elements with class node) will have data attached to them. The 'key' we use (to let D3 know the uniqueness of items) will be the iso2.
     var node = svg.selectAll("g.node").data(data, function(d) {
-        return d.country;
+        return d.iso2;
     });
 
     // we 'enter' the data, making the SVG group (to contain a circle and text) with a class node. This corresponds with what we told the data it should be above.
-
     var nodeGroup = node.enter().append("g").attr("class", "node")
         // this is how we set the position of the items. Translate is an incredibly useful function for rotating and positioning items 
         .attr('transform', function(d) {
@@ -188,10 +243,12 @@ function genVis(data) {
         .attr("r", 5)
         .attr("class", "dot")
         .style("fill", function(d) {
-            // remember the ordinal scales? We use the colors scale to get a colour for our manufacturer. Now each node will be coloured
-            // by who makes the node. 
-            // return colors(d.manufacturer);
-            return '#2c3e50';
+            if (d.outlier) {
+                return 'red';
+            } else {
+                return '#2c3e50';
+            }
+
         })
         .on("mouseover", function(d) {
             tooltip.transition()
@@ -208,30 +265,31 @@ function genVis(data) {
         });
 
 
-    /* //Trentline
+    //Trentline
     var xSeries = [];
     var ySeries = [];
+    data.sort(function(a, b) {
+        return a.GDP - b.GDP;
+    });
     for (var j = 0; j < data.length; j++) {
-        xSeries.push(data[j].GDP);
-        ySeries.push(data[j].applicants_population);
-
+        if (!data[j].outlier) {
+            xSeries.push(data[j].GDP);
+            ySeries.push(data[j].applicants_population);
+        }
     }
-    var leastSquaresCoeff = leastSquares(xSeries, ySeries);
-    console.log(leastSquaresCoeff);
-    var min = Math.min.apply(null, xSeries),
-        max = Math.max.apply(null, xSeries);
+    var linePoints = findLineByLeastSquares(xSeries, ySeries);
+    console.log(linePoints);
+   var pearsonCorrel = getPearsonsCorrelation(xSeries, ySeries);
 
-    var x1 = min;
-    var y1 = leastSquaresCoeff[0] * min + leastSquaresCoeff[1];
-    var x2 =max;
-    var y2 = leastSquaresCoeff[0] *max + leastSquaresCoeff[1];
+    var x1 = linePoints[0][0];
+    var y1 = linePoints[1][0];
+    var x2 = linePoints[0][linePoints[0].length - 1];
+    var y2 = linePoints[1][linePoints[0].length - 1];
     var trendData = [
         [x1, y1, x2, y2]
     ];
-
     var trendline = svg.selectAll(".trendline")
         .data(trendData);
-
     trendline.enter()
         .append("line")
         .attr("class", "trendline")
@@ -249,8 +307,134 @@ function genVis(data) {
         })
         .attr("stroke", "black")
         .attr("stroke-width", 1);
-        */
+
+    svg.append("text")
+        .text("Correlation: " + d3.round(pearsonCorrel,3))
+        .attr("class", "text-label")
+        .style("fill", "#1A242F")
+        .style("font-size", "0.8em")
+        .attr("x", function(d) {
+            return x(x2)-8;
+        })
+        .attr("y", function(d) {
+            return y(y2)+23;
+        });
+
 }
+
+
+
+
+function findLineByLeastSquares(values_x, values_y) {
+    var sum_x = 0;
+    var sum_y = 0;
+    var sum_xy = 0;
+    var sum_xx = 0;
+    var count = 0;
+
+    /*
+     * We'll use those variables for faster read/write access.
+     */
+    var x = 0;
+    var y = 0;
+    var values_length = values_x.length;
+
+    if (values_length != values_y.length) {
+        throw new Error('The parameters values_x and values_y need to have same size!');
+    }
+
+    /*
+     * Nothing to do.
+     */
+    if (values_length === 0) {
+        return [
+            [],
+            []
+        ];
+    }
+
+    /*
+     * Calculate the sum for each of the parts necessary.
+     */
+    for (var v = 0; v < values_length; v++) {
+        x = values_x[v];
+        y = values_y[v];
+        sum_x += x;
+        sum_y += y;
+        sum_xx += x * x;
+        sum_xy += x * y;
+        count++;
+    }
+
+    /*
+     * Calculate m and b for the formular:
+     * y = x * m + b
+     */
+    var m = (count * sum_xy - sum_x * sum_y) / (count * sum_xx - sum_x * sum_x);
+    var b = (sum_y / count) - (m * sum_x) / count;
+
+    /*
+     * We will make the x and y result line now
+     */
+    var result_values_x = [];
+    var result_values_y = [];
+
+    for (var v = 0; v < values_length; v++) {
+        x = values_x[v];
+        y = x * m + b;
+        result_values_x.push(x);
+        result_values_y.push(y);
+    }
+
+    return [result_values_x, result_values_y];
+}
+
+function getPearsonsCorrelation(x, y) {
+    var shortestArrayLength = 0;
+    if (x.length == y.length) {
+        shortestArrayLength = x.length;
+    } else if (x.length > y.length) {
+        shortestArrayLength = y.length;
+        console.error('x has more items in it, the last ' + (x.length - shortestArrayLength) + ' item(s) will be ignored');
+    } else {
+        shortestArrayLength = x.length;
+        console.error('y has more items in it, the last ' + (y.length - shortestArrayLength) + ' item(s) will be ignored');
+    }
+
+    var xy = [];
+    var x2 = [];
+    var y2 = [];
+
+    for (var i = 0; i < shortestArrayLength; i++) {
+        xy.push(x[i] * y[i]);
+        x2.push(x[i] * x[i]);
+        y2.push(y[i] * y[i]);
+    }
+
+    var sum_x = 0;
+    var sum_y = 0;
+    var sum_xy = 0;
+    var sum_x2 = 0;
+    var sum_y2 = 0;
+
+    for (var i = 0; i < shortestArrayLength; i++) {
+        sum_x += x[i];
+        sum_y += y[i];
+        sum_xy += xy[i];
+        sum_x2 += x2[i];
+        sum_y2 += y2[i];
+    }
+
+    var step1 = (shortestArrayLength * sum_xy) - (sum_x * sum_y);
+    var step2 = (shortestArrayLength * sum_x2) - (sum_x * sum_x);
+    var step3 = (shortestArrayLength * sum_y2) - (sum_y * sum_y);
+    var step4 = Math.sqrt(step2 * step3);
+    var answer = step1 / step4;
+
+    if (isNaN(answer)) return 0;
+    return answer;
+}
+
 
 var updateVis = function(data) {
     var x = d3.scale.linear()
@@ -261,7 +445,7 @@ var updateVis = function(data) {
         .range([0, width - margins.left - margins.right]);
 
     // this does the same as for the y axis but maps from the rating variable to the height to 0. 
-    var y = d3.scale.log()
+    var y = d3.scale.linear()
         .domain(d3.extent(data, function(d) {
             return d.applicants_population;
         }))
@@ -287,7 +471,11 @@ var updateVis = function(data) {
         .attr("r", 5)
         .attr("class", "dot")
         .style("fill", function(d) {
-            return '#2c3e50';
+            if (d.outlier) {
+                return 'red';
+            } else {
+                return '#2c3e50';
+            }
         }).on("mouseover", function(d) {
             tooltip.transition()
                 .duration(200)
@@ -312,34 +500,3 @@ var updateVis = function(data) {
     nodeExit.selectAll('circle')
         .attr('r', 0);
 };
-
-// returns slope, intercept and r-square of the line
-function leastSquares(xSeries, ySeries) {
-    var reduceSumFunc = function(prev, cur) {
-        return prev + cur;
-    };
-
-    var xBar = xSeries.reduce(reduceSumFunc) * 1.0 / xSeries.length;
-    var yBar = ySeries.reduce(reduceSumFunc) * 1.0 / ySeries.length;
-
-    var ssXX = xSeries.map(function(d) {
-            return Math.pow(d - xBar, 2);
-        })
-        .reduce(reduceSumFunc);
-
-    var ssYY = ySeries.map(function(d) {
-            return Math.pow(d - yBar, 2);
-        })
-        .reduce(reduceSumFunc);
-
-    var ssXY = xSeries.map(function(d, i) {
-            return (d - xBar) * (ySeries[i] - yBar);
-        })
-        .reduce(reduceSumFunc);
-
-    var slope = ssXY / ssXX;
-    var intercept = yBar - (xBar * slope);
-    var rSquare = Math.pow(ssXY, 2) / (ssXX * ssYY);
-
-    return [slope, intercept, rSquare];
-}
