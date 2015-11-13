@@ -32,8 +32,6 @@ angular.module('gdpModule', ['angularAwesomeSlider'])
             .then(function(res) {
                 $scope.dataset = res.data.data;
 
-
-
                 //generate ststistic data for outliers
                 for (i = 0; i < $scope.dataset.length; i++) {
                     $scope.dataset[i].applicants_population = Math.log10($scope.dataset[i].applicants_population);
@@ -279,7 +277,7 @@ function genVis(data) {
     }
     var linePoints = findLineByLeastSquares(xSeries, ySeries);
     console.log(linePoints);
-   var pearsonCorrel = getPearsonsCorrelation(xSeries, ySeries);
+    var pearsonCorrel = getPearsonsCorrelation(xSeries, ySeries);
 
     var x1 = linePoints[0][0];
     var y1 = linePoints[1][0];
@@ -309,15 +307,15 @@ function genVis(data) {
         .attr("stroke-width", 1);
 
     svg.append("text")
-        .text("Correlation: " + d3.round(pearsonCorrel,3))
+        .text("Correlation: " + d3.round(pearsonCorrel, 3))
         .attr("class", "text-label")
         .style("fill", "#1A242F")
         .style("font-size", "0.8em")
         .attr("x", function(d) {
-            return x(x2)-8;
+            return x(x2) - 8;
         })
         .attr("y", function(d) {
-            return y(y2)+23;
+            return y(y2) + 23;
         });
 
 }
@@ -434,69 +432,3 @@ function getPearsonsCorrelation(x, y) {
     if (isNaN(answer)) return 0;
     return answer;
 }
-
-
-var updateVis = function(data) {
-    var x = d3.scale.linear()
-        .domain(d3.extent(data, function(d) {
-            return d.GDP;
-        }))
-        // the range maps the domain to values from 0 to the width minus the left and right margins (used to space out the visualization)
-        .range([0, width - margins.left - margins.right]);
-
-    // this does the same as for the y axis but maps from the rating variable to the height to 0. 
-    var y = d3.scale.linear()
-        .domain(d3.extent(data, function(d) {
-            return d.applicants_population;
-        }))
-        // Note that height goes first due to the weird SVG coordinate system
-        .range([height - margins.top - margins.bottom, 0]);
-
-    var xAxis = d3.svg.axis().scale(x).orient("bottom").tickPadding(2);
-    var yAxis = d3.svg.axis().scale(y).orient("left").tickPadding(2);
-
-    svg.selectAll("g.y.axis").transition().duration(1000).call(yAxis);
-    svg.selectAll("g.x.axis").transition().duration(1000).call(xAxis);
-
-    var node = svg.selectAll("g.node").data(data, function(d) {
-        return d.country;
-    });
-
-    var nodeEnter = node.enter().append("g").attr("class", "node")
-        .attr('transform', function(d) {
-            return "translate(" + x(d.GDP) + "," + (height + 100) + ")";
-        });
-
-    nodeEnter.append("circle")
-        .attr("r", 5)
-        .attr("class", "dot")
-        .style("fill", function(d) {
-            if (d.outlier) {
-                return 'red';
-            } else {
-                return '#2c3e50';
-            }
-        }).on("mouseover", function(d) {
-            tooltip.transition()
-                .duration(200)
-                .style("opacity", 0.9);
-            tooltip.html(d.country)
-                .style("left", (d3.event.pageX - 10) + "px")
-                .style("top", (d3.event.pageY - 28) + "px");
-        })
-        .on("mouseout", function(d) {
-            tooltip.transition()
-                .duration(500)
-                .style("opacity", 0);
-        });
-
-    node.transition().duration(500)
-        .attr('transform', function(d) {
-            return "translate(" + x(d.GDP) + "," + y(d.applicants_population) + ")";
-        });
-
-
-    var nodeExit = node.exit().remove();
-    nodeExit.selectAll('circle')
-        .attr('r', 0);
-};

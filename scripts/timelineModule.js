@@ -1,29 +1,30 @@
 angular.module('timelineModule', ['angularAwesomeSlider'])
     .controller('timelineCtrl', ['$scope', '$http', function($scope, $http) {
 
-    $scope.yearValues = [];
-    var scale = [2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015];
-    for (var s = 0;s<scale.length;s++){
-    	var object={
-    	year:scale[s],
-    	applicants:0};
-    	$scope.yearValues.push(object);
-    }
-     $http.get('data/total_applicants_each_year.json')
+        $scope.yearValues = [];
+        var scale = [2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015];
+        for (var s = 0; s < scale.length; s++) {
+            var object = {
+                year: scale[s],
+                applicants: 0
+            };
+            $scope.yearValues.push(object);
+        }
+        $http.get('data/total_applicants_each_year.json')
             .then(function(res) {
-            	var data = res.data.data;
-                for (var i=0;i<data.length;i++){
-                	for (var j=0;j<$scope.yearValues.length;j++){
-                		if (data[i].year==$scope.yearValues[j].year)
-                		{
-                			$scope.yearValues[j].applicants+=data[i].applicants;
-                		}
-                	}
+                var data = res.data.data;
+                for (var i = 0; i < data.length; i++) {
+                    for (var j = 0; j < $scope.yearValues.length; j++) {
+                        if (data[i].year == $scope.yearValues[j].year) {
+                            $scope.yearValues[j].applicants += data[i].applicants;
+                        }
+                    }
                 }
+                genVisYearTimeline($scope.yearValues);
             });
 
         $scope.rangeValue = "2008;2015";
-             $scope.options = {
+        $scope.options = {
             from: 2008,
             to: 2015,
             step: 1,
@@ -44,63 +45,76 @@ angular.module('timelineModule', ['angularAwesomeSlider'])
             }
         };
 
-        genVisYearTimeline($scope.yearValues);
+        
     }]);
 
 function genVisYearTimeline(data) {
 
-    svg = d3.select("overviewLinechart").append("svg").attr("width", width).attr("height", height).append("g")
-        .attr("transform", "translate(" + margins.left + "," + margins.top + ")");
+    // Set the dimensions of the canvas / graph
+    var margin = {
+            top: 30,
+            right: 20,
+            bottom: 30,
+            left: 50
+        },
+        width = 500 - margin.left - margin.right,
+        height = 400 - margin.top - margin.bottom;
 
-    var daten = [
-        {'spieltag': 1, 'tore': 3},
-        {'spieltag': 2, 'tore': 5},
-        {'spieltag': 3, 'tore': 2},
-        {'spieltag': 4, 'tore': 7},
-        {'spieltag': 5, 'tore': 12},
-    ]
+        console.log(data);
 
-     var width = 300;
-     var height = 200;
-     var xFaktor=30;
-     var yFaktor=20;
+    // Set the ranges
+    var x = d3.scale.linear()
+        .range([0, width]);
+    var y = d3.scale.linear()
+        .range([height, 0]);
 
-var svgElement= d3.select('overviewLinechart').append(svg).attr({
-   
-    'width': width,
-    'height': height,
+    // Define the axes
+    var xAxis = d3.svg.axis().scale(x)
+        .orient("bottom").ticks(5);
 
-});
+    var yAxis = d3.svg.axis().scale(y)
+        .orient("left").ticks(5);
 
-
-var pfad=
-    d3.svg.line()
-        .x(function (d){
-            return d.spieltag*xFaktor;
+    // Define the line
+    var valueline = d3.svg.line()
+        .x(function(d) {
+            return x(d.year);
         })
-        .y(function (d){
-            return height - d.tore*yFaktor;
+        .y(function(d) {
+            return y(d.applicants);
         });
-        .interpolate('basis')
 
-svgElement
-    .append('path')
-    .attr ({
-        'd': pfad(daten),
-        'fill': 'none',
-        'stroke': 'black',
-        'stroke-width': 4
-         //dicke des stiftes
+    // Adds the svg canvas
+    var svg = d3.select("#overviewLinechart")
+        .append("svg")
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+        .append("g")
+        .attr("transform",
+            "translate(" + margin.left + "," + margin.top + ")");
 
+    // Scale the range of the data
+    x.domain(d3.extent(data, function(d) {
+        return d.year;
+    }));
+    y.domain(d3.extent(data, function(d) {
+        return d.applicants;
+    }));
 
-    });
+    // Add the valueline path.
+    svg.append("path")
+        .attr("class", "line")
+        .attr("d", valueline(data));
 
+    // Add the X Axis
+    svg.append("g")
+        .attr("class", "x axis")
+        .attr("transform", "translate(0," + height + ")")
+        .call(xAxis);
 
-
+    // Add the Y Axis
+    svg.append("g")
+        .attr("class", "y axis")
+        .call(yAxis);
+        
 }
-
-
-
-
-
-
