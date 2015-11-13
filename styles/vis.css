@@ -18,7 +18,7 @@ text {
     fill: #414241;
 }
 .dot {
-    opacity: .9;
+    opacity: .7;
 }
 
 circle.dot:hover{
