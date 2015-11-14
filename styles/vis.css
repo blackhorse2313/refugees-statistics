@@ -1,43 +1,47 @@
 /* Scatterplot style */
+
 .name {
-    float:right;
-    color:#27aae1;
+    float: right;
+    color: #27aae1;
 }
+
 .axis {
     fill: none;
     stroke: #AAA;
     stroke-width: 1px;
 }
+
 text {
     stroke: none;
     fill: #666666;
     font-size: .6em;
-    font-family:"Helvetica Neue"
+    font-family: "Helvetica Neue"
 }
+
 .label {
     fill: #414241;
 }
+
 .dot {
     opacity: .7;
 }
 
-circle.dot:hover{
-	fill: #128f76 !important;
+circle.dot:hover {
+    fill: #2C3E50 !important;
 }
 
-div.tooltip {   
-  position: absolute;           
-  text-align: center;                          
-  padding: 2px;             
-  font: 12px sans-serif;        
-  background:  #18bc9c;   
-  border: 0px;      
-  border-radius: 4px;           
-  pointer-events: none;         
+div.tooltip {
+    position: absolute;
+    text-align: center;
+    padding: 2px;
+    font: 12px sans-serif;
+    background: #18bc9c;
+    border: 0px;
+    border-radius: 4px;
+    pointer-events: none;
 }
 
-
-path { 
+path {
     stroke: steelblue;
     stroke-width: 2;
     fill: none;
@@ -49,4 +53,12 @@ path {
     stroke: grey;
     stroke-width: 1;
     shape-rendering: crispEdges;
+}
+
+svg {
+    border: 1px solid #999999;
+}
+
+.helpLine:hover {
+    opacity: 0.1 !important;
 }

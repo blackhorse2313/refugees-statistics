@@ -4,11 +4,11 @@ angular.module('gdpModule', ['angularAwesomeSlider'])
         var scale = [2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015];
         var i, j, k; // the iterators
 
+
+
         $scope.dataset = [];
         $scope.countries = [];
         $scope.currentYear = 2015;
-
-
 
         $scope.stats = [];
         $scope.yearValueList = [];
@@ -32,6 +32,12 @@ angular.module('gdpModule', ['angularAwesomeSlider'])
             .then(function(res) {
                 $scope.dataset = res.data.data;
 
+                $scope.colors = d3.scale.linear()
+                    .domain(d3.extent($scope.dataset, function(d) {
+                        return d.population;
+                    }))
+                    .range(["white", "#217DBB"]);
+
                 //generate ststistic data for outliers
                 for (i = 0; i < $scope.dataset.length; i++) {
                     $scope.dataset[i].applicants_population = Math.log10($scope.dataset[i].applicants_population);
@@ -41,6 +47,8 @@ angular.module('gdpModule', ['angularAwesomeSlider'])
                             $scope.yearValueList[j].valueList.push($scope.dataset[i].korrel);
                         }
                     }
+
+
                 }
                 for (i = 0; i < scale.length; i++) {
 
@@ -66,7 +74,7 @@ angular.module('gdpModule', ['angularAwesomeSlider'])
                     for (j = 0; j < scale.length; j++) {
                         if ($scope.dataset[i].year == $scope.stats[j].year) {
                             //if ($scope.dataset[i].korrel <= $scope.stats[j].lowerBound || $scope.dataset[i].korrel >= $scope.stats[j].upperBound) {
-                            if ($scope.dataset[i].korrel <= $scope.stats[j].median * 0.4 || $scope.dataset[i].korrel >= $scope.stats[j].median * 1.8) {
+                            if ($scope.dataset[i].korrel <= $scope.stats[j].median * 0.4 || $scope.dataset[i].korrel >= $scope.stats[j].median * 1.6) {
                                 $scope.dataset[i].outlier = true;
                             } else {
                                 $scope.dataset[i].outlier = false;
@@ -96,10 +104,51 @@ angular.module('gdpModule', ['angularAwesomeSlider'])
                     if (a.country > b.country) return 1;
                     return 0;
                 });
-                genVis(displayData);
+                genVis(displayData, $scope.hideOutliers);
+                genDotPlot(displayData);
             });
 
+        $scope.hoverListItem = function(iso, enter) {
+            for (i = 0; i < $scope.dataset.length; i++) {
+                if ($scope.dataset[i].year == $scope.currentYear && $scope.dataset[i].iso2 == iso) {
+                    if (enter) {
+                        $("#dot" + iso).css("fill", "#FF00FF").attr("r", 7);
+                        $("#hl" + iso).css("opacity", 0.1);
+                    } else {
+                        $("#hl" + iso).css("opacity", 0);
+                        if (!$scope.dataset[i].outlier) {
+                            $("#dot" + iso).css("fill", "#15A589").attr("r", 5);
+                        } else {
+                            $("#dot" + iso).css("fill", "#d62c1a").attr("r", 5);
+                        }
+
+                    }
+                }
+            }
+
+        };
+
+        $scope.selectAllButton = false;
+        $scope.selectAll = function(selected) {
+            console.log(selected);
+
+            if (selected) {
+                var displayData = [];
+                for (i = 0; i < $scope.dataset.length; i++) {
+                    $scope.dataset[i].selected = true;
+                    if ($scope.dataset[i].year == $scope.currentYear && $scope.dataset[i].selected) {
+                        displayData.push($scope.dataset[i]);
+                    }
+                }
+                $('#scatterPlotGDP > svg').remove();
+                $('#dotPlotGDP > svg').remove();
+                genVis(displayData, $scope.hideOutliers);
+                genDotPlot(displayData);
+            }
+        };
+
         $scope.check = function(iso) {
+            $scope.selectAllButton = false;
             var displayData = [];
             for (i = 0; i < $scope.dataset.length; i++) {
                 if ($scope.dataset[i].iso2 == iso) {
@@ -115,9 +164,36 @@ angular.module('gdpModule', ['angularAwesomeSlider'])
 
             }
             $('#scatterPlotGDP > svg').remove();
-            genVis(displayData);
+            genVis(displayData, $scope.hideOutliers);
+
+            $('#dotPlotGDP > svg').remove();
+            genDotPlot(displayData);
         };
 
+        // Button for outliers
+        $scope.buttonClass = "btn btn-danger";
+        $scope.buttonText = "Hide outliers";
+        $scope.hideOutliers = false;
+        $scope.outliersButton = function() {
+            if ($scope.buttonText == "Hide outliers") {
+                $scope.buttonClass = "btn btn-primary";
+                $scope.buttonText = "Display outliers";
+                $scope.hideOutliers = true;
+            } else {
+                $scope.buttonClass = "btn btn-danger";
+                $scope.buttonText = "Hide outliers";
+                $scope.hideOutliers = false;
+            }
+            var displayData = [];
+            for (i = 0; i < $scope.dataset.length; i++) {
+                if ($scope.dataset[i].year == $scope.currentYear && $scope.dataset[i].selected) {
+                    displayData.push($scope.dataset[i]);
+                }
+
+            }
+            $('#scatterPlotGDP > svg').remove();
+            genVis(displayData, $scope.hideOutliers);
+        };
 
 
 
@@ -150,7 +226,10 @@ angular.module('gdpModule', ['angularAwesomeSlider'])
                 }
             }
             $('#scatterPlotGDP > svg').remove();
-            genVis(displayData);
+            genVis(displayData, $scope.hideOutliers);
+
+            $('#dotPlotGDP > svg').remove();
+            genDotPlot(displayData);
         };
         $scope.simulate = function() {
             var s = 0;
@@ -171,18 +250,31 @@ angular.module('gdpModule', ['angularAwesomeSlider'])
     }]);
 
 // just to have some space around items. 
-var margins = {
-    "left": 40,
-    "right": 80,
-    "top": 30,
-    "bottom": 30
-};
+
 
 var width = 500;
 var height = 500;
 var svg, tooltip;
 
-function genVis(data) {
+function genVis(dataset, hideOutliers) {
+
+    var data = [];
+    if (hideOutliers) {
+        for (i = 0; i < dataset.length; i++) {
+            if (!dataset[i].outlier) {
+                data.push(dataset[i]);
+            }
+        }
+    } else {
+        data = dataset;
+    }
+
+    var margins = {
+        "left": 40,
+        "right": 85,
+        "top": 30,
+        "bottom": 40
+    };
     // we add the SVG component to the scatterPlotGDP div
     svg = d3.select("#scatterPlotGDP").append("svg").attr("width", width).attr("height", height).append("g")
         .attr("transform", "translate(" + margins.left + "," + margins.top + ")");
@@ -240,14 +332,18 @@ function genVis(data) {
     nodeGroup.append("circle")
         .attr("r", 5)
         .attr("class", "dot")
+        .attr("id", function(d) {
+            return "dot" + d.iso2;
+        })
         .style("fill", function(d) {
             if (d.outlier) {
-                return 'red';
+                return '#d62c1a';
             } else {
-                return '#2c3e50';
+                return '#15A589';
             }
 
         })
+        .style("opacity", 1)
         .on("mouseover", function(d) {
             tooltip.transition()
                 .duration(200)
@@ -320,115 +416,158 @@ function genVis(data) {
 
 }
 
+var genDotPlot = function(dataset) {
 
-
-
-function findLineByLeastSquares(values_x, values_y) {
-    var sum_x = 0;
-    var sum_y = 0;
-    var sum_xy = 0;
-    var sum_xx = 0;
-    var count = 0;
-
-    /*
-     * We'll use those variables for faster read/write access.
-     */
-    var x = 0;
-    var y = 0;
-    var values_length = values_x.length;
-
-    if (values_length != values_y.length) {
-        throw new Error('The parameters values_x and values_y need to have same size!');
+    var data = [];
+    for (i = 0; i < dataset.length; i++) {
+        if (!dataset[i].outlier) {
+            data.push(dataset[i]);
+        }
     }
 
-    /*
-     * Nothing to do.
-     */
-    if (values_length === 0) {
-        return [
-            [],
-            []
-        ];
+    data.sort(function(a, b) {
+        return a.GDP - b.GDP;
+    });
+
+    var margins = {
+        "left": 100,
+        "right": 20,
+        "top": 20,
+        "bottom": 20
+    };
+
+    var dotPadding = 10;
+
+
+    svg = d3.select("#dotPlotGDP").append("svg").attr("width", width).attr("height", height).append("g")
+        .attr("transform", "translate(" + margins.left + "," + margins.top + ")");
+
+    var x = d3.scale.linear()
+        .domain(d3.extent(data, function(d) {
+            return d.GDP;
+        }))
+        .range([dotPadding, width - margins.left - margins.right - dotPadding]);
+
+    var x2 = d3.scale.linear()
+        .domain(d3.extent(data, function(d) {
+            return Math.log10(d.applicants_population);
+        }))
+        .range([dotPadding, width - margins.left - margins.right - dotPadding]);
+
+    var y = d3.scale.ordinal()
+        .domain(data.map(function(d) {
+            return d.country;
+        }))
+        .rangeBands([height - margins.top - margins.bottom, 0])
+        .rangePoints([height - margins.top - margins.bottom, 0]);
+
+    // we add the axes SVG component. At this point, this is just a placeholder. The actual axis will be added in a bit
+    svg.append("g").attr("class", "y axis");
+
+    // this is the actual definition of our x and y axes. The orientation refers to where the labels appear - for the x axis, below or above the line, and for the y axis, left or right of the line. Tick padding refers to how much space between the tick and the label. There are other parameters too - see https://github.com/mbostock/d3/wiki/SVG-Axes for more information
+    var yAxis = d3.svg.axis().scale(y).orient("left").ticks(data.length);
+
+    // this is where we select the axis we created a few lines earlier. See how we select the axis item. in our svg we appended a g element with a x/y and axis class. To pull that back up, we do this svg select, then 'call' the appropriate axis object for rendering.    
+    svg.selectAll("g.y.axis").call(yAxis);
+
+    // svg.selectAll("g.text").style("text-anchor", "inherit");
+
+    // now, we can get down to the data part, and drawing stuff. We are telling D3 that all nodes (g elements with class node) will have data attached to them. The 'key' we use (to let D3 know the uniqueness of items) will be the iso2.
+    var node = svg.selectAll("g.node").data(data, function(d) {
+        return d.country;
+    });
+
+    var arr = [];
+    for (i = 0; i < data.length; i++) {
+        arr.push(data[i].GDP);
     }
+    var trendline = svg.selectAll(".trendline")
+        .data(data);
+    // Line for the dots
+    trendline.enter()
+        .append("line")
+        .attr("class", "horizontalLine")
+        .attr("x1", function(d) {
+            return x(d3.min(arr)) - dotPadding;
+        })
+        .attr("y1", function(d) {
+            return y(d.country);
+        })
+        .attr("x2", function(d) {
+            return x(d3.max(arr)) + dotPadding;
+        })
+        .attr("y2", function(d) {
+            return y(d.country);
+        })
+        .attr("stroke", "grey")
+        .attr("stroke-width", 1)
+        .style("opacity", 0.5);
 
-    /*
-     * Calculate the sum for each of the parts necessary.
-     */
-    for (var v = 0; v < values_length; v++) {
-        x = values_x[v];
-        y = values_y[v];
-        sum_x += x;
-        sum_y += y;
-        sum_xx += x * x;
-        sum_xy += x * y;
-        count++;
-    }
 
-    /*
-     * Calculate m and b for the formular:
-     * y = x * m + b
-     */
-    var m = (count * sum_xy - sum_x * sum_y) / (count * sum_xx - sum_x * sum_x);
-    var b = (sum_y / count) - (m * sum_x) / count;
+    // we 'enter' the data, making the SVG group (to contain a circle and text) with a class node. This corresponds with what we told the data it should be above.
 
-    /*
-     * We will make the x and y result line now
-     */
-    var result_values_x = [];
-    var result_values_y = [];
 
-    for (var v = 0; v < values_length; v++) {
-        x = values_x[v];
-        y = x * m + b;
-        result_values_x.push(x);
-        result_values_y.push(y);
-    }
 
-    return [result_values_x, result_values_y];
-}
 
-function getPearsonsCorrelation(x, y) {
-    var shortestArrayLength = 0;
-    if (x.length == y.length) {
-        shortestArrayLength = x.length;
-    } else if (x.length > y.length) {
-        shortestArrayLength = y.length;
-        console.error('x has more items in it, the last ' + (x.length - shortestArrayLength) + ' item(s) will be ignored');
-    } else {
-        shortestArrayLength = x.length;
-        console.error('y has more items in it, the last ' + (y.length - shortestArrayLength) + ' item(s) will be ignored');
-    }
+    // we 'enter' the data, making the SVG group (to contain a circle and text) with a class node. This corresponds with what we told the data it should be above.
 
-    var xy = [];
-    var x2 = [];
-    var y2 = [];
 
-    for (var i = 0; i < shortestArrayLength; i++) {
-        xy.push(x[i] * y[i]);
-        x2.push(x[i] * x[i]);
-        y2.push(y[i] * y[i]);
-    }
 
-    var sum_x = 0;
-    var sum_y = 0;
-    var sum_xy = 0;
-    var sum_x2 = 0;
-    var sum_y2 = 0;
+    var nodeGroup2 = node.enter().append("g").attr("class", "node")
+        // this is how we set the position of the items. Translate is an incredibly useful function for rotating and positioning items 
+        .attr('transform', function(d) {
+            return "translate(" + x2(Math.log10(d.applicants_population)) + "," + y(d.country) + ")";
+        });
+    var nodeGroup = node.enter().append("g").attr("class", "node")
+        // this is how we set the position of the items. Translate is an incredibly useful function for rotating and positioning items 
+        .attr('transform', function(d) {
+            return "translate(" + x(d.GDP) + "," + y(d.country) + ")";
+        });
 
-    for (var i = 0; i < shortestArrayLength; i++) {
-        sum_x += x[i];
-        sum_y += y[i];
-        sum_xy += xy[i];
-        sum_x2 += x2[i];
-        sum_y2 += y2[i];
-    }
+    nodeGroup2.append("circle")
+        .attr("r", 5)
+        .attr("class", "dot")
+        .style("opacity", 1)
+        .style("fill", "#2C3E50");
 
-    var step1 = (shortestArrayLength * sum_xy) - (sum_x * sum_y);
-    var step2 = (shortestArrayLength * sum_x2) - (sum_x * sum_x);
-    var step3 = (shortestArrayLength * sum_y2) - (sum_y * sum_y);
-    var step4 = Math.sqrt(step2 * step3);
-    var answer = step1 / step4;
+    nodeGroup.append("circle")
+        .attr("r", 5)
+        .attr("class", "dot")
+        .style("opacity", 0.5)
+        .style("fill", "#FF00FF");
 
-    if (isNaN(answer)) return 0;
-    return answer;
-}
+
+    // invisible line for selecting
+    trendline.enter()
+        .append("line")
+        .attr("class", "helpLine")
+        .attr("id", function(d) {
+            return 'hl' + d.iso2;
+        })
+        .attr("x1", function(d) {
+            return x(d3.min(arr)) - dotPadding;
+        })
+        .attr("y1", function(d) {
+            return y(d.country);
+        })
+        .attr("x2", function(d) {
+            return x(d3.max(arr)) + dotPadding;
+        })
+        .attr("y2", function(d) {
+            return y(d.country);
+        })
+        .attr("stroke", "red")
+        .attr("stroke-width", 18)
+        .style("opacity", 0)
+        .on("mouseover", function(d) {
+            $("#dot" + d.iso2).css("fill", "#FF00FF").attr("r", 7);
+        })
+        .on("mouseout", function(d) {
+            $("#dot" + d.iso2).css("fill", "#15A589").attr("r", 5);
+        });
+
+
+
+
+
+};
