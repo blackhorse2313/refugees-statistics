@@ -153,21 +153,7 @@ function genVisYearTimeline(data) {
         return  'blue';
     });
  
-    svg
-        .selectAll('text')
-        .data(data)
-        .enter()
-        .append("text")
-        .text("Applicants: " + d.applicants)
-        .attr("class", "text-label")
-        .style("fill", "#1A242F")
-        .style("font-size", "20")
-        .attr("x", function(d) {
-            return x (d.year) ;
-        })
-        .attr("y", function(d) {
-            return y (d.applicants);
-        });
+   
 
    
  svg
