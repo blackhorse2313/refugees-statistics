@@ -166,6 +166,7 @@ function genVisYearTimeline(data) {
         .append('g')
         .attr('class','dot')
         .append('circle')
+        .attr("opacity", 1)
         .attr('cx', function(d) {
             return x(d.year);
         })
@@ -176,7 +177,7 @@ function genVisYearTimeline(data) {
             return y(d.applicants);
         })
         .attr('fill', function(d) {
-            return 'blue';
+            return '#337AB7';
         });
 
 var f = d3.format(",.0f")
@@ -190,7 +191,7 @@ svg
     .attr('y', function(d){return y(d.applicants)-8;})
     .attr('font-size', 300)
     .attr('font-family', 'Arial')
-    .attr('fill', 'blue')
+    .attr('fill', '#2C3E50')
     .attr('text-anchor', 'middle');
 
 

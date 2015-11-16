@@ -14,16 +14,11 @@
 text {
     stroke: none;
     fill: black;
-    font-size: .6em;
-    font-family: "Helvetica Neue"
+    font-size: 11px;
 }
 
 .label {
     fill: #414241;
-}
-
-.dot {
-    opacity: .7;
 }
 
 circle.dot:hover {
@@ -42,7 +37,7 @@ div.tooltip {
 }
 
 path {
-    stroke: steelblue;
+    stroke: #2C3E50;
     stroke-width: 2;
     fill: none;
 }
