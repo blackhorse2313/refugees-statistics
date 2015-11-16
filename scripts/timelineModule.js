@@ -1,7 +1,7 @@
 angular.module('timelineModule', ['angularAwesomeSlider'])
     .controller('timelineCtrl', ['$scope', '$http', function($scope, $http) {
 
-        var i,j;
+        var i, j;
         var d = [];
 
         $scope.yearValues = [];
@@ -65,7 +65,7 @@ angular.module('timelineModule', ['angularAwesomeSlider'])
             }
         };
 
-        
+
     }]);
 
 function genVisYearTimeline(data) {
@@ -80,7 +80,7 @@ function genVisYearTimeline(data) {
         width = 500 - margin.left - margin.right,
         height = 400 - margin.top - margin.bottom;
 
-     //Console.log(data);
+    //Console.log(data);
 
     // Set the ranges
     var x = d3.scale.linear()
@@ -90,7 +90,8 @@ function genVisYearTimeline(data) {
 
     // Define the axes
     var xAxis = d3.svg.axis().scale(x)
-        .orient("bottom");
+        .orient("bottom")
+        .tickFormat(d3.format(""));
 
     var yAxis = d3.svg.axis().scale(y)
         .orient("left").ticks(5);
@@ -117,9 +118,9 @@ function genVisYearTimeline(data) {
     x.domain(d3.extent(data, function(d) {
         return d.year;
     }));
-    y.domain(d3.extent(data, function(d) {
+    y.domain([0, d3.max(data, function(d){
         return d.applicants;
-    }));
+    })]);
 
     // Add the valueline path.
     svg.append("path")
@@ -135,74 +136,66 @@ function genVisYearTimeline(data) {
     //Add the Y Axis
 
 
- svg
-    .selectAll('circle')
+    svg
+        .selectAll('circle')
+        .data(data)
+        .enter()
+        .append('g')
+        .attr('class','dot')
+        .append('circle')
+        .attr('cx', function(d) {
+            return x(d.year);
+        })
+        .attr('r', function(d) {
+            return 5;
+        })
+        .attr('cy', function(d) {
+            return y(d.applicants);
+        })
+        .attr('fill', function(d) {
+            return 'blue';
+        });
+
+var f = d3.format(",.0f")
+
+svg
+.selectAll('g.dot')
+.append('text')
     .data(data)
-    .enter()
-    .append ('circle')
-    .attr('cx', function (d){
-      return x (d.year);
-    })
-    .attr('r', function (d){
-            return 3;
-    })
-    .attr('cy', function (d){
-     return y (d.applicants) ;
-    })
-    .attr('fill', function (d){
-        return  'blue';
-    });
+    .text(function(d){return f(d.applicants);})
+    .attr('x', function(d){return x(d.year);})
+    .attr('y', function(d){return y(d.applicants)-8;})
+    .attr('font-size', 300)
+    .attr('font-family', 'Arial')
+    .attr('fill', 'blue')
+    .attr('text-anchor', 'middle');
 
 
-   
- svg
-   .selectAll('text')
-   .data(data)  
-   .enter()         
-   .append('text')
-   .attr('x', function (d){
-      return x(d.year);
-    })
 
-    .attr('y', function (d){
-     return y(d.applicants);
-    })
 
-    .attr('fill', function (d){
-        return  'blue';
-    })
 
-    .attr('font-family', function (d){
-        return  'Arial';
-    })
+}
 
-    .attr('font-size', function (d){
-        return  '10';
-    })
-
-   .text(function(d) {return d.applicants;
-   });}
-
- //   svg
-   //.append('circle')
-  // .data(data)
-  // .attr('x', function (d){
-     //   return d.year;
-   //})
-   //.attr('y', function (d){
- //       return d.applicants;
- //  })
-  // .attr('r': 5)
+//   svg
+//.append('circle')
+// .data(data)
+// .attr('x', function (d){
+//   return d.year;
+//})
+//.attr('y', function (d){
+//       return d.applicants;
+//  })
+// .attr('r': 5)
 //});
- 
-     //'r': 5,
-  //   'cx': 20,
-     //'cy': 20,
-   // 'fill': 'black'
- // });
+
+//'r': 5,
+//   'cx': 20,
+//'cy': 20,
+// 'fill': 'black'
+// });
 
 
-  var genRadarChart = function(data, LegendOptions) {
+var genRadarChart = function(data, LegendOptions) {
     var wh = 500,
         m = 50,
         legendWidth = 100;
@@ -216,7 +209,7 @@ function genVisYearTimeline(data) {
         width = wh + legendWidth,
         height = wh;
 
-        var colorscale = d3.scale.category10();
+    var colorscale = d3.scale.category10();
 
     ////////////////////////////////////////////////////////////// 
     //////////////////// Draw the Chart ////////////////////////// 
@@ -233,7 +226,7 @@ function genVisYearTimeline(data) {
         levels: 12,
         roundStrokes: false,
         labelFactor: 1.1,
-        dotRadius: 3,   
+        dotRadius: 3,
         //color: color
     };
     //Call function to draw the Radar chart
@@ -290,7 +283,3 @@ function genVisYearTimeline(data) {
             return d;
         });
 };
-
-        
-
-
