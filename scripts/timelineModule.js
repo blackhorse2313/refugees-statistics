@@ -112,7 +112,8 @@ function genVisYearTimeline(data) {
     // Define the axes
     var xAxis = d3.svg.axis().scale(x)
         .orient("bottom")
-        .ticks(data.length);
+        .ticks(data.length)
+        .tickFormat(d3.format(""));
 
     var yAxis = d3.svg.axis().scale(y)
         .orient("left").ticks(5);
