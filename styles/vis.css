@@ -13,7 +13,7 @@
 
 text {
     stroke: none;
-    fill: #666666;
+    fill: black;
     font-size: .6em;
     font-family: "Helvetica Neue"
 }
@@ -61,4 +61,11 @@ svg {
 
 .helpLine:hover {
     opacity: 0.1 !important;
+}
+
+.tooltip {
+    font-weight: bold;
+    background: white;
+    border: 0px;
+    border-radius: 4px;
 }
