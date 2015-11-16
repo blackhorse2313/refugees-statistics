@@ -3,7 +3,10 @@
     <div style="width:500px;margin-left:50px; display:inline-block">
         <div id="overviewLinechart"></div>
         <h3>Time range</h3>
-        <input ng-model="rangeValue" type="text" id="range" slider options="options" />
+        <input ng-model="rangeValue"  type="text" id="range" slider options="options" ng-change="changeInterval()"/>
+        {{lowerBound()}}
     </div>
     <div class="radarChart" style="margin-left:50px; display:inline-block;"></div>
+
+
 </div>
