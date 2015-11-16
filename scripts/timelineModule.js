@@ -60,7 +60,7 @@ function genVisYearTimeline(data) {
         width = 500 - margin.left - margin.right,
         height = 400 - margin.top - margin.bottom;
 
-        console.log(data);
+     //Console.log(data);
 
     // Set the ranges
     var x = d3.scale.linear()
@@ -70,7 +70,7 @@ function genVisYearTimeline(data) {
 
     // Define the axes
     var xAxis = d3.svg.axis().scale(x)
-        .orient("bottom").ticks(5);
+        .orient("bottom");
 
     var yAxis = d3.svg.axis().scale(y)
         .orient("left").ticks(5);
@@ -112,9 +112,77 @@ function genVisYearTimeline(data) {
         .attr("transform", "translate(0," + height + ")")
         .call(xAxis);
 
-    // Add the Y Axis
-    svg.append("g")
-        .attr("class", "y axis")
-        .call(yAxis);
+    //Add the Y Axis
+
+
+ svg
+    .selectAll('circle')
+    .data(data)
+    .enter()
+    .append ('circle')
+    .attr('cx', function (d){
+      return x (d.year);
+    })
+    .attr('r', function (d){
+            return 3;
+    })
+    .attr('cy', function (d){
+     return y (d.applicants) ;
+    })
+    .attr('fill', function (d){
+        return  'blue';
+    });
+ 
+
+   
+ svg
+   .selectAll('text')
+   .data(data)  
+   .enter()         
+   .append('text')
+   .attr('x', function (d){
+      return x(d.year);
+    })
+
+    .attr('y', function (d){
+     return y(d.applicants);
+    })
+
+    .attr('fill', function (d){
+        return  'blue';
+    })
+
+    .attr('font-family', function (d){
+        return  'Arial';
+    })
+
+    .attr('font-size', function (d){
+        return  '10';
+    })
+
+   .text(function(d) {return d.applicants;
+   });}
+
+ //   svg
+   //.append('circle')
+  // .data(data)
+  // .attr('x', function (d){
+     //   return d.year;
+   //})
+   //.attr('y', function (d){
+ //       return d.applicants;
+ //  })
+  // .attr('r': 5)
+//});
+ 
+     //'r': 5,
+  //   'cx': 20,
+     //'cy': 20,
+   // 'fill': 'black'
+ // });
+
+
+  
         
-}
+
+
