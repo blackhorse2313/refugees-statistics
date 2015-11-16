@@ -1,8 +1,10 @@
 angular.module('timelineModule', ['angularAwesomeSlider'])
     .controller('timelineCtrl', ['$scope', '$http', function($scope, $http) {
 
-        var i, j;
+
         var d = [];
+        var i, j;
+        var data;
 
         $scope.yearValues = [];
         var scale = [2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015];
@@ -15,9 +17,10 @@ angular.module('timelineModule', ['angularAwesomeSlider'])
         }
         $http.get('data/total_applicants_each_year.json')
             .then(function(res) {
-                var data = res.data.data;
-                for (var i = 0; i < data.length; i++) {
-                    for (var j = 0; j < $scope.yearValues.length; j++) {
+
+                data = res.data.data;
+                for (i = 0; i < data.length; i++) {
+                    for (j = 0; j < $scope.yearValues.length; j++) {
                         if (data[i].year == $scope.yearValues[j].year) {
                             $scope.yearValues[j].applicants += data[i].applicants;
                         }
@@ -43,7 +46,26 @@ angular.module('timelineModule', ['angularAwesomeSlider'])
                 genRadarChart(d, scale);
             });
 
+
+
         $scope.rangeValue = "2008;2015";
+        $scope.changeInterval = function() {
+            var d = [];
+            var lowerBound= $scope.rangeValue.split(";")[0];
+            var upperBound= $scope.rangeValue.split(";")[1];
+
+            for (i = lowerBound; i <= upperBound; i++) {
+                console.log(i);
+                for (j = 0; j < scale.length; j++) {
+                    if ($scope.yearValues[j].year == i) {
+                        d.push($scope.yearValues[j]);
+                    }
+                }
+            }
+            $('#lineChartYear').remove();
+            genVisYearTimeline(d);
+        };
+        // slider options
         $scope.options = {
             from: 2008,
             to: 2015,
@@ -64,7 +86,6 @@ angular.module('timelineModule', ['angularAwesomeSlider'])
                 } // use it if double value
             }
         };
-
 
     }]);
 
@@ -91,7 +112,7 @@ function genVisYearTimeline(data) {
     // Define the axes
     var xAxis = d3.svg.axis().scale(x)
         .orient("bottom")
-        .tickFormat(d3.format(""));
+        .ticks(data.length);
 
     var yAxis = d3.svg.axis().scale(y)
         .orient("left").ticks(5);
@@ -108,6 +129,7 @@ function genVisYearTimeline(data) {
     // Adds the svg canvas
     var svg = d3.select("#overviewLinechart")
         .append("svg")
+        .attr("id","lineChartYear")
         .attr("width", width + margin.left + margin.right)
         .attr("height", height + margin.top + margin.bottom)
         .append("g")
