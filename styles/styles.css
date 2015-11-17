@@ -80,7 +80,7 @@ div {
 */
 
 #countryTable {
-    width: 200px;
+    
 }
 
 .checkboxInTable {
@@ -102,7 +102,9 @@ div {
 
 #countryTable tbody {
     display: block;
-    height: 500px;
+    height: 415px;
+    width: 186px;
+    font-size: 13px;
     overflow: auto;
 }
 

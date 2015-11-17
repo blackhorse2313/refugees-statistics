@@ -29,10 +29,12 @@ div.tooltip {
     position: absolute;
     text-align: center;
     padding: 2px;
-    font: 12px sans-serif;
-    background: #18bc9c;
+    background: #2C3E50;
     border: 0px;
-    border-radius: 4px;
+    border-radius: 6px;
+    font-size: 11px;
+    color: white;
+    font-family: "Lato","Helvetica Neue",Helvetica,Arial,sans-serif;
     pointer-events: none;
 }
 
@@ -68,4 +70,10 @@ svg {
 .y.label{
     font-size: 11px;
     font-weight: normal;
+}
+
+#listLegend{
+    background: linear-gradient(to right, #ffffff, #217dbb);
+    height: 20px;
+    border: 1px solid grey;
 }

@@ -104,7 +104,7 @@ angular.module('gdpModule', ['angularAwesomeSlider'])
                     if (a.country > b.country) return 1;
                     return 0;
                 });
-                genVis(displayData, $scope.hideOutliers);
+                genScatterPlotGDP(displayData, $scope.hideOutliers);
                 genDotPlot(displayData);
             });
 
@@ -112,14 +112,14 @@ angular.module('gdpModule', ['angularAwesomeSlider'])
             for (i = 0; i < $scope.dataset.length; i++) {
                 if ($scope.dataset[i].year == $scope.currentYear && $scope.dataset[i].iso2 == iso) {
                     if (enter) {
-                        $("#dot" + iso).css("fill", "#FF00FF").attr("r", 7);
+                        $("#dot" + iso).css("fill", "#2C3E50");
                         $("#hl" + iso).css("opacity", 0.1);
                     } else {
                         $("#hl" + iso).css("opacity", 0);
                         if (!$scope.dataset[i].outlier) {
-                            $("#dot" + iso).css("fill", "#15A589").attr("r", 5);
+                            $("#dot" + iso).css("fill", "#15A589");
                         } else {
-                            $("#dot" + iso).css("fill", "#d62c1a").attr("r", 5);
+                            $("#dot" + iso).css("fill", "#d62c1a");
                         }
 
                     }
@@ -140,9 +140,8 @@ angular.module('gdpModule', ['angularAwesomeSlider'])
                         displayData.push($scope.dataset[i]);
                     }
                 }
-                $('#scatterPlotGDP > svg').remove();
-                $('#dotPlotGDP > svg').remove();
-                genVis(displayData, $scope.hideOutliers);
+
+                genScatterPlotGDP(displayData, $scope.hideOutliers);
                 genDotPlot(displayData);
             }
         };
@@ -163,10 +162,7 @@ angular.module('gdpModule', ['angularAwesomeSlider'])
                 }
 
             }
-            $('#scatterPlotGDP > svg').remove();
-            genVis(displayData, $scope.hideOutliers);
-
-            $('#dotPlotGDP > svg').remove();
+            genScatterPlotGDP(displayData, $scope.hideOutliers);
             genDotPlot(displayData);
         };
 
@@ -191,8 +187,7 @@ angular.module('gdpModule', ['angularAwesomeSlider'])
                 }
 
             }
-            $('#scatterPlotGDP > svg').remove();
-            genVis(displayData, $scope.hideOutliers);
+            genScatterPlotGDP(displayData, $scope.hideOutliers);
         };
 
 
@@ -225,10 +220,9 @@ angular.module('gdpModule', ['angularAwesomeSlider'])
                     displayData.push($scope.dataset[i]);
                 }
             }
-            $('#scatterPlotGDP > svg').remove();
-            genVis(displayData, $scope.hideOutliers);
+            genScatterPlotGDP(displayData, $scope.hideOutliers);
 
-            $('#dotPlotGDP > svg').remove();
+
             genDotPlot(displayData);
         };
         $scope.simulate = function() {
@@ -245,19 +239,18 @@ angular.module('gdpModule', ['angularAwesomeSlider'])
                 }
             }, 1500, scale.length - 1);
         };
-
-
     }]);
 
 // just to have some space around items. 
 
-
+var delimiter = d3.format(",.0f");
 var width = 500;
-var height = 500;
+var height = 530;
 var svg, tooltip;
 
-function genVis(dataset, hideOutliers) {
+function genScatterPlotGDP(dataset, hideOutliers) {
 
+    $('#scatterPlotGDP > svg').remove();
     var data = [];
     if (hideOutliers) {
         for (i = 0; i < dataset.length; i++) {
@@ -291,6 +284,12 @@ function genVis(dataset, hideOutliers) {
         }))
         .range([height - margins.top - margins.bottom, 0]);
 
+    var dotSize = d3.scale.linear()
+        .domain(d3.extent(data, function(d) {
+            return d.population;
+        }))
+        .range([3, 15]);
+
     // we add the axes SVG component. At this point, this is just a placeholder. The actual axis will be added in a bit
     svg.append("g").attr("class", "x axis").attr("transform", "translate(0," + y.range()[0] + ")");
     svg.append("g").attr("class", "y axis");
@@ -301,18 +300,17 @@ function genVis(dataset, hideOutliers) {
         .attr("fill", "#414241")
         .attr("text-anchor", "end")
         .attr("x", width / 2 - 50)
-        .attr("y", height - 55)
-        .text("GDP");
+        .attr("y", height - 75)
+        .text("GDP per capita");
 
     svg.append("text")
         .attr("class", "y label")
-        .attr("text-anchor", "end")
+        .attr("text-anchor", "middle")
         .attr("y", -15)
         .attr("x", -200)
         .attr("dy", ".75em")
         .attr("transform", "rotate(-90)")
-        .text("Asylum applicants");
-
+        .text("Asylum applicants / population");
 
     // this is the actual definition of our x and y axes. The orientation refers to where the labels appear - for the x axis, below or above the line, and for the y axis, left or right of the line. Tick padding refers to how much space between the tick and the label. There are other parameters too - see https://github.com/mbostock/d3/wiki/SVG-Axes for more information
     var xAxis = d3.svg.axis().scale(x).orient("bottom").tickPadding(2).tickSize(0).tickFormat("");
@@ -341,7 +339,9 @@ function genVis(dataset, hideOutliers) {
 
     // we add our first graphics element! A circle! 
     nodeGroup.append("circle")
-        .attr("r", 5)
+        .attr("r", function(d) {
+            return dotSize(d.population);
+        })
         .attr("class", "dot")
         .attr("id", function(d) {
             return "dot" + d.iso2;
@@ -358,9 +358,9 @@ function genVis(dataset, hideOutliers) {
         .on("mouseover", function(d) {
             tooltip.transition()
                 .duration(200)
-                .style("opacity", 0.9);
-            tooltip.html(d.country)
-                .style("left", (d3.event.pageX - 10) + "px")
+                .style("opacity", 1);
+            tooltip.html('<u>' + d.country + '</u><br>GDP per capita: ' + delimiter(d.GDP) + ' $<br>Asylum applicants: ' + delimiter(d.applicants) + '<br>Population: ' + delimiter(d.population))
+                .style("left", (d3.event.pageX + 20) + "px")
                 .style("top", (d3.event.pageY - 28) + "px");
         })
         .on("mouseout", function(d) {
@@ -423,11 +423,11 @@ function genVis(dataset, hideOutliers) {
         .attr("y", function(d) {
             return y(y2) + 23;
         });
-
 }
 
 var genDotPlot = function(dataset) {
 
+    $('#dotPlotGDP > svg').remove();
     var data = [];
     for (i = 0; i < dataset.length; i++) {
         if (!dataset[i].outlier) {
@@ -443,7 +443,7 @@ var genDotPlot = function(dataset) {
         "left": 100,
         "right": 20,
         "top": 20,
-        "bottom": 20
+        "bottom": 60
     };
 
     var dotPadding = 10;
@@ -570,14 +570,46 @@ var genDotPlot = function(dataset) {
         .attr("stroke-width", 18)
         .style("opacity", 0)
         .on("mouseover", function(d) {
-            $("#dot" + d.iso2).css("fill", "#FF00FF").attr("r", 7);
+            $("#dot" + d.iso2).css("fill", "#2C3E50");
         })
         .on("mouseout", function(d) {
-            $("#dot" + d.iso2).css("fill", "#15A589").attr("r", 5);
+            $("#dot" + d.iso2).css("fill", "#15A589");
         });
 
 
-
-
-
+    //Draw the Circle
+    var top = height - margins.top - margins.bottom * 0.5;
+    var middle = 50;
+    console.log(top);
+    var legend = svg.append("g")
+        .attr("class", "legend")
+        .style("border", "1px dashed black");
+    legend.append("circle")
+        .attr("cx", middle)
+        .attr("cy", top)
+        .attr("r", 7)
+        .attr("fill", "rgba(255, 0, 255, 0.5)");
+    legend.append("text")
+        .attr("x", middle + 10)
+        .attr("y", top + 4.5)
+        .text("GDP per capita");
+    legend.append("circle")
+        .attr("cx", middle + 100)
+        .attr("cy", top)
+        .attr("r", 7)
+        .attr("fill", "rgb(44, 62, 80)");
+    legend.append("text")
+        .attr("x", middle + 110)
+        .attr("y", top + 4.5)
+        .text("Asylum applicants / population");
+    legend.append("rect")
+        .attr("x", middle - 20)
+        .attr("y", top - 17)
+        .attr("width", 300)
+        .attr("height", 34)
+        .style("fill", "none")
+        .style("stroke", "grey")
+        .style("stroke-width", "1")
+        .style("padding", "10")
+        .text("Asylum applicants / population");
 };
