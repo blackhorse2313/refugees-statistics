@@ -295,17 +295,28 @@ function genVis(dataset, hideOutliers) {
     svg.append("g").attr("class", "x axis").attr("transform", "translate(0," + y.range()[0] + ")");
     svg.append("g").attr("class", "y axis");
 
+
     // this is our X axis label. Nothing too special to see here.
     svg.append("text")
         .attr("fill", "#414241")
         .attr("text-anchor", "end")
-        .attr("x", width / 2)
-        .attr("y", height - 35);
+        .attr("x", width / 2 - 50)
+        .attr("y", height - 55)
+        .text("GDP");
+
+    svg.append("text")
+        .attr("class", "y label")
+        .attr("text-anchor", "end")
+        .attr("y", -15)
+        .attr("x", -200)
+        .attr("dy", ".75em")
+        .attr("transform", "rotate(-90)")
+        .text("Asylum applicants");
 
 
     // this is the actual definition of our x and y axes. The orientation refers to where the labels appear - for the x axis, below or above the line, and for the y axis, left or right of the line. Tick padding refers to how much space between the tick and the label. There are other parameters too - see https://github.com/mbostock/d3/wiki/SVG-Axes for more information
-    var xAxis = d3.svg.axis().scale(x).orient("bottom").tickPadding(2);
-    var yAxis = d3.svg.axis().scale(y).orient("left").tickPadding(2);
+    var xAxis = d3.svg.axis().scale(x).orient("bottom").tickPadding(2).tickSize(0).tickFormat("");
+    var yAxis = d3.svg.axis().scale(y).orient("left").tickPadding(2).tickSize(0).tickFormat("");
 
     // this is where we select the axis we created a few lines earlier. See how we select the axis item. in our svg we appended a g element with a x/y and axis class. To pull that back up, we do this svg select, then 'call' the appropriate axis object for rendering.    
     svg.selectAll("g.y.axis").call(yAxis);
@@ -405,8 +416,7 @@ function genVis(dataset, hideOutliers) {
     svg.append("text")
         .text("Correlation: " + d3.round(pearsonCorrel, 3))
         .attr("class", "text-label")
-        .style("fill", "#1A242F")
-        .style("font-size", "0.8em")
+        .style("fill", "black")
         .attr("x", function(d) {
             return x(x2) - 8;
         })

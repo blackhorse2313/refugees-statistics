@@ -22,7 +22,7 @@
         <div style="display: inline-block;margin-left:20px; margin-top:30px">
             <div id="dotPlotGDP"></div>
             <div id="timeline" style="margin-top:20px">
-                <a class="btn btn-primary" ng-click="simulate()" ng-disabled="disabled" style="display: inline-block;"><span class="glyphicon glyphicon-play"></span> Play</a>
+                <a class="btn btn-primary btn-sm" ng-click="simulate()" ng-disabled="disabled" style="display: inline-block;"><span class="glyphicon glyphicon-play"></span> Play</a>
                 <div style="display: inline-block; width:400px; margin-left:20px; margin-right:20px">
                     <input ng-model="currentYear" type="text" id="timeline" slider options="options" ng-disabled="disabled" ng-change="changeTime()" />
                 </div>
@@ -30,7 +30,7 @@
         </div>
         <div style="display: inline-block; margin-left:20px; margin-top:30px">
             <div id="scatterPlotGDP"></div>
-            <button class="btn" ng-click="outliersButton()" ng-class="buttonClass" style="margin-top:20px;">{{buttonText}}</button>
+            <button class="btn btn-sm" ng-click="outliersButton()" ng-class="buttonClass" style="margin-top:20px;">{{buttonText}}</button>
         </div>
     </div>
 </div>

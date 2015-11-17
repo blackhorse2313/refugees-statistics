@@ -1,12 +1,11 @@
 <div class="page-header">
     <h1>Overview of changing number of refugees during time</h1>
-    <div style="width:500px;margin-left:50px; display:inline-block">
-        <div id="overviewLinechart"></div>
-        <h3>Time range</h3>
-        <input ng-model="rangeValue"  type="text" id="range" slider options="options" ng-change="changeInterval()"/>
-        {{lowerBound()}}
+    <div style="width:450px;margin-left:50px;margin-top:30px; display:inline-block">
+        <div id="yearlyLineChart"></div>
+        <div id="rangeSlider">
+            <input ng-model="rangeValue" type="text" id="range" slider options="options" ng-change="changeInterval()" />
+        </div>
+        <div id="monthlyLineChart"></div>
     </div>
-    <div class="radarChart" style="margin-left:50px; display:inline-block;"></div>
-
-
+    <div class="radarChart" style="margin-left:50px; margin-top:30px;display:inline-block;"></div>
 </div>

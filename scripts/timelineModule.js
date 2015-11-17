@@ -1,13 +1,14 @@
+var colorscale = d3.scale.category10();
+
 angular.module('timelineModule', ['angularAwesomeSlider'])
     .controller('timelineCtrl', ['$scope', '$http', function($scope, $http) {
 
-
+        var scale = [2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015];
         var d = [];
         var i, j;
         var data;
 
         $scope.yearValues = [];
-        var scale = [2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015];
         for (var s = 0; s < scale.length; s++) {
             var object = {
                 year: scale[s],
@@ -26,7 +27,6 @@ angular.module('timelineModule', ['angularAwesomeSlider'])
                         }
                     }
                 }
-                genVisYearTimeline($scope.yearValues);
 
                 for (j = 0; j < scale.length; j++) {
                     var year = [];
@@ -43,27 +43,40 @@ angular.module('timelineModule', ['angularAwesomeSlider'])
                         }
                     }
                 }
-                genRadarChart(d, scale);
+                $scope.changeInterval();
             });
 
 
 
-        $scope.rangeValue = "2008;2015";
+        $scope.rangeValue = "2011;2015";
         $scope.changeInterval = function() {
-            var d = [];
-            var lowerBound= $scope.rangeValue.split(";")[0];
-            var upperBound= $scope.rangeValue.split(";")[1];
+            var yearData = [];
+            var monthData = [];
+            var lowerBound = $scope.rangeValue.split(";")[0];
+            var upperBound = $scope.rangeValue.split(";")[1];
 
             for (i = lowerBound; i <= upperBound; i++) {
-                console.log(i);
                 for (j = 0; j < scale.length; j++) {
                     if ($scope.yearValues[j].year == i) {
-                        d.push($scope.yearValues[j]);
+                        yearData.push($scope.yearValues[j]);
                     }
                 }
             }
-            $('#lineChartYear').remove();
-            genVisYearTimeline(d);
+
+            genVisYearlyLineChart(yearData);
+
+            var s = [];
+            for (i = lowerBound; i <= upperBound; i++) {
+                s.push(i);
+                for (j = 0; j < data.length; j++) {
+                    if (data[j].year == i) {
+                        monthData.push(data[j]);
+                    }
+                }
+            }
+
+            genRadarChart(mapping(monthData, s), scale);
+            genVisMonthlyLineChart(monthData);
         };
         // slider options
         $scope.options = {
@@ -89,19 +102,19 @@ angular.module('timelineModule', ['angularAwesomeSlider'])
 
     }]);
 
-function genVisYearTimeline(data) {
+function genVisYearlyLineChart(data) {
+
+    $('#lineChartYear').remove();
 
     // Set the dimensions of the canvas / graph
     var margin = {
             top: 30,
-            right: 20,
+            right: 50,
             bottom: 30,
             left: 50
         },
         width = 500 - margin.left - margin.right,
-        height = 400 - margin.top - margin.bottom;
-
-    //Console.log(data);
+        height = 300 - margin.top - margin.bottom;
 
     // Set the ranges
     var x = d3.scale.linear()
@@ -109,11 +122,14 @@ function genVisYearTimeline(data) {
     var y = d3.scale.linear()
         .range([height, 0]);
 
+
+
     // Define the axes
     var xAxis = d3.svg.axis().scale(x)
         .orient("bottom")
         .ticks(data.length)
-        .tickFormat(d3.format(""));
+        .tickFormat(d3.format("d"))
+        .tickSubdivide(0);
 
     var yAxis = d3.svg.axis().scale(y)
         .orient("left").ticks(5);
@@ -128,9 +144,9 @@ function genVisYearTimeline(data) {
         });
 
     // Adds the svg canvas
-    var svg = d3.select("#overviewLinechart")
+    var svg = d3.select("#yearlyLineChart")
         .append("svg")
-        .attr("id","lineChartYear")
+        .attr("id", "lineChartYear")
         .attr("width", width + margin.left + margin.right)
         .attr("height", height + margin.top + margin.bottom)
         .append("g")
@@ -141,7 +157,7 @@ function genVisYearTimeline(data) {
     x.domain(d3.extent(data, function(d) {
         return d.year;
     }));
-    y.domain([0, d3.max(data, function(d){
+    y.domain([0, d3.max(data, function(d) {
         return d.applicants;
     })]);
 
@@ -164,7 +180,7 @@ function genVisYearTimeline(data) {
         .data(data)
         .enter()
         .append('g')
-        .attr('class','dot')
+        .attr('class', 'dot')
         .append('circle')
         .attr("opacity", 1)
         .attr('cx', function(d) {
@@ -178,48 +194,59 @@ function genVisYearTimeline(data) {
         })
         .attr('fill', function(d) {
             return '#337AB7';
+        }).on("mouseover", function(d,i) {
+            $('#yearIndex_'+i).css('fill-opacity',0.5);
+        })
+        .on("mouseout", function(d,i) {
+            $('#yearIndex_'+i).css('fill-opacity',0);
         });
 
-var f = d3.format(",.0f")
+    var f = d3.format(",.0f");
 
-svg
-.selectAll('g.dot')
-.append('text')
-    .data(data)
-    .text(function(d){return f(d.applicants);})
-    .attr('x', function(d){return x(d.year);})
-    .attr('y', function(d){return y(d.applicants)-8;})
-    .attr('font-size', 300)
-    .attr('font-family', 'Arial')
-    .attr('fill', '#2C3E50')
-    .attr('text-anchor', 'middle');
-
-
-
-
-
+    svg
+        .selectAll('g.dot')
+        .append('text')
+        .data(data)
+        .text(function(d) {
+            return f(d.applicants);
+        })
+        .attr('x', function(d) {
+            return x(d.year);
+        })
+        .attr('y', function(d) {
+            return y(d.applicants) - 8;
+        })
+        .attr('font-size', 300)
+        .attr('font-family', 'Arial')
+        .attr('fill', '#2C3E50')
+        .attr('text-anchor', 'middle');
 }
 
-//   svg
-//.append('circle')
-// .data(data)
-// .attr('x', function (d){
-//   return d.year;
-//})
-//.attr('y', function (d){
-//       return d.applicants;
-//  })
-// .attr('r': 5)
-//});
-
-//'r': 5,
-//   'cx': 20,
-//'cy': 20,
-// 'fill': 'black'
-// });
-
-
 var genRadarChart = function(data, LegendOptions) {
+
+    var maxValue=0;
+    for (i = 0; i < data.length; i++) {
+        var value = d3.max(data[i], function(d) {
+            return d.value;
+        });
+        if (value>maxValue){
+            maxValue=value;
+        }
+    }
+    maxValue = Math.ceil(maxValue / 10000) * 10000;
+    console.log('maxValue: ' + maxValue);
+
+    for (i = 0; i < data.length; i++) {
+        if (data[i].length < 12) {
+            var month = {
+                axis: getMonthName(data[i].length),
+                value: 0
+            };
+            data[i].push(month);
+        }
+    }
+
+    $('#radarChart').remove();
     var wh = 500,
         m = 50,
         legendWidth = 100;
@@ -233,8 +260,6 @@ var genRadarChart = function(data, LegendOptions) {
         width = wh + legendWidth,
         height = wh;
 
-    var colorscale = d3.scale.category10();
-
     ////////////////////////////////////////////////////////////// 
     //////////////////// Draw the Chart ////////////////////////// 
     ////////////////////////////////////////////////////////////// 
@@ -246,8 +271,8 @@ var genRadarChart = function(data, LegendOptions) {
         w: width,
         h: height,
         margin: margin,
-        maxValue: 120000,
-        levels: 12,
+        maxValue: maxValue,
+        levels: maxValue/10000,
         roundStrokes: false,
         labelFactor: 1.1,
         dotRadius: 3,
@@ -256,54 +281,126 @@ var genRadarChart = function(data, LegendOptions) {
     //Call function to draw the Radar chart
     RadarChart(".radarChart", data, radarChartOptions);
 
-    var svg = d3.select('.radarChart')
-        .selectAll('svg')
-        .append('svg')
-        .attr("width", 500)
-        .attr("height", 500);
 
-    //Create the title for the legend
-    var text = svg.append("text")
-        .attr("class", "title")
-        .attr('transform', 'translate(90,0)')
-        .attr("x", width - 70)
-        .attr("y", 10)
-        .attr("font-size", "12px")
-        .attr("fill", "#404040")
-        .text("What % of owners use a specific service in a week");
-
-    //Initiate Legend   
-    var legend = svg.append("g")
-        .attr("class", "legend")
-        .attr("height", 100)
-        .attr("width", 200)
-        .attr('transform', 'translate(90,20)');
-    //Create colour squares
-    legend.selectAll('rect')
-        .data(LegendOptions)
-        .enter()
-        .append("rect")
-        .attr("x", width - 65)
-        .attr("y", function(d, i) {
-            return i * 20;
-        })
-        .attr("width", 10)
-        .attr("height", 10)
-        .style("fill", function(d, i) {
-            return colorscale(i);
-        });
-    //Create text next to squares
-    legend.selectAll('text')
-        .data(LegendOptions)
-        .enter()
-        .append("text")
-        .attr("x", width - 52)
-        .attr("y", function(d, i) {
-            return i * 20 + 9;
-        })
-        .attr("font-size", "11px")
-        .attr("fill", "#737373")
-        .text(function(d) {
-            return d;
-        });
 };
+
+var mapping = function(data, scale) {
+    var d = [];
+    for (j = 0; j < scale.length; j++) {
+        var year = [];
+        d.push(year);
+    }
+    for (i = 0; i < data.length; i++) {
+        for (j = 0; j < scale.length; j++) {
+            if (data[i].year == scale[j]) {
+                var month = {
+                    axis: getMonthName(data[i].month),
+                    value: data[i].applicants
+                };
+                d[j].push(month);
+            }
+        }
+    }
+    return d;
+};
+
+
+function genVisMonthlyLineChart(data) {
+
+    $('#lineChartMonth').remove();
+    // Set the dimensions of the canvas / graph
+    var margin = {
+            top: 30,
+            right: 50,
+            bottom: 30,
+            left: 50
+        },
+        width = 500 - margin.left - margin.right,
+        height = 300 - margin.top - margin.bottom;
+
+
+    var f = d3.format(",.0f");
+
+    // Set the ranges
+    var x = d3.scale.ordinal()
+        .rangeBands([0, width])
+        .domain(data.map(function(d) {
+            return d.year + '_' + d.month;
+        }));
+    var y = d3.scale.linear()
+        .range([height, 0])
+        .domain([0, d3.max(data, function(d) {
+            return d.applicants;
+        })]);
+    var xText = d3.scale.ordinal()
+        .rangeBands([0, width])
+        .domain(data.map(function(d) {
+            return d.year + '';
+        }));
+
+    //number of ticks
+    var max = d3.max(data, function(d) {
+        return d.year;
+    });
+    var min = d3.min(data, function(d) {
+        return d.year;
+    });
+    // Define the axes
+
+    var xAxis = d3.svg.axis().scale(xText)
+        .ticks(max - min)
+        .tickFormat(d3.format("d"))
+        //.tickSize(10)      
+        .orient("bottom");
+
+    var xAxisTicks = d3.svg.axis().scale(x)
+        .ticks(data.length)
+        .tickFormat("")
+        .orient("bottom");
+
+    var yAxis = d3.svg.axis().scale(y)
+        .orient("left").ticks(5);
+
+    // Define the line
+    var valueline = d3.svg.line()
+        .x(function(d) {
+            return x(d.year + '_' + d.month);
+        })
+        .y(function(d) {
+            return y(d.applicants);
+        });
+
+    // Adds the svg canvas
+    var svg = d3.select("#monthlyLineChart")
+        .append("svg")
+        .attr("id", "lineChartMonth")
+        .attr("width", width + margin.left + margin.right)
+        .attr("height", height + margin.top + margin.bottom)
+        .append("g")
+        .attr("transform",
+            "translate(" + margin.left + "," + margin.top + ")");
+
+    // Scale the range of the data
+
+    // Add the valueline path.
+    svg.append("path")
+        .attr("class", "line")
+        .attr("d", valueline(data));
+
+    // Add the X Axis
+    svg.append("g")
+        .attr("id", "monthScaleText")
+        .attr("class", "x axis")
+        .attr("transform", "translate(0," + height + ")")
+        .call(xAxis);
+
+    svg.append("g")
+        .attr("class", "x axis")
+        .attr("transform", "translate(0," + height + ")")
+        .call(xAxisTicks);
+
+    svg.append("g")
+        .attr("class", "y axis")
+        .call(yAxis);
+
+}

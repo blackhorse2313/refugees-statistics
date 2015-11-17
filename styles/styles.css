@@ -56,8 +56,12 @@ div {
 
 .jslider div.jslider-value span {
     visibility: hidden;
+        
 }
 
+.jslider div.jslider-value{
+    background: rgba(255, 255, 255, 0) !important;
+}
 
 /* Hide the label of the slider */
 
@@ -86,6 +90,8 @@ div {
     margin-bottom: 0;
 }
 
+
+
 .jslider.disabled {
     opacity: 1.0 !important;
 }
@@ -113,6 +119,13 @@ div {
     user-select: none;
 }
 
-.radarArea{
-        fill-opacity: 0 !important;
+#rangeSlider{
+    margin: 30px ;
+    margin-top: 0px ;
+    width: auto ;
+}
+
+#monthScaleText > g > line{
+    stroke: transparent;
+    stroke-width: 0;
 }

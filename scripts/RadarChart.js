@@ -89,17 +89,7 @@ function RadarChart(id, data, options) {
 		.style("fill-opacity", cfg.opacityCircles)
 		//.style("filter" , "url(#glow)");
 
-	//Text indicating at what % each level is
-	axisGrid.selectAll(".axisLabel")
-	   .data(d3.range(1,(cfg.levels+1)).reverse())
-	   .enter().append("text")
-	   .attr("class", "axisLabel")
-	   .attr("x", 4)
-	   .attr("y", function(d){return -d*radius/cfg.levels;})
-	   .attr("dy", "0.4em")
-	   .style("font-size", "10px")
-	   .attr("fill", "#737373")
-	   .text(function(d,i) { return Format(maxValue * d/cfg.levels); });
+	
 
 	/////////////////////////////////////////////////////////
 	//////////////////// Draw the axes //////////////////////
@@ -156,24 +146,22 @@ function RadarChart(id, data, options) {
 	blobWrapper
 		.append("path")
 		.attr("class", "radarArea")
+		.attr("id",function(d,i) { return 'yearIndex_'+i; })
 		.attr("d", function(d,i) { return radarLine(d); })
 		.style("fill", function(d,i) { return cfg.color(i); })
-		.style("fill-opacity", cfg.opacityArea)
+		.style("fill-opacity", 0 )
 		.on('mouseover', function (d,i){
 			//Dim all blobs
 			d3.selectAll(".radarArea")
-				.transition().duration(200)
-				.style("fill-opacity", 0.1); 
+				.transition().duration(200); 
 			//Bring back the hovered over blob
 			d3.select(this)
-				.transition().duration(200)
-				.style("fill-opacity", 0.7);	
+				.transition().duration(200);	
 		})
 		.on('mouseout', function(){
 			//Bring back all blobs
 			d3.selectAll(".radarArea")
-				.transition().duration(200)
-				.style("fill-opacity", cfg.opacityArea);
+				.transition().duration(200);
 		});
 		
 	//Create the outlines	
@@ -218,7 +206,6 @@ function RadarChart(id, data, options) {
 		.on("mouseover", function(d,i) {
 			newX =  parseFloat(d3.select(this).attr('cx')) - 10;
 			newY =  parseFloat(d3.select(this).attr('cy')) - 10;
-					
 			tooltip
 				.attr('x', newX)
 				.attr('y', newY)
@@ -237,6 +224,18 @@ function RadarChart(id, data, options) {
 	var tooltip = g.append("text")
 		.attr("class", "tooltip")
 		.style("opacity", 0);
+
+		//Text indicating at what % each level is
+	axisGrid.selectAll(".axisLabel")
+	   .data(d3.range(1,(cfg.levels+1)).reverse())
+	   .enter().append("text")
+	   .attr("class", "axisLabel")
+	   .attr("x", 4)
+	   .attr("y", function(d){return -d*radius/cfg.levels;})
+	   .attr("dy", "0.4em")
+	   .style("font-size", "10px")
+	   .attr("fill", "#737373")
+	   .text(function(d,i) { return Format(maxValue * d/cfg.levels); });
 	
 	/////////////////////////////////////////////////////////
 	/////////////////// Helper Function /////////////////////
