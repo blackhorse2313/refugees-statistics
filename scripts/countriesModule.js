@@ -18,11 +18,13 @@ angular.module('countriesModule', [])
                     return b.applicants - a.applicants;
                 });
                 /* put d3 functions here */
+                genHorizontalBarchart(displayData,"barImmigrants");
             });
 
         $http.get('data/emigrants.json')
             .then(function(res) {
                 emigrants = res.data.data;
                 /* put d3 funtions here */
+                genHorizontalBarchart(emigrants,"barEmigrants");
             });
     }]);

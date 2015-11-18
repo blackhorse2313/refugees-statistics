@@ -78,3 +78,13 @@ svg {
     height: 20px;
     border: 1px solid grey;
 }
+
+.verticalBarAxis line, .verticalBarAxis path{
+    fill:none;
+    stroke:white;
+    shape-rendering:crispEdges;
+}
+
+.verticalBar:hover{
+    fill:#18BC9C;
+}
