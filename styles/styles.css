@@ -16,6 +16,14 @@ div {
     text-align: center;
 }
 
+.panel-title{
+    width: auto;
+    text-align: center;
+}
+
+h1 {
+    margin-bottom: 20px;
+}
 
 /*
 .navbar-collapse.collapse.in .nav.navbar-nav {

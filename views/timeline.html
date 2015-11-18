@@ -1,11 +1,35 @@
 <div class="page-header">
     <h1>Overview of changing number of refugees during time</h1>
-    <div style="width:450px;margin-left:50px;margin-top:30px; display:inline-block">
-        <div id="yearlyLineChart"></div>
-        <div id="rangeSlider">
-            <input ng-model="rangeValue" type="text" id="range" slider options="options" ng-change="changeInterval()" />
+    <div style="display:inline-block">
+    <div style="margin-left:30px;">
+        <div class="panel panel-default" style="margin-left:30px; display:inline-block;width:auto">
+            <div class="panel-heading">
+                <h3 class="panel-title">Yearly view</h3>
+            </div>
+            <div class="panel-body">
+                <div id="yearlyLineChart"></div>
+                <div id="rangeSlider">
+                    <input ng-model="rangeValue" type="text" id="range" slider options="options" ng-change="changeInterval()" />
+                </div>
+            </div>
         </div>
-        <div id="monthlyLineChart"></div>
+         <div class="panel panel-default" style="margin-left:30px; width:auto">
+        <div class="panel-heading">
+            <h3 class="panel-title">Detailed view</h3>
+        </div>
+        <div class="panel-body">
+            <div id="monthlyLineChart"></div>
+        </div>
     </div>
-    <div class="radarChart" style="margin-left:50px; margin-top:30px;display:inline-block;"></div>
+    </div>
+        
+    </div>
+    <div class="panel panel-default" style="margin-left:30px; display:inline-block;width:auto">
+        <div class="panel-heading">
+            <h3 class="panel-title">Monthly view</h3>
+        </div>
+        <div class="panel-body">
+            <div class="radarChart"></div>
+        </div>
+    </div>
 </div>

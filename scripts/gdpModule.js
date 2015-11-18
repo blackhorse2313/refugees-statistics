@@ -300,7 +300,7 @@ function genScatterPlotGDP(dataset, hideOutliers) {
         .attr("fill", "#414241")
         .attr("text-anchor", "end")
         .attr("x", width / 2 - 50)
-        .attr("y", height - 75)
+        .attr("y", height - 55)
         .text("GDP per capita");
 
     svg.append("text")

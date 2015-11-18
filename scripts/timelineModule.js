@@ -4,6 +4,7 @@ angular.module('timelineModule', ['angularAwesomeSlider'])
     .controller('timelineCtrl', ['$scope', '$http', function($scope, $http) {
 
         var scale = [2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015];
+        console.log(colorscale);
         var d = [];
         var i, j;
         var data;
@@ -65,6 +66,7 @@ angular.module('timelineModule', ['angularAwesomeSlider'])
 
             genVisYearlyLineChart(yearData);
 
+  
             var s = [];
             for (i = lowerBound; i <= upperBound; i++) {
                 s.push(i);
@@ -75,7 +77,8 @@ angular.module('timelineModule', ['angularAwesomeSlider'])
                 }
             }
 
-            genRadarChart(mapping(monthData, s), scale);
+
+            genRadarChart(mapping(monthData, s), s);
             genVisMonthlyLineChart(monthData);
         };
         // slider options
@@ -114,7 +117,7 @@ function genVisYearlyLineChart(data) {
             left: 50
         },
         width = 500 - margin.left - margin.right,
-        height = 300 - margin.top - margin.bottom;
+        height = 250 - margin.top - margin.bottom;
 
     // Set the ranges
     var x = d3.scale.linear()
@@ -194,11 +197,11 @@ function genVisYearlyLineChart(data) {
         })
         .attr('fill', function(d) {
             return '#337AB7';
-        }).on("mouseover", function(d,i) {
-            $('#yearIndex_'+i).css('fill-opacity',0.5);
+        }).on("mouseover", function(d, i) {
+            $('#yearIndex_' + i).css('fill-opacity', 0.5);
         })
-        .on("mouseout", function(d,i) {
-            $('#yearIndex_'+i).css('fill-opacity',0);
+        .on("mouseout", function(d, i) {
+            $('#yearIndex_' + i).css('fill-opacity', 0);
         });
 
     var f = d3.format(",.0f");
@@ -224,13 +227,13 @@ function genVisYearlyLineChart(data) {
 
 var genRadarChart = function(data, LegendOptions) {
 
-    var maxValue=0;
+    var maxValue = 0;
     for (i = 0; i < data.length; i++) {
         var value = d3.max(data[i], function(d) {
             return d.value;
         });
-        if (value>maxValue){
-            maxValue=value;
+        if (value > maxValue) {
+            maxValue = value;
         }
     }
     maxValue = Math.ceil(maxValue / 10000) * 10000;
@@ -247,7 +250,7 @@ var genRadarChart = function(data, LegendOptions) {
     }
 
     $('#radarChart').remove();
-    var wh = 500,
+    var wh = 400,
         m = 50,
         legendWidth = 100;
 
@@ -257,7 +260,7 @@ var genRadarChart = function(data, LegendOptions) {
             bottom: m,
             left: m
         },
-        width = wh + legendWidth,
+        width = wh,
         height = wh;
 
     ////////////////////////////////////////////////////////////// 
@@ -272,7 +275,7 @@ var genRadarChart = function(data, LegendOptions) {
         h: height,
         margin: margin,
         maxValue: maxValue,
-        levels: maxValue/10000,
+        levels: maxValue / 10000,
         roundStrokes: false,
         labelFactor: 1.1,
         dotRadius: 3,
@@ -281,7 +284,62 @@ var genRadarChart = function(data, LegendOptions) {
     //Call function to draw the Radar chart
     RadarChart(".radarChart", data, radarChartOptions);
 
+    ////////////////////////////////////////////
+    /////////// Initiate legend ////////////////
+    ////////////////////////////////////////////
 
+    var svg = d3.select('.radarChart')
+        .selectAll('svg')
+        .append('svg')
+        .attr("width", wh+300)
+        .attr("height", wh+300);
+
+    var legendTop = 30;
+    //Create the title for the legend
+    var text = svg.append("text")
+        .attr("class", "title")
+        .attr('transform', 'translate(90,0)')
+        .attr("x", wh+20+15)
+        .attr("y", 10+legendTop)
+        .attr("font-size", "12px")
+        .attr("fill", "#404040")
+        .style("font-weight","bold")
+        .text("Year");
+
+    //Initiate Legend   
+    var legend = svg.append("g")
+        .attr("class", "legend")
+        .attr("height", 100)
+        .attr("width", 200)
+        .attr('transform', 'translate(90,20)');
+    //Create colour squares
+    legend.selectAll('rect')
+        .data(LegendOptions)
+        .enter()
+        .append("rect")
+        .attr("x", wh+20)
+        .attr("y", function(d, i) {
+            return i * 20+legendTop;
+        })
+        .attr("width", 10)
+        .attr("height", 10)
+        .style("fill", function(d, i) {
+            return colorscale(i);
+        });
+    //Create text next to squares
+    legend.selectAll('text')
+        .data(LegendOptions)
+        .enter()
+        .append("text")
+        .attr("x", wh+20+15)
+        .attr("y", function(d, i) {
+            return i * 20 + 9 +legendTop;
+        })
+        .attr("font-size", "11px")
+        .attr("fill", "#737373")
+        .text(function(d) {
+            return d;
+        });
 };
 
 var mapping = function(data, scale) {
@@ -316,7 +374,7 @@ function genVisMonthlyLineChart(data) {
             left: 50
         },
         width = 500 - margin.left - margin.right,
-        height = 300 - margin.top - margin.bottom;
+        height = 250 - margin.top - margin.bottom;
 
 
     var f = d3.format(",.0f");

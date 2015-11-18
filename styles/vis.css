@@ -34,7 +34,7 @@ div.tooltip {
     border-radius: 6px;
     font-size: 11px;
     color: white;
-    font-family: "Lato","Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-family: "Lato", "Helvetica Neue", Helvetica, Arial, sans-serif;
     pointer-events: none;
 }
 
@@ -52,10 +52,11 @@ path {
     shape-rendering: crispEdges;
 }
 
+/* replace by panels 
 svg {
     border: 1px solid #999999;
 }
-
+*/
 .helpLine:hover {
     opacity: 0.1 !important;
 }
@@ -67,12 +68,12 @@ svg {
     border-radius: 4px;
 }
 
-.y.label{
+.y.label {
     font-size: 11px;
     font-weight: normal;
 }
 
-#listLegend{
+#listLegend {
     background: linear-gradient(to right, #ffffff, #217dbb);
     height: 20px;
     border: 1px solid grey;
