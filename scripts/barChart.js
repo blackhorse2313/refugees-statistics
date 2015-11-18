@@ -79,3 +79,8 @@ var genHorizontalBarchart = function(data, chartID) {
         .attr("text-anchor","middle");
 
 };
+
+var genVerticalBarchart= function(data,chartID){
+    console.log(data);
+
+};

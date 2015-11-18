@@ -3,28 +3,54 @@ angular.module('countriesModule', [])
 
         var emigrants;
         var immigrants;
+        var displayImmigrants = [];
         var i, j;
+
+        $scope.emigrantsButtonText = "Show all";
+        $scope.immigrantsButtonText = "Show all";
+        $scope.showBarImmigrants = true;
+        $scope.showBarEmigrants = true;
+
+        $scope.emigrantsButton = function() {
+            if ($scope.emigrantsButtonText == "Show all") {
+                $scope.emigrantsButtonText = "Show top 5";
+                $scope.showBarEmigrants = false;
+            } else {
+                $scope.emigrantsButtonText = "Show all";
+                $scope.showBarEmigrants = true;
+            }
+        };
+        $scope.immigrantsButton = function() {
+            if ($scope.immigrantsButtonText == "Show all") {
+                $scope.immigrantsButtonText = "Show top 5";
+                $scope.showBarImmigrants = false;
+            } else {
+                $scope.immigrantsButtonText = "Show all";
+                $scope.showBarImmigrants = true;
+            }
+        };
 
         $http.get('data/applicants_gdp.json')
             .then(function(res) {
                 immigrants = res.data.data;
-                var displayData = [];
                 for (i = 0; i < immigrants.length; i++) {
                     if (immigrants[i].year == 2015) {
-                        displayData.push(immigrants[i]);
+                        displayImmigrants.push(immigrants[i]);
                     }
                 }
-                displayData.sort(function(a, b) {
+                displayImmigrants.sort(function(a, b) {
                     return b.applicants - a.applicants;
                 });
                 /* put d3 functions here */
-                genHorizontalBarchart(displayData,"barImmigrants");
+                genHorizontalBarchart(displayImmigrants, "verbarImmigrants");
+                genVerticalBarchart(displayImmigrants,"horbarImmigrants");
             });
 
         $http.get('data/emigrants.json')
             .then(function(res) {
                 emigrants = res.data.data;
                 /* put d3 funtions here */
-                genHorizontalBarchart(emigrants,"barEmigrants");
+                genHorizontalBarchart(emigrants, "verbarEmigrants");
+                // genVerticalBarchart(emigrants,"horbarEmigrants");
             });
     }]);

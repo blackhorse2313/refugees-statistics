@@ -6,7 +6,9 @@
                 <h3 class="panel-title">Destination countries</h3>
             </div>
             <div class="panel-body">
-                <div id="barImmigrants"></div>
+                <div id="verbarImmigrants" ng-show="showBarImmigrants"></div>
+                <div id="horbarImmigrants" ng-show="showBarImmigrants"></div>
+                <button class="btn btn-sm btn-primary" ng-click="immigrantsButton()">{{immigrantsButtonText}}</button>
             </div>
         </div>
     </div>
@@ -16,7 +18,9 @@
                 <h3 class="panel-title">Origin countries</h3>
             </div>
             <div class="panel-body">
-                <div id="barEmigrants"></div>
+                <div id="verbarEmigrants" ng-show="showBarEmigrants"></div>
+                <div id="horbarEmigrants" ng-show="showBarImmigrants"></div>
+                <button class="btn btn-sm btn-primary" ng-click="emigrantsButton()">{{emigrantsButtonText}}</button>
             </div>
         </div>
     </div>
