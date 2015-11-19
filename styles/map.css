@@ -16,7 +16,11 @@
 }
 
 .land {
-  fill: #222;
+  fill: #ddd;
+}
+
+.land-selected {
+  fill: #bb2222;
 }
 
 .boundary {
