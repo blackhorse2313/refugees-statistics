@@ -20,7 +20,10 @@
 }
 
 .land-selected {
-  fill: #bb2222;
+  fill: #22dd22;
+  stroke: #006600;
+  stroke-width: 2px;
+  stroke-opacity: 1;
 }
 
 .boundary {

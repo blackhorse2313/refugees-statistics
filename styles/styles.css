@@ -116,3 +116,8 @@ div {
 .radarArea{
         fill-opacity: 0 !important;
 }
+
+body > div.home.ng-scope > * {
+    display: inline-block;
+    margin-left: 50px;
+}
