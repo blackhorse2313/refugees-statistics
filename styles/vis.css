@@ -73,7 +73,7 @@ svg {
     font-weight: normal;
 }
 
-#listLegend {
+.listLegend {
     background: linear-gradient(to right, #ffffff, #217dbb);
     height: 20px;
     border: 1px solid grey;

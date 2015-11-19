@@ -1,6 +1,38 @@
 <div class="page-header">
     <h1>Correlation between number of refugees and distance between origin and destination country</h1>
-    <div id="body">
-	  
+    <div class="panel panel-default" style="margin-left:30px; display:inline-block;width:auto">
+        <div class="panel-body">
+            <div class="right-inner-addon" style="margin-bottom:10px;">
+                <i class="glyphicon glyphicon-search"></i>
+                <input type="search" class="form-control" placeholder="Search for a country..." style="height:34px;" ng-model="searchText" />
+            </div>
+            <table class="table table-condensed table-bordered countryTable">
+                <tbody>
+                    <tr ng-repeat="country in countryList | filter:searchText" ng-style="{ 'background-color': colors(country.applicants) }">
+                        <td>
+                            <div class="checkbox checkboxInTable" style="width: 205px;">
+                                <label>
+                                    <input type="checkbox" ng-checked="country.selected">
+                                    <div style="width:36px;display: inline-block;text-align:center;margin-right:5px;"><img class="flag" ng-src="images/flags-normal/{{country.iso2 | lowercase}}.png" style="height:18px;"></div>{{country.country}}</label>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+            <div style="text-align: center;">Number of refugees
+                <div>
+                    <div class="listLegend"></div>
+                    <div style="width:100%;font-size: 11px;">
+                        <div style="float: left; display: inline-block;">Low</div>
+                        <div style="float: right; display: inline-block;">High</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="panel panel-default" style="margin-left:30px; display:inline-block;width:auto">
+        <div class="panel-body">
+            <div id="distanceScatterplot"></div>
+        </div>
     </div>
 </div>

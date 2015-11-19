@@ -87,9 +87,6 @@ h1 {
 }
 */
 
-#countryTable {
-    
-}
 
 .checkboxInTable {
     position: relative;
@@ -108,12 +105,13 @@ h1 {
     border: 1px solid #C0C0C0;
 }
 
-#countryTable tbody {
+.countryTable tbody {
     display: block;
     height: 415px;
-    width: 186px;
+    width: 215px;
     font-size: 13px;
-    overflow: auto;
+    overflow-y: auto;
+    overflow-x: hidden;
 }
 
 .jslider {
@@ -138,4 +136,46 @@ h1 {
 #monthScaleText > g > line{
     stroke: transparent;
     stroke-width: 0;
+}
+
+.row.subpage{
+    text-align: center;
+}
+
+.row.subpage div{
+    padding: 30px;
+} 
+
+
+.row.subpage .description{
+    text-align: justify;
+}
+
+.img-circle{
+    border: solid #95A5A6 2px;
+}
+
+.left-inner-addon {
+    position: relative;
+}
+.left-inner-addon input {
+    padding-left: 30px;    
+}
+.left-inner-addon i {
+    position: absolute;
+    padding: 10px 12px;
+    pointer-events: none;
+}
+
+.right-inner-addon {
+    position: relative;
+}
+.right-inner-addon input {
+    padding-right: 30px;    
+}
+.right-inner-addon i {
+    position: absolute;
+    right: 0px;
+    padding: 10px 12px;
+    pointer-events: none;
 }

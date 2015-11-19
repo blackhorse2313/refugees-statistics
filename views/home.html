@@ -1,59 +1,63 @@
 <div class="container">
     <div class="jumbotron">
-        <h1>Information Visualization</h1>
+        <h1>Refugees Statistics</h1>
         <p>This is a simple hero unit, a simple jumbotron-style component for calling extra attention to featured content or information.</p>
     </div>
-    <div class="row">
+    <div class="row subpage">
         <div class="col-lg-6">
+        <img class="img-circle" src="images/countries_icon.png" alt="Generic placeholder image" width="140" height="140">
             <h2>Major Countries</h2>
-            <p>Donec sed odio dui. Etiam porta sem malesuada magna mollis euismod. Nullam id dolor id nibh ultricies vehicula ut id elit. Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Praesent commodo cursus magna.</p>
+            <p class="description">Donec sed odio dui. Etiam porta sem malesuada magna mollis euismod. Nullam id dolor id nibh ultricies vehicula ut id elit. Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Praesent commodo cursus magna.</p>
             <p><a class="btn btn-default" href="#/countries" role="button">View visualization &raquo;</a></p>
         </div>
         <!-- /.col-lg-6 -->
         <div class="col-lg-6">
+            <img class="img-circle" src="images/time_icon.png" alt="Generic placeholder image" width="140" height="140">
             <h2>Timeline</h2>
-            <p>Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit. Cras mattis consectetur purus sit amet fermentum. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh.</p>
+            <p class="description">Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit. Cras mattis consectetur purus sit amet fermentum. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh.</p>
             <p><a class="btn btn-default" href="#/timeline" role="button">View visualization &raquo;</a></p>
         </div>
         <!-- /.col-lg-6 -->
     </div>
     <!-- /.row -->
-    <div class="row">
+    <div class="row subpage" style="margin-top:20px;">
         <div class="col-lg-6">
+            <img class="img-circle" src="images/gdp_icon.png" alt="Generic placeholder image" width="140" height="140">
             <h2>GDP</h2>
-            <p>Donec sed odio dui. Etiam porta sem malesuada magna mollis euismod. Nullam id dolor id nibh ultricies vehicula ut id elit. Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Praesent commodo cursus magna.</p>
+            <p class="description">Donec sed odio dui. Etiam porta sem malesuada magna mollis euismod. Nullam id dolor id nibh ultricies vehicula ut id elit. Morbi leo risus, porta ac consectetur ac, vestibulum at eros. Praesent commodo cursus magna.</p>
             <p><a class="btn btn-default" href="#/gdp" role="button">View visualization &raquo;</a></p>
         </div>
         <!-- /.col-lg-6 -->
         <div class="col-lg-6">
+            <img class="img-circle" src="images/distance_icon.png" alt="Generic placeholder image" width="140" height="140">
             <h2>Distance</h2>
-            <p>Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit. Cras mattis consectetur purus sit amet fermentum. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh.</p>
+            <p class="description">Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget lacinia odio sem nec elit. Cras mattis consectetur purus sit amet fermentum. Fusce dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh.</p>
             <p><a class="btn btn-default" href="#/distance" role="button">View visualization &raquo;</a></p>
         </div>
         <!-- /.col-lg-6 -->
     </div>
     <!-- /.row -->
     <hr class="featurette-divider">
-
-      <div class="row featurette">
+    <div class="row featurette">
         <div class="col-md-12">
-          <h2 class="featurette-heading">Data Sources <span class="text-muted">(Last update: 2015-11-07)</span></h2>
-          <p class="lead">The following table shows the data sources used for the visualizations.</p>
+            <h2 class="featurette-heading">Data Sources <span class="text-muted">(Last update: 2015-11-07)</span></h2>
+            <p class="lead">The following table shows the data sources used for the visualizations.</p>
         </div>
-      </div>
-    <table class="table"  ng-controller="dataSrcCtrl">
-    <col width="15%">
-  <col width="85%">
-        <thead><tr>
-            <th>Attribute</th>
-            <th>Source</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr ng-repeat="dataSource in dataSources">
-            <td>{{dataSource.attribute}}</td>
-            <td><a target="_blank" ng-href="{{dataSource.link}}">{{dataSource.linkName}}</a></td>
-        </tr>
-        </tbody>
+    </div>
+    <table class="table" ng-controller="dataSrcCtrl">
+        <col width="15%">
+            <col width="85%">
+                <thead>
+                    <tr>
+                        <th>Attribute</th>
+                        <th>Source</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr ng-repeat="dataSource in dataSources">
+                        <td>{{dataSource.attribute}}</td>
+                        <td><a target="_blank" ng-href="{{dataSource.link}}">{{dataSource.linkName}}</a></td>
+                    </tr>
+                </tbody>
     </table>
 </div>

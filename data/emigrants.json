@@ -1,551 +1,228 @@
 {
     "data": [{
         "country": "Syria",
-        "iso": "SYR",
-        "applicants": 163375
+        "applicants": 163375,
+        "iso2": "SY",
+        "iso3": "SYR"
     }, {
         "country": "Afganistan",
-        "iso": "AFG",
-        "applicants": 81790
+        "applicants": 81790,
+        "iso2": "AF",
+        "iso3": "AFG"
     }, {
         "country": "Iraq",
-        "iso": "IRQ",
-        "applicants": 52245
+        "applicants": 52245,
+        "iso2": "IQ",
+        "iso3": "IRQ"
     }, {
         "country": "Albania",
-        "iso": "ALB",
-        "applicants": 44635
+        "applicants": 44635,
+        "iso2": "AL",
+        "iso3": "ALB"
     }, {
         "country": "Eritrea",
-        "iso": "ERI",
-        "applicants": 30205
+        "applicants": 30205,
+        "iso2": "ER",
+        "iso3": "ERI"
     }, {
         "country": "Pakistan",
-        "iso": "PAK",
-        "applicants": 27845
+        "applicants": 27845,
+        "iso2": "PK",
+        "iso3": "PAK"
     }, {
         "country": "Nigeria",
-        "iso": "NGA",
-        "applicants": 15485
+        "applicants": 15485,
+        "iso2": "NG",
+        "iso3": "NGA"
     }, {
         "country": "Serbia",
-        "iso": "SRB",
-        "applicants": 14485
+        "applicants": 14485,
+        "iso2": "RS",
+        "iso3": "SRB"
     }, {
         "country": "Somalia",
-        "iso": "SOM",
-        "applicants": 14485
+        "applicants": 14485,
+        "iso2": "SO",
+        "iso3": "SOM"
     }, {
         "country": "Somaliland",
-        "iso": "SOM",
-        "applicants": 14485
+        "applicants": 14485,
+        "iso2": "SO",
+        "iso3": "SOM"
     }, {
         "country": "Ukraine",
-        "iso": "UKR",
-        "applicants": 13425
+        "applicants": 13425,
+        "iso2": "UA",
+        "iso3": "UKR"
     }, {
         "country": "Russia",
-        "iso": "RUS",
-        "applicants": 11065
+        "applicants": 11065,
+        "iso2": "RU",
+        "iso3": "RUS"
     }, {
         "country": "Bangladesh",
-        "iso": "BGD",
-        "applicants": 9175
+        "applicants": 9175,
+        "iso2": "BD",
+        "iso3": "BGD"
     }, {
         "country": "Iran",
-        "iso": "IRN",
-        "applicants": 8510
+        "applicants": 8510,
+        "iso2": "IR",
+        "iso3": "IRN"
     }, {
         "country": "Gambia",
-        "iso": "GMB",
-        "applicants": 7980
+        "applicants": 7980,
+        "iso2": "GM",
+        "iso3": "GMB"
     }, {
         "country": "Macedonia",
-        "iso": "MKD",
-        "applicants": 7365
+        "applicants": 7365,
+        "iso2": "MK",
+        "iso3": "MKD"
     }, {
         "country": "Sudan",
-        "iso": "SDN",
-        "applicants": 5835
+        "applicants": 5835,
+        "iso2": "SD",
+        "iso3": "SDN"
     }, {
         "country": "Senegal",
-        "iso": "SEN",
-        "applicants": 5715
+        "applicants": 5715,
+        "iso2": "SN",
+        "iso3": "SEN"
     }, {
         "country": "Algeria",
-        "iso": "DZA",
-        "applicants": 4900
+        "applicants": 4900,
+        "iso2": "DZ",
+        "iso3": "DZA"
     }, {
         "country": "Mali",
-        "iso": "MLI",
-        "applicants": 4660
+        "applicants": 4660,
+        "iso2": "ML",
+        "iso3": "MLI"
     }, {
         "country": "Georgia",
-        "iso": "GEO",
-        "applicants": 4430
+        "applicants": 4430,
+        "iso2": "GE",
+        "iso3": "GEO"
     }, {
         "country": "Bosnia-Herzegovina",
-        "iso": "BIH",
-        "applicants": 4375
+        "applicants": 4375,
+        "iso2": "BA",
+        "iso3": "BIH"
     }, {
         "country": "Ethiopia",
-        "iso": "ETH",
-        "applicants": 4000
+        "applicants": 4000,
+        "iso2": "ET",
+        "iso3": "ETH"
     }, {
         "country": "China",
-        "iso": "CHN",
-        "applicants": 3590
+        "applicants": 3590,
+        "iso2": "CN",
+        "iso3": "CHN"
     }, {
         "country": "Congo (Kinshasa)",
-        "iso": "ZAR",
-        "applicants": 3360
+        "applicants": 3360,
+        "iso2": "CD",
+        "iso3": "ZAR"
     }, {
         "country": "Morocco",
-        "iso": "MAR",
-        "applicants": 3275
+        "applicants": 3275,
+        "iso2": "MA",
+        "iso3": "MAR"
     }, {
         "country": "Sri Lanka",
-        "iso": "LKA",
-        "applicants": 3205
+        "applicants": 3205,
+        "iso2": "LK",
+        "iso3": "LKA"
     }, {
         "country": "Ivory Coast",
-        "iso": "CIV",
-        "applicants": 3105
+        "applicants": 3105,
+        "iso2": "CI",
+        "iso3": "CIV"
     }, {
         "country": "Guinea",
-        "iso": "GIN",
-        "applicants": 3085
+        "applicants": 3085,
+        "iso2": "GN",
+        "iso3": "GIN"
     }, {
         "country": "Libya",
-        "iso": "LBY",
-        "applicants": 3080
+        "applicants": 3080,
+        "iso2": "LY",
+        "iso3": "LBY"
     }, {
         "country": "Montenegro",
-        "iso": "MNE",
-        "applicants": 3065
+        "applicants": 3065,
+        "iso2": "ME",
+        "iso3": "MNE"
     }, {
         "country": "Turkey",
-        "iso": "TUR",
-        "applicants": 2695
+        "applicants": 2695,
+        "iso2": "TR",
+        "iso3": "TUR"
     }, {
         "country": "India",
-        "iso": "IND",
-        "applicants": 2680
+        "applicants": 2680,
+        "iso2": "IN",
+        "iso3": "IND"
     }, {
         "country": "Ghana",
-        "iso": "GHA",
-        "applicants": 2670
+        "applicants": 2670,
+        "iso2": "GH",
+        "iso3": "GHA"
     }, {
         "country": "Armenia",
-        "iso": "ARM",
-        "applicants": 2540
+        "applicants": 2540,
+        "iso2": "AM",
+        "iso3": "ARM"
     }, {
         "country": "Cameroon",
-        "iso": "CMR",
-        "applicants": 2155
+        "applicants": 2155,
+        "iso2": "CM",
+        "iso3": "CMR"
     }, {
         "country": "Egypt",
-        "iso": "EGY",
-        "applicants": 2000
+        "applicants": 2000,
+        "iso2": "EG",
+        "iso3": "EGY"
     }, {
         "country": "Palestinian Territories",
-        "iso": "PSE",
-        "applicants": 1825
+        "applicants": 1825,
+        "iso2": "PS",
+        "iso3": "PSE"
     }, {
         "country": "Azerbaijan",
-        "iso": "AZE",
-        "applicants": 1665
+        "applicants": 1665,
+        "iso2": "AZ",
+        "iso3": "AZE"
     }, {
         "country": "Tunisia",
-        "iso": "TUN",
-        "applicants": 1615
+        "applicants": 1615,
+        "iso2": "TN",
+        "iso3": "TUN"
     }, {
         "country": "Mongolia",
-        "iso": "MNG",
-        "applicants": 1595
+        "applicants": 1595,
+        "iso2": "MN",
+        "iso3": "MNG"
     }, {
         "country": "Haiti",
-        "iso": "HTI",
-        "applicants": 1485
+        "applicants": 1485,
+        "iso2": "HT",
+        "iso3": "HTI"
     }, {
         "country": "Congo (Brazzaville)",
-        "iso": "COG",
-        "applicants": 1180
+        "applicants": 1180,
+        "iso2": "CG",
+        "iso3": "COG"
     }, {
         "country": "Moldova",
-        "iso": "MDA",
-        "applicants": 1095
+        "applicants": 1095,
+        "iso2": "MD",
+        "iso3": "MDA"
     }, {
         "country": "Vietnam",
-        "iso": "VNM",
-        "applicants": 1095
-    }, {
-        "country": "Lebanon",
-        "iso": "LBN",
-        "applicants": 980
-    }, {
-        "country": "Yemen",
-        "iso": "YEM",
-        "applicants": 840
-    }, {
-        "country": "Guinea-Bissau",
-        "iso": "GNB",
-        "applicants": 765
-    }, {
-        "country": "Mauritania",
-        "iso": "MRT",
-        "applicants": 685
-    }, {
-        "country": "Tajikistan",
-        "iso": "TJK",
-        "applicants": 660
-    }, {
-        "country": "Sierra Leone",
-        "iso": "SLE",
-        "applicants": 605
-    }, {
-        "country": "Belarus",
-        "iso": "BLR",
-        "applicants": 540
-    }, {
-        "country": "Togo",
-        "iso": "TGO",
-        "applicants": 500
-    }, {
-        "country": "Central African Republic",
-        "iso": "CAF",
-        "applicants": 475
-    }, {
-        "country": "Burkina Faso",
-        "iso": "BFA",
-        "applicants": 470
-    }, {
-        "country": "Uganda",
-        "iso": "UGA",
-        "applicants": 465
-    }, {
-        "country": "Angola",
-        "iso": "AGO",
-        "applicants": 440
-    }, {
-        "country": "Cuba",
-        "iso": "CUB",
-        "applicants": 425
-    }, {
-        "country": "Benin",
-        "iso": "BEN",
-        "applicants": 400
-    }, {
-        "country": "Comoros",
-        "iso": "COM",
-        "applicants": 380
-    }, {
-        "country": "Kazakhstan",
-        "iso": "KAZ",
-        "applicants": 330
-    }, {
-        "country": "Uzbekistan",
-        "iso": "UZB",
-        "applicants": 305
-    }, {
-        "country": "Chad",
-        "iso": "TCD",
-        "applicants": 295
-    }, {
-        "country": "Kyrgyzstan",
-        "iso": "KGZ",
-        "applicants": 280
-    }, {
-        "country": "Niger",
-        "iso": "NER",
-        "applicants": 275
-    }, {
-        "country": "El Salvador",
-        "iso": "SLV",
-        "applicants": 275
-    }, {
-        "country": "Western Sahara",
-        "iso": "ESH",
-        "applicants": 270
-    }, {
-        "country": "Myanmar",
-        "iso": "MMR",
-        "applicants": 270
-    }, {
-        "country": "Jordan",
-        "iso": "JOR",
-        "applicants": 265
-    }, {
-        "country": "Rwanda",
-        "iso": "RWA",
-        "applicants": 265
-    }, {
-        "country": "Dominican Republic",
-        "iso": "DOM",
-        "applicants": 255
-    }, {
-        "country": "Zimbabwe",
-        "iso": "ZWE",
-        "applicants": 250
-    }, {
-        "country": "Turkmenistan",
-        "iso": "TKM",
-        "applicants": 245
-    }, {
-        "country": "Kenya",
-        "iso": "KEN",
-        "applicants": 230
-    }, {
-        "country": "Burundi",
-        "iso": "BDI",
-        "applicants": 225
-    }, {
-        "country": "Venezuela",
-        "iso": "VEN",
-        "applicants": 220
-    }, {
-        "country": "Nepal",
-        "iso": "NPL",
-        "applicants": 200
-    }, {
-        "country": "Djibouti",
-        "iso": "DJI",
-        "applicants": 165
-    }, {
-        "country": "Colombia",
-        "iso": "COL",
-        "applicants": 135
-    }, {
-        "country": "Liberia",
-        "iso": "LBR",
-        "applicants": 135
-    }, {
-        "country": "Malawi",
-        "iso": "MWI",
-        "applicants": 130
-    }, {
-        "country": "Philippines",
-        "iso": "PHL",
-        "applicants": 130
-    }, {
-        "country": "Kuwait",
-        "iso": "KWT",
-        "applicants": 120
-    }, {
-        "country": "Honduras",
-        "iso": "HND",
-        "applicants": 110
-    }, {
-        "country": "Jamaica",
-        "iso": "JAM",
-        "applicants": 105
-    }, {
-        "country": "South Africa",
-        "iso": "ZAF",
-        "applicants": 105
-    }, {
-        "country": "Poland",
-        "iso": "POL",
-        "applicants": 75
-    }, {
-        "country": "North Korea",
-        "iso": "PRK",
-        "applicants": 65
-    }, {
-        "country": "Peru",
-        "iso": "PER",
-        "applicants": 65
-    }, {
-        "country": "Gabon",
-        "iso": "GAB",
-        "applicants": 60
-    }, {
-        "country": "Romania",
-        "iso": "ROU",
-        "applicants": 55
-    }, {
-        "country": "South Sudan",
-        "iso": "SSD",
-        "applicants": 55
-    }, {
-        "country": "Madagascar",
-        "iso": "MDG",
-        "applicants": 50
-    }, {
-        "country": "Saudi Arabia",
-        "iso": "SAU",
-        "applicants": 50
-    }, {
-        "country": "Tanzania",
-        "iso": "TZA",
-        "applicants": 50
-    }, {
-        "country": "Mexico",
-        "iso": "MEX",
-        "applicants": 45
-    }, {
-        "country": "United States",
-        "iso": "USA",
-        "applicants": 40
-    }, {
-        "country": "Israel",
-        "iso": "ISR",
-        "applicants": 35
-    }, {
-        "country": "Malaysia",
-        "iso": "MYS",
-        "applicants": 35
-    }, {
-        "country": "Bolivia",
-        "iso": "BOL",
-        "applicants": 30
-    }, {
-        "country": "Brazil",
-        "iso": "BRA",
-        "applicants": 30
-    }, {
-        "country": "Mauritius",
-        "iso": "MUS",
-        "applicants": 30
-    }, {
-        "country": "Bulgaria",
-        "iso": "BGR",
-        "applicants": 25
-    }, {
-        "country": "Bahrain",
-        "iso": "BHR",
-        "applicants": 25
-    }, {
-        "country": "Lithuania",
-        "iso": "LTU",
-        "applicants": 25
-    }, {
-        "country": "Zambia",
-        "iso": "ZMB",
-        "applicants": 25
-    }, {
-        "country": "Guyana",
-        "iso": "GUY",
-        "applicants": 20
-    }, {
-        "country": "Indonesia",
-        "iso": "IDN",
-        "applicants": 20
-    }, {
-        "country": "Namibia",
-        "iso": "NAM",
-        "applicants": 20
-    }, {
-        "country": "Croatia",
-        "iso": "HRV",
-        "applicants": 15
-    }, {
-        "country": "Cambodia",
-        "iso": "KHM",
-        "applicants": 15
-    }, {
-        "country": "Bhutan",
-        "iso": "BTN",
-        "applicants": 10
-    }, {
-        "country": "Botswana",
-        "iso": "BWA",
-        "applicants": 10
-    }, {
-        "country": "Chile",
-        "iso": "CHL",
-        "applicants": 10
-    }, {
-        "country": "Dominica",
-        "iso": "DMA",
-        "applicants": 10
-    }, {
-        "country": "Ecuador",
-        "iso": "ECU",
-        "applicants": 10
-    }, {
-        "country": "Italy",
-        "iso": "ITA",
-        "applicants": 10
-    }, {
-        "country": "South Korea",
-        "iso": "KOR",
-        "applicants": 10
-    }, {
-        "country": "Laos",
-        "iso": "LAO",
-        "applicants": 10
-    }, {
-        "country": "Latvia",
-        "iso": "LVA",
-        "applicants": 10
-    }, {
-        "country": "Maldives",
-        "iso": "MDV",
-        "applicants": 10
-    }, {
-        "country": "Swaziland",
-        "iso": "SWZ",
-        "applicants": 10
-    }, {
-        "country": "Thailand",
-        "iso": "THA",
-        "applicants": 10
-    }, {
-        "country": "Trinidad & Tobago",
-        "iso": "TTO",
-        "applicants": 10
-    }, {
-        "country": "Taiwan",
-        "iso": "TWN",
-        "applicants": 10
-    }, {
-        "country": "United Arab Emirates",
-        "iso": "ARE",
-        "applicants": 5
-    }, {
-        "country": "Canada",
-        "iso": "CAN",
-        "applicants": 5
-    }, {
-        "country": "Spain",
-        "iso": "ESP",
-        "applicants": 5
-    }, {
-        "country": "Guatemala",
-        "iso": "GTM",
-        "applicants": 5
-    }, {
-        "country": "Hungary",
-        "iso": "HUN",
-        "applicants": 5
-    }, {
-        "country": "Saint Christopher & Nevis",
-        "iso": "KNA",
-        "applicants": 5
-    }, {
-        "country": "Saint Lucia",
-        "iso": "LCA",
-        "applicants": 5
-    }, {
-        "country": "Nicaragua",
-        "iso": "NIC",
-        "applicants": 5
-    }, {
-        "country": "Oman",
-        "iso": "OMN",
-        "applicants": 5
-    }, {
-        "country": "Sweden",
-        "iso": "SWE",
-        "applicants": 5
-    }, {
-        "country": "Slovakia",
-        "iso": "SVK",
-        "applicants": 5
-    }, {
-        "country": "Saint Vincent & The Grenadines",
-        "iso": "VCT",
-        "applicants": 5
+        "applicants": 1095,
+        "iso2": "VN",
+        "iso3": "VNM"
     }]
 }

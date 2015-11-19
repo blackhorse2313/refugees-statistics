@@ -6,8 +6,8 @@
              <label style="width:100%;cursor:pointer;">
                 <input type="checkbox" ng-model="selectAllButton" ng-disabled="selectAllButton" ng-click="selectAll(selectAllButton)" style="margin-right:10px;margin-left:10px;"></input>Select all
             </label>
-            <table id="countryTable" class="table table-condensed table-bordered">
-                <tbody>
+            <table class="table table-condensed table-bordered countryTable">
+                <tbody style="width: 186px;">
                     <tr ng-repeat="country in countries" ng-style="{ 'background-color': colors(country.population) }">
                         <td style="width:200px">
                             <div class="checkbox checkboxInTable" ng-mouseover="hoverListItem(country.iso2, true)" ng-mouseleave="hoverListItem(country.iso2, false)" >
@@ -20,9 +20,9 @@
                 </tbody>
             </table>
             <div style="text-align: center;">Population</div>
-            <div id="listLegend"></div>
+            <div class="listLegend"></div>
             <div style="width:100%;font-size: 11px;">
-                <div style="display: inline-block;">Low</div>
+                <div style="float: left; display: inline-block;">Low</div>
                 <div style="float: right; display: inline-block;">High</div>
             </div>
         </div>
