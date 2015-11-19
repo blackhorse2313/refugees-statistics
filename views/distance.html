@@ -12,7 +12,7 @@
                         <td>
                             <div class="checkbox checkboxInTable" style="width: 205px;">
                                 <label>
-                                    <input type="checkbox" ng-checked="country.selected">
+                                    <input type="checkbox" ng-checked="country.selected" ng-click="check(country.iso2)">
                                     <div style="width:36px;display: inline-block;text-align:center;margin-right:5px;"><img class="flag" ng-src="images/flags-normal/{{country.iso2 | lowercase}}.png" style="height:18px;"></div>{{country.country}}</label>
                             </div>
                         </td>
