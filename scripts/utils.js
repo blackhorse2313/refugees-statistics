@@ -160,7 +160,6 @@ function genWorld(worldType, world, names) {
         attribute; // Page attribute to append map
     
     // Task 4
-    console.log(worldType);
     if (worldType == WorldType.EQUIDISTANT) {
         width = 600, height = 600;
         rotatable = true;
@@ -199,25 +198,31 @@ function genWorld(worldType, world, names) {
 
     var path = d3.geo.path().projection(projection);
 
+    // Define groups to enforce drawing order
+    var g = svg.append("g");
+    var graticulateGroup = g.append('g');
+    var countryGroup = g.append('g');
+    var arcGroup = g.append('g');
+
     ////
     //// Globe lines (graticule)
     ////
 
-    svg.append("defs").append("path")
+    graticulateGroup.append("defs").append("path")
         .datum({type: "Sphere"})
         .attr("id", "sphere")
         .attr("d", path);
 
-    svg.append("use")
+    graticulateGroup.append("use")
         .attr("class", "stroke")
         .attr("xlink:href", "#sphere");
 
-    svg.append("use")
+    graticulateGroup.append("use")
         .attr("class", "fill")
         .attr("xlink:href", "#sphere");
 
     var graticule = d3.geo.graticule();
-    svg.append("path")
+    graticulateGroup.append("path")
         .datum(graticule)
         .attr("class", "graticule")
         .attr("d", path);
@@ -238,13 +243,13 @@ function genWorld(worldType, world, names) {
           d.name = tryit.name; 
         }
     });
-
+    
     // Displays country name on the map
     var tooltip = d3.select("body").append("div")
         .attr("class", "tooltip");
     
     // Assign country data, with key = id
-    var country = svg.selectAll(".country").data(countries, function(d) {
+    var country = countryGroup.selectAll(".country").data(countries, function(d) {
         return d.id;
     });
     country
@@ -253,12 +258,17 @@ function genWorld(worldType, world, names) {
         .attr("d", path)
         .attr("class", "land")
 
-        // Rotate globe to center on selected country
         .on("click", function(d,i) {
             var p = d3.geo.centroid(countries[i]);
+            var places = [
+                [-103.57283669203011, 44.75581985576071],
+                [103.45274688320029, 36.683485526723125]
+            ];
 
-            // Depending on the map usage, we may want to rotate on selection
-            if (rotatable) {
+            // Rotate & draw immigration flux only if we are in the distanceModule
+            if (worldType == WorldType.EQUIDISTANT) {
+                drawFlux(path, arcGroup, p, places);
+
                 (function transition() {
                     d3.transition().duration(750).tween("rotate", function() {
                         var r = d3.interpolate(projection.rotate(), [-p[0], -p[1]]);
@@ -268,12 +278,12 @@ function genWorld(worldType, world, names) {
                                 .attr("d", path)
                                 .classed("land-selected", function(d2, i) {
                                     return d2.id == d.id;
-                                });
+                                })
                         };
                     });
                 })();
             }
-            // But we always want the selected country to change appearance
+            // However, we always want the selected country to change appearance
             else {
                 svg.selectAll("path")
                     .attr("d", path)
@@ -297,4 +307,41 @@ function genWorld(worldType, world, names) {
         .on("mouseout",  function(d,i) {
             tooltip.classed("hidden", true)
         });
+}
+
+function drawFlux(path, arcGroup, origin, places) {
+    var links = [];
+    for (var i=0; i<2; i++) {
+        links.push({
+            type: "LineString",
+            coordinates: [
+                origin,
+                places[i]
+            ]
+        });
+    }
+
+    var pathArcs = arcGroup.selectAll(".arc").data(links);
+
+    //enter
+    pathArcs.enter()
+        .append("path").attr({
+            'class': 'arc'
+        }).style({ 
+            fill: 'none',
+        });
+
+    //update
+    pathArcs.attr({
+            //d is the points attribute for this path, we'll draw
+            //  an arc between the points using the arc function
+            d: path
+        })
+        .style({
+            stroke: '#0000ff',
+            'stroke-width': '2px'
+        })
+
+    //exit
+    pathArcs.exit().remove();
 }
