@@ -1,13 +1,3 @@
-.stroke {
-  fill: none;
-  stroke: #000;
-  stroke-width: 3px;
-}
-
-.fill {
-  fill: #fff;
-}
-
 .graticule {
   fill: none;
   stroke: #777;
@@ -15,11 +5,13 @@
   stroke-opacity: .5;
 }
 
-.land {
+path.land {
+  stroke: steelblue;
+  stroke-width: 1;
   fill: #ddd;
 }
 
-.land-selected {
+path.land-selected {
   fill: #22dd22;
   stroke: #006600;
   stroke-width: 2px;
