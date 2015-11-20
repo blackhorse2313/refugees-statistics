@@ -5,7 +5,7 @@
 /////////// Inspired by the code of alangrafu ///////////
 /////////////////////////////////////////////////////////
 	
-function RadarChart(id, data, options) {
+function RadarChart(id, data, options, colorStartIndex) {
 	var cfg = {
 	 w: 600,				//Width of the circle
 	 h: 600,				//Height of the circle
@@ -19,7 +19,9 @@ function RadarChart(id, data, options) {
 	 opacityCircles: 0.2, 	//The opacity of the circles of each blob
 	 strokeWidth: 2, 		//The width of the stroke around each blob
 	 roundStrokes: false,	//If true the area and stroke will follow a round path (cardinal-closed)
-	 color: d3.scale.category10()	//Color function
+	 color: d3.scale.ordinal()
+        .range(d3.scale.category10().range())
+        .domain(d3.range(0, 7))	//Color function
 	};
 	
 	//Put all of the options into a variable called cfg
@@ -149,7 +151,7 @@ function RadarChart(id, data, options) {
 		.attr("class", "radarArea")
 		.attr("id",function(d,i) { return 'yearIndex_'+i; })
 		.attr("d", function(d,i) { return radarLine(d); })
-		.style("fill", function(d,i) { return cfg.color(i); })
+		.style("fill", function(d,i) { return cfg.color(7-(i+colorStartIndex)); })
 		.style("fill-opacity", 0 )
 		.on('mouseover', function (d,i){
 			//Dim all blobs
@@ -170,7 +172,7 @@ function RadarChart(id, data, options) {
 		.attr("class", "radarStroke")
 		.attr("d", function(d,i) { return radarLine(d); })
 		.style("stroke-width", cfg.strokeWidth + "px")
-		.style("stroke", function(d,i) { return cfg.color(i); })
+		.style("stroke", function(d,i) {return cfg.color(7-(i+colorStartIndex)); })
 		.style("fill", "none")
 		//.style("filter" , "url(#glow)");		
 	
@@ -182,7 +184,7 @@ function RadarChart(id, data, options) {
 		.attr("r", cfg.dotRadius)
 		.attr("cx", function(d,i){ return rScale(d.value) * Math.cos(angleSlice*i - Math.PI/2); })
 		.attr("cy", function(d,i){ return rScale(d.value) * Math.sin(angleSlice*i - Math.PI/2); })
-		.style("fill", function(d,i,j) { return cfg.color(j); });
+		.style("fill", function(d,i,j) { return cfg.color(7-(j+colorStartIndex)); });
 
 	/////////////////////////////////////////////////////////
 	//////// Append invisible circles for tooltip ///////////
