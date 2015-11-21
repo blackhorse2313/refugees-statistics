@@ -6,26 +6,26 @@ angular.module('countriesModule', [])
         var displayImmigrants = [];
         var i, j;
 
-        $scope.emigrantsButtonText = "Show all";
-        $scope.immigrantsButtonText = "Show all";
+        $scope.emigrantsButtonText = "Show more";
+        $scope.immigrantsButtonText = "Show more";
         $scope.showBarImmigrants = true;
         $scope.showBarEmigrants = true;
 
         $scope.emigrantsButton = function() {
-            if ($scope.emigrantsButtonText == "Show all") {
-                $scope.emigrantsButtonText = "Show top 5";
+            if ($scope.emigrantsButtonText == "Show more") {
+                $scope.emigrantsButtonText = "Show less";
                 $scope.showBarEmigrants = false;
             } else {
-                $scope.emigrantsButtonText = "Show all";
+                $scope.emigrantsButtonText = "Show more";
                 $scope.showBarEmigrants = true;
             }
         };
         $scope.immigrantsButton = function() {
-            if ($scope.immigrantsButtonText == "Show all") {
-                $scope.immigrantsButtonText = "Show top 5";
+            if ($scope.immigrantsButtonText == "Show more") {
+                $scope.immigrantsButtonText = "Show less";
                 $scope.showBarImmigrants = false;
             } else {
-                $scope.immigrantsButtonText = "Show all";
+                $scope.immigrantsButtonText = "Show more";
                 $scope.showBarImmigrants = true;
             }
         };
@@ -51,6 +51,6 @@ angular.module('countriesModule', [])
                 emigrants = res.data.data;
                 /* put d3 funtions here */
                 genHorizontalBarchart(emigrants, "verbarEmigrants");
-                // genVerticalBarchart(emigrants,"horbarEmigrants");
+                genVerticalBarchart(emigrants,"horbarEmigrants");
             });
     }]);
