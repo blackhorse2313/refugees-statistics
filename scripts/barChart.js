@@ -1,6 +1,6 @@
 var genHorizontalBarchart = function(data, chartID) {
 
-	var delimiter = d3.format(",.0f");
+    var delimiter = d3.format(",.0f");
     data = data.slice(0, 5);
 
     var height = 300,
@@ -26,7 +26,7 @@ var genHorizontalBarchart = function(data, chartID) {
             return d.applicants;
         })]);
 
-    var svg = d3.select("#"+chartID)
+    var svg = d3.select("#" + chartID)
         .append("svg")
         .attr("height", height + margin.top + margin.bottom)
         .attr("width", width + margin.left + margin.right)
@@ -38,7 +38,7 @@ var genHorizontalBarchart = function(data, chartID) {
         .data(data)
         .enter()
         .append("rect")
-        .attr("class","verticalBar")
+        .attr("class", "verticalBar")
         .attr("x", function(d) {
             return x(d.country);
         })
@@ -70,17 +70,21 @@ var genHorizontalBarchart = function(data, chartID) {
             return delimiter(d.applicants);
         })
         .attr("x", function(d) {
-            return x(d.country)+(width / data.length)/2;
+            return x(d.country) + (width / data.length) / 2;
         })
         .attr("y", function(d) {
-            return y(d.applicants)+15;
+            return y(d.applicants) + 15;
         })
-        .style("fill","white")
-        .attr("text-anchor","middle");
+        .style("fill", "white")
+        .attr("text-anchor", "middle");
 
 };
-
-var genVerticalBarchart= function(data,chartID){
+var genVerticalBarchart = function(data, chartID) {
     console.log(data);
+
+    var delimiter = d3.format(",.0f");
+
+    data = data.slice(0,8);
+
 
 };
