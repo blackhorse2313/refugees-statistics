@@ -246,7 +246,7 @@ angular.module('gdpModule', ['angularAwesomeSlider'])
 var delimiter = d3.format(",.0f");
 var width = 500;
 var height = 530;
-var svg, tooltip;
+var svg, tip;
 
 function genScatterPlotGDP(dataset, hideOutliers) {
 
@@ -332,10 +332,16 @@ function genScatterPlotGDP(dataset, hideOutliers) {
             return "translate(" + x(d.GDP) + "," + y(d.applicants_population) + ")";
         });
 
-    // add the tooltip area to the webpage
-    tooltip = d3.select("body").append("div")
-        .attr("class", "tooltip")
-        .style("opacity", 0);
+
+    // real tooltip
+    tip = d3.tip()
+        .attr('class', 'd3-tip')
+        .offset([0, 10])
+        .direction('e')
+        .html(function(d) {
+            return '<u>' + d.country + '</u><br>GDP per capita: ' + delimiter(d.GDP) + ' $<br>Asylum applicants: ' + delimiter(d.applicants) + '<br>Population: ' + delimiter(d.population);
+        });
+    svg.call(tip);
 
     // we add our first graphics element! A circle! 
     nodeGroup.append("circle")
@@ -355,20 +361,8 @@ function genScatterPlotGDP(dataset, hideOutliers) {
 
         })
         .style("opacity", 1)
-        .on("mouseover", function(d) {
-            tooltip.transition()
-                .duration(200)
-                .style("opacity", 1);
-            tooltip.html('<u>' + d.country + '</u><br>GDP per capita: ' + delimiter(d.GDP) + ' $<br>Asylum applicants: ' + delimiter(d.applicants) + '<br>Population: ' + delimiter(d.population))
-                .style("left", (d3.event.pageX + 20) + "px")
-                .style("top", (d3.event.pageY - 28) + "px");
-        })
-        .on("mouseout", function(d) {
-            tooltip.transition()
-                .duration(500)
-                .style("opacity", 0);
-        });
-
+        .on("mouseover", tip.show)
+        .on("mouseout", tip.hide);
 
     //Trentline
     var xSeries = [];
@@ -545,7 +539,6 @@ var genDotPlot = function(dataset) {
         .attr("class", "dot")
         .style("opacity", 0.5)
         .style("fill", "#FF00FF");
-
 
     // invisible line for selecting
     trendline.enter()

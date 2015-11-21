@@ -45,11 +45,6 @@
         "iso2": "SO",
         "iso3": "SOM"
     }, {
-        "country": "Somaliland",
-        "applicants": 14485,
-        "iso2": "SO",
-        "iso3": "SOM"
-    }, {
         "country": "Ukraine",
         "applicants": 13425,
         "iso2": "UA",
@@ -150,11 +145,6 @@
         "iso2": "LY",
         "iso3": "LBY"
     }, {
-        "country": "Montenegro",
-        "applicants": 3065,
-        "iso2": "ME",
-        "iso3": "MNE"
-    }, {
         "country": "Turkey",
         "applicants": 2695,
         "iso2": "TR",
@@ -184,11 +174,6 @@
         "applicants": 2000,
         "iso2": "EG",
         "iso3": "EGY"
-    }, {
-        "country": "Palestinian Territories",
-        "applicants": 1825,
-        "iso2": "PS",
-        "iso3": "PSE"
     }, {
         "country": "Azerbaijan",
         "applicants": 1665,

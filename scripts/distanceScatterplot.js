@@ -23,7 +23,7 @@ var genDistanceScatterplot = function(dataset) {
     svg = d3.select("#distanceScatterplot").append("svg").attr("width", width).attr("height", height).append("g")
         .attr("transform", "translate(" + margins.left + "," + margins.top + ")");
 
-    if (dataset.length != 0) {
+    if (dataset.length !== 0) {
 
         var x = d3.scale.linear()
             .domain(d3.extent(dataset[0].values, function(d) {
@@ -63,7 +63,14 @@ var genDistanceScatterplot = function(dataset) {
             .attr("transform", "rotate(-90)")
             .text("Asylum applicants / population");
 
-
+        // real tooltip
+        var tip = d3.tip()
+            .attr('class', 'd3-tip')
+            .offset([-10, 0])
+            .html(function(d) {
+                return "Destination country: <u>" + d.destination + "</u><br>Refugees / million inhabitants: <u>" + d3.round(d.applicants_population, 3) + "</u><br>Distance: <u>" + delimiter(d.distance) + " km</u)";
+            });
+        svg.call(tip);
 
         for (var i = 0; i < dataset.length; i++) {
             var data = dataset[i].values;
@@ -107,20 +114,13 @@ var genDistanceScatterplot = function(dataset) {
                 })
                 .style("opacity", 1)
                 .on("mouseover", function(d) {
-                    tooltip.transition()
-                        .duration(200)
-                        .style("opacity", 1);
-                    tooltip.html("Destination country: <u>" + d.destination + "</u><br>Refugees / million inhabitants: <u>" + d3.round(d.applicants_population, 3) + "</u><br>Distance: <u>" + delimiter(d.distance) + " km</u)")
-                        .style("left", (d3.event.pageX + 10) + "px")
-                        .style("top", (d3.event.pageY - 28) + "px");
+                    tip.show(d);
                     $("circle").css("opacity", 0.1);
                     $("circle[id^='" + d.source_iso2 + "']").css("opacity", 1);
                     $(".trendline_" + d.source_iso2).css("visibility", "visible");
                 })
                 .on("mouseout", function(d) {
-                    tooltip.transition()
-                        .duration(500)
-                        .style("opacity", 0);
+                    tip.hide(d);
                     $("circle").css("opacity", 1);
                     $(".trendline_" + d.source_iso2).css("visibility", "hidden");
                 });
@@ -138,7 +138,16 @@ var genDistanceScatterplot = function(dataset) {
 
             }
             var linePoints = findLineByLeastSquares(xSeries, ySeries);
-            console.log(linePoints);
+
+            while (linePoints[1][linePoints[1].length - 1] < 0) {
+                linePoints[0].pop();
+                linePoints[1].pop();
+            }
+            while (linePoints[1][0] < 0) {
+                linePoints[0].shift();
+                linePoints[1].shift();
+            }
+
             var pearsonCorrel = getPearsonsCorrelation(xSeries, ySeries);
 
             var x1 = linePoints[0][0];
@@ -148,6 +157,8 @@ var genDistanceScatterplot = function(dataset) {
             var trendData = [
                 [x1, y1, x2, y2]
             ];
+            
+
             var trendline = svg.selectAll(".trendline")
                 .data(trendData);
             trendline.enter()

@@ -42,13 +42,13 @@ angular.module('distanceModule', [])
                 }
             }
 
+            console.log($scope.countryList);
             for (i = 0; i < $scope.data.length; i++) {
                 var index = countryNameList.indexOf($scope.data[i].source);
                 if (index != -1) {
                     displayData[index].values.push($scope.data[i]);
                 }
             }
-            console.log(displayData);
             genDistanceScatterplot(displayData);
         };
 

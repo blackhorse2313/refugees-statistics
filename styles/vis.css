@@ -52,11 +52,13 @@ path {
     shape-rendering: crispEdges;
 }
 
+
 /* replace by panels 
 svg {
     border: 1px solid #999999;
 }
 */
+
 .helpLine:hover {
     opacity: 0.1 !important;
 }
@@ -79,12 +81,60 @@ svg {
     border: 1px solid grey;
 }
 
-.verticalBarAxis line, .verticalBarAxis path{
-    fill:none;
-    stroke:white;
-    shape-rendering:crispEdges;
+.verticalBarAxis line,
+.verticalBarAxis path {
+    fill: none;
+    stroke: white;
+    shape-rendering: crispEdges;
 }
 
-.verticalBar:hover{
-    fill:#18BC9C;
+.verticalBar:hover {
+    fill: #18BC9C;
+}
+
+.d3-tip {
+    line-height: 1;
+    padding: 8px;
+    font-family: "Lato", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 11px;
+    line-height: 1.42857143;
+    background: rgba(0, 0, 0, 0.8);
+    color: #fff;
+    border-radius: 8px;
+}
+
+
+/* Creates a small triangle extender for the tooltip */
+
+
+}
+svg.e {
+    margin-left: 200px;
+}
+.d3-tip:after {
+    box-sizing: border-box;
+    display: inline;
+    font-size: 10px;
+    width: 100%;
+    line-height: 1;
+    color: #2C3E50;
+    opacity: 0.8;
+    position: absolute;
+}
+
+/* Eastward tooltips */
+.d3-tip.e:after {
+    content: "\25C0";
+    margin: -4px 0 0 0;
+    top: 50%;
+    left: -8px;
+}
+
+/* Nrthward tooltips */
+.d3-tip.n:after {
+    content: "\25BC";
+    margin: -1px 0 0 0;
+    top: 100%;
+    left: 0;
+    text-align: center;
 }
