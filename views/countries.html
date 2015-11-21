@@ -7,7 +7,7 @@
             </div>
             <div class="panel-body">
                 <div id="verbarImmigrants" ng-show="showBarImmigrants"></div>
-                <div id="horbarImmigrants" ng-show="showBarImmigrants"></div>
+                <div id="horbarImmigrants" ng-hide="showBarImmigrants"></div>
                 <button class="btn btn-sm btn-primary" ng-click="immigrantsButton()">{{immigrantsButtonText}}</button>
             </div>
         </div>
@@ -19,7 +19,7 @@
             </div>
             <div class="panel-body">
                 <div id="verbarEmigrants" ng-show="showBarEmigrants"></div>
-                <div id="horbarEmigrants" ng-show="showBarImmigrants"></div>
+                <div id="horbarEmigrants" ng-hide="showBarEmigrants"></div>
                 <button class="btn btn-sm btn-primary" ng-click="emigrantsButton()">{{emigrantsButtonText}}</button>
             </div>
         </div>
