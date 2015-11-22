@@ -1,17 +1,7 @@
 angular.module('countriesModule', [])
     .controller('countriesCtrl', ['$scope', '$http', function($scope, $http) {
-        queue()
-            .defer(d3.json, "data/world-110m.json")
-            .defer(d3.tsv, "data/world-country-names.tsv")
-            .await(genVisCountries);
-    }]);
 
-function genVisCountries(error, world, names) {
-    if (error) throw error;
 
-    genWorld(WorldType.EUROPE, world, names);
-    genWorld(WorldType.EQUIRECTANGULAR, world, names);
-}
         var emigrants;
         var immigrants;
         var displayImmigrants = [];
@@ -54,7 +44,7 @@ function genVisCountries(error, world, names) {
                 });
                 /* put d3 functions here */
                 genHorizontalBarchart(displayImmigrants, "verbarImmigrants");
-                genVerticalBarchart(displayImmigrants,"horbarImmigrants");
+                genVerticalBarchart(displayImmigrants, "horbarImmigrants");
             });
 
         $http.get('data/emigrants.json')
@@ -62,6 +52,18 @@ function genVisCountries(error, world, names) {
                 emigrants = res.data.data;
                 /* put d3 funtions here */
                 genHorizontalBarchart(emigrants, "verbarEmigrants");
-                genVerticalBarchart(emigrants,"horbarEmigrants");
+                genVerticalBarchart(emigrants, "horbarEmigrants");
             });
+
+        queue()
+            .defer(d3.json, "data/world-110m.json")
+            .defer(d3.tsv, "data/world-country-names.tsv")
+            .await(genVisCountries);
     }]);
+
+function genVisCountries(error, world, names) {
+    if (error) throw error;
+
+    genWorld(WorldType.EUROPE, world, names);
+    genWorld(WorldType.EQUIRECTANGULAR, world, names);
+}

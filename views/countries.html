@@ -4,15 +4,15 @@
         <div class="panel panel-default" style="margin-left:30px; display:inline-block;width:auto">
             <div class="panel-heading">
                 <h3 class="panel-title">Destination countries</h3>
-        <div id="europe">
-        </div>
-        <div id="world-equirectangular">
-        </div>
             </div>
             <div class="panel-body">
-                <div id="verbarImmigrants" ng-show="showBarImmigrants"></div>
-                <div id="horbarImmigrants" ng-hide="showBarImmigrants"></div>
-                <button class="btn btn-sm btn-primary" ng-click="immigrantsButton()">{{immigrantsButtonText}}</button>
+                <div style="display:inline-block; margin-left:50px;">
+                    <div id="verbarImmigrants" ng-show="showBarImmigrants"></div>
+                    <div id="horbarImmigrants" ng-hide="showBarImmigrants"></div>
+                    <button class="btn btn-sm btn-primary" ng-click="immigrantsButton()">{{immigrantsButtonText}}</button>
+                </div>
+                <div id="europe" style="display:inline-block;">
+                </div>
             </div>
         </div>
     </div>
@@ -22,9 +22,13 @@
                 <h3 class="panel-title">Origin countries</h3>
             </div>
             <div class="panel-body">
-                <div id="verbarEmigrants" ng-show="showBarEmigrants"></div>
-                <div id="horbarEmigrants" ng-hide="showBarEmigrants"></div>
-                <button class="btn btn-sm btn-primary" ng-click="emigrantsButton()">{{emigrantsButtonText}}</button>
+                <div style="display:inline-block;">
+                    <div id="verbarEmigrants" ng-show="showBarEmigrants"></div>
+                    <div id="horbarEmigrants" ng-hide="showBarEmigrants"></div>
+                    <button class="btn btn-sm btn-primary" ng-click="emigrantsButton()">{{emigrantsButtonText}}</button>
+                </div>
+                <div id="world-equirectangular" style="display:inline-block;margin-left:50px">
+                </div>
             </div>
         </div>
     </div>

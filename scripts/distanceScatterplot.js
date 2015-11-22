@@ -4,8 +4,8 @@ var genDistanceScatterplot = function(dataset) {
 
 
 
-    var width = 600,
-        height = 500;
+    var width = 500,
+        height = 400;
     var delimiter = d3.format(',.0f');
 
     var dotColor = d3.scale.category10().domain(d3.extent(dataset, function(d) {

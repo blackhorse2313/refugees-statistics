@@ -161,7 +161,7 @@ function genWorld(worldType, world, names) {
     
     // Task 4
     if (worldType == WorldType.EQUIDISTANT) {
-        width = 600, height = 600;
+        width = 500, height = 500;
         rotatable = true;
         attribute = "#world-equidistant";
         projection = d3.geo.azimuthalEquidistant()

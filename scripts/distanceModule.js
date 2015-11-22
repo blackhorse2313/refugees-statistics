@@ -27,14 +27,7 @@ angular.module('distanceModule', [])
                         updateData($scope.data);
                     });
             });
-        queue()
-            .defer(d3.json, "data/world-110m.json")
-            .defer(d3.tsv, "data/world-country-names.tsv")
-            .await(genVisDistance);
-    }]);
 
-function genVisDistance(error, world, names) {
-    if (error) throw error;
         var updateData = function() {
             var countryNameList = [];
             var displayData = [];
@@ -48,9 +41,6 @@ function genVisDistance(error, world, names) {
                     displayData.push(element);
                 }
             }
-
-    genWorld(WorldType.EQUIDISTANT, world, names);
-}
             console.log($scope.countryList);
             for (i = 0; i < $scope.data.length; i++) {
                 var index = countryNameList.indexOf($scope.data[i].source);
@@ -75,5 +65,14 @@ function genVisDistance(error, world, names) {
             updateData($scope.data);
         };
 
+        queue()
+            .defer(d3.json, "data/world-110m.json")
+            .defer(d3.tsv, "data/world-country-names.tsv")
+            .await(genVisDistance);
+
+        function genVisDistance(error, world, names) {
+            if (error) throw error;
+            genWorld(WorldType.EQUIDISTANT, world, names);
+        }
 
     }]);
