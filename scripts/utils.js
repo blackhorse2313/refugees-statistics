@@ -180,7 +180,7 @@ function genWorld(worldType, world, names) {
             .translate([width / 2, height / 2])
             .precision(.1);
     } else if (worldType == WorldType.EUROPE) {
-        width = 600, height = 600;
+        width = 500, height = 500;
         rotatable = false;
         attribute = "#europe";
 	    projection = d3.geo.equirectangular()

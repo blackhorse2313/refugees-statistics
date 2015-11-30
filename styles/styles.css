@@ -2,6 +2,11 @@ body {
     padding-top: 50px;
 }
 
+.container{
+    margin: auto !important;
+    display: block !important;
+}
+
 div {
     vertical-align: top;
 }

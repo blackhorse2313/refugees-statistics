@@ -339,6 +339,9 @@ function genVisYearlyLineChart(data) {
         .attr('class', 'dot')
         .append('circle')
         .attr("opacity", 1)
+        .attr("id", function(d) {
+            return "dot_" + d.year;
+        })
         .attr('cx', function(d) {
             return x(d.year);
         })
@@ -351,24 +354,6 @@ function genVisYearlyLineChart(data) {
         .attr('fill', function(d) {
             return '#337AB7';
         }).on("mouseover", function(d, i) {
-            $('#yearIndex_' + i).css('fill-opacity', 0.5);
-        })
-        .on("mouseout", function(d, i) {
-            $('#yearIndex_' + i).css('fill-opacity', 0);
-        });
-
-    // invisible rectangles for selecting year
-    var rectangle = svg.selectAll('g.dot')
-        .append("rect")
-        .data(data)
-        .attr('x', function(d) {
-            return x(d.year) - (width / data.length / 2);
-        })
-        .attr("y", 0 - margin.top)
-        .attr("width", width / data.length)
-        .attr("height", height + margin.top)
-        .attr("opacity", 0)
-        .on("mouseover", function(d, i) {
             $('#yearIndex_' + i).css('fill-opacity', 0.5);
         })
         .on("mouseout", function(d, i) {
@@ -388,12 +373,34 @@ function genVisYearlyLineChart(data) {
             return x(d.year);
         })
         .attr('y', function(d) {
-            return y(d.applicants) - 8;
+            return y(d.applicants) - 10;
         })
         .attr('font-size', 300)
         .attr('font-family', 'Arial')
         .attr('fill', '#2C3E50')
         .attr('text-anchor', 'middle');
+
+    // invisible rectangles for selecting year
+    var rectangle = svg.selectAll('g.dot')
+        .append("rect")
+        .data(data)
+        .attr('x', function(d) {
+            return x(d.year) - (width / data.length / 2);
+        })
+        .attr("y", 0 - margin.top)
+        .attr("width", width / data.length)
+        .attr("height", height + margin.top)
+        .attr("opacity", 0)
+        .on("mouseover", function(d, i) {
+            $('#yearIndex_' + i).css('fill-opacity', 0.5);
+            $('#dot_' + d.year).css('fill', '#18bc9c').css('r', '7');
+        })
+        .on("mouseout", function(d, i) {
+            $('#yearIndex_' + i).css('fill-opacity', 0);
+            $('#dot_' + d.year).css('fill', '#337AB7').css('r', '5');
+        });
+
+
 }
 
 var genRadarChart = function(data, LegendOptions) {

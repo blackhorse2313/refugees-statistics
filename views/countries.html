@@ -6,10 +6,10 @@
                 <h3 class="panel-title">Destination countries</h3>
             </div>
             <div class="panel-body">
-                <div style="display:inline-block; margin-left:50px;">
+                <div style="display:inline-block;">
                     <div id="verbarImmigrants" ng-show="showBarImmigrants"></div>
                     <div id="horbarImmigrants" ng-hide="showBarImmigrants"></div>
-                    <button class="btn btn-sm btn-primary" ng-click="immigrantsButton()">{{immigrantsButtonText}}</button>
+                    <button class="btn btn-primary" ng-click="immigrantsButton()" style="width:200px;">{{immigrantsButtonText}}</button>
                 </div>
                 <div id="europe" style="display:inline-block;">
                 </div>
@@ -23,9 +23,16 @@
             </div>
             <div class="panel-body">
                 <div style="display:inline-block;">
-                    <div id="verbarEmigrants" ng-show="showBarEmigrants"></div>
-                    <div id="horbarEmigrants" ng-hide="showBarEmigrants"></div>
-                    <button class="btn btn-sm btn-primary" ng-click="emigrantsButton()">{{emigrantsButtonText}}</button>
+                    <div id="verbarEmigrants" ng-show="showTop5Emigrants"></div>
+                    <div id="verbarContinents" ng-show="showContinents"></div>
+                    <div id="horbarEmigrants" ng-show="showSpecificContinent"></div>
+                    <div>
+                        <button class="btn  btn-primary" ng-click="emigrantsButton()" style="display:inline-block;width:200px;">{{emigrantsButtonText}}</button>
+                        <select ng-model="selectedContinent" class="form-control pull-right" placeholder="select a country" style="width:250px;display:inline-block;" ng-show="!showTop5Emigrants">
+                            <option value="" selected disabled>Please select a continent</option>
+                            <option ng-repeat="continent in continents" value="{{continent.continentCode}}">{{continent.country}}</option>
+                        </select>
+                    </div>
                 </div>
                 <div id="world-equirectangular" style="display:inline-block;margin-left:50px">
                 </div>

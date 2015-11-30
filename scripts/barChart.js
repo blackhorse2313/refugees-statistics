@@ -1,7 +1,21 @@
+var continents = [{
+    continentCode: "AF",
+    country: "Africa",
+    color: "#18bc9c"
+}, {
+    continentCode: "AS",
+    country: "Asia",
+    color: "#3498db"
+}, {
+    continentCode: "EU",
+    country: "Europe",
+    color: "#2C3E50"
+}];
+
+
 var genHorizontalBarchart = function(data, chartID) {
 
     var delimiter = d3.format(",.0f");
-    data = data.slice(0, 5);
 
     var height = 380,
         width = 530;
@@ -45,11 +59,43 @@ var genHorizontalBarchart = function(data, chartID) {
         .attr("y", function(d) {
             return y(d.applicants);
         })
-        .attr("fill", "#2C3E50")
+        .style("cursor",function(d){
+            var cursor = "auto";
+            if (chartID === "verbarEmigrants" ||chartID === "verbarContinents"){
+                cursor = "pointer";
+            }
+            return cursor;
+        })
+        .attr("fill", function(d) {
+            var color = "#2c3e50";
+            if (chartID === "verbarEmigrants") {
+                continents.forEach(function(continent) {
+                    if (d.continent == continent.continentCode) {
+                        console.log(continent.color);
+                        color = continent.color;
+                    }
+                });
+            } else if (chartID === "verbarContinents") {
+                continents.forEach(function(continent) {
+                    if (d.continentCode == continent.continentCode) {
+                        console.log(continent.color);
+                        color = continent.color;
+                    }
+                });
+            }
+            return color;
+        })
         .attr("width", width / data.length - 5)
         .attr("height", function(d) {
 
             return height - y(d.applicants);
+        }).on("click", function(d) {
+            if (chartID === "verbarContinents") {
+                change(d.continentCode);
+            }
+            if (chartID === "verbarEmigrants") {
+                selectCountry(d.continent);
+            }
         });
 
     var xAxis = d3.svg.axis().scale(x)
@@ -77,11 +123,70 @@ var genHorizontalBarchart = function(data, chartID) {
         })
         .style("fill", "white")
         .attr("text-anchor", "middle");
+
+
+    if (chartID === "verbarEmigrants") {
+        ////////////////////////////////////////////
+        /////////// Initiate legend ////////////////
+        ////////////////////////////////////////////
+        var legendSvg = d3.select('#verbarEmigrants')
+            .selectAll('svg')
+            .append('svg')
+            .attr("width", 1000)
+            .attr("height", 1000)
+            .attr("stroke", "solid black");
+
+        var legendTop = 30;
+        //Create the title for the legend
+        var text = legendSvg.append("text")
+            .attr("class", "title")
+            .attr('transform', 'translate(90,0)')
+            .attr("x", width - 200)
+            .attr("y", 10 + legendTop)
+            .attr("font-size", "12px")
+            .attr("fill", "#404040")
+            .style("font-weight", "bold")
+            .text("Continents");
+
+
+        //Initiate Legend   
+        var legend = svg.append("g")
+            .attr("class", "legend")
+            .attr("height", 100)
+            .attr("width", 200)
+            .attr('transform', 'translate(90,20)');
+        //Create colour squares
+        legend.selectAll('rect')
+            .data(continents)
+            .enter()
+            .append("rect")
+            .attr("x", width - 215)
+            .attr("y", function(d, i) {
+                return i * 20 + legendTop;
+            })
+            .attr("width", 10)
+            .attr("height", 10)
+            .style("fill", function(d, i) {
+                return d.color;
+            });
+        //Create text next to squares
+        legend.selectAll('text')
+            .data(continents)
+            .enter()
+            .append("text")
+            .attr("x", width - 200)
+            .attr("y", function(d, i) {
+                return i * 20 + 9 + legendTop;
+            })
+            .attr("font-size", "11px")
+            .attr("fill", "#737373")
+            .text(function(d) {
+                return d.country;
+            });
+    }
 };
 
 var genVerticalBarchart = function(data, chartID) {
-
-    console.log(chartID);
 
     var height = 400,
         width = 400;
@@ -89,7 +194,7 @@ var genVerticalBarchart = function(data, chartID) {
     var margin = {
         top: 10,
         bottom: 10,
-        left: 90,
+        left: 110,
         right: 60
     };
 
@@ -102,7 +207,7 @@ var genVerticalBarchart = function(data, chartID) {
     var i;
 
     for (i = 0; i < data.length; i++) {
-        if (data[i].applicants > 5000) {
+        if (data[i].applicants > 1000) {
             dataEdit.push(data[i]);
         } else {
             others.applicants += data[i].applicants;
@@ -145,7 +250,18 @@ var genVerticalBarchart = function(data, chartID) {
         .attr("y", function(d) {
             return y(d.country);
         })
-        .attr("fill", "#2C3E50")
+        .attr("fill", function(d) {
+            var color = "#2C3E50";
+            if (chartID == "horbarEmigrants") {
+                continents.forEach(function(continent) {
+                    if (d.continent == continent.continentCode) {
+                        console.log(continent.color);
+                        color = continent.color;
+                    }
+                });
+            }
+            return color;
+        })
         .attr("width", function(d) {
             return x(d.applicants);
         })

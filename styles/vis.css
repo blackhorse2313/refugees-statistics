@@ -89,7 +89,7 @@ svg {
 }
 
 .verticalBar:hover {
-    fill: #18BC9C;
+    fill: #f39c12;
 }
 
 .d3-tip {

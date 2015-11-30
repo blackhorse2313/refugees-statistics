@@ -1,4 +1,4 @@
-angular.module('countriesModule', [])
+var ctrl = angular.module('countriesModule', [])
     .controller('countriesCtrl', ['$scope', '$http', function($scope, $http) {
 
 
@@ -7,23 +7,79 @@ angular.module('countriesModule', [])
         var displayImmigrants = [];
         var i, j;
 
-        $scope.emigrantsButtonText = "Show more";
+        $scope.continents = [{
+            continentCode: "AF",
+            country: "Africa",
+            applicants: 0
+        }, {
+            continentCode: "AS",
+            country: "Asia",
+            applicants: 0
+        }, {
+            continentCode: "EU",
+            country: "Europe",
+            applicants: 0
+        }, {
+            continentCode: "NA",
+            country: "North America",
+            applicants: 0
+        }, {
+            continentCode: "OC",
+            country: "Oceania",
+            applicants: 0
+        }, {
+            continentCode: "SA",
+            country: "South America",
+            applicants: 0
+        }];
+
+        $scope.selectedContinent = "";
+        $scope.$watch('selectedContinent', function(newVal, oldVal) {
+            if ($scope.selectedContinent !== "") {
+                $scope.showContinents = false;
+                $scope.showTop5Emigrants = false;
+                $scope.emigrantsButtonText = "Continent overview";
+                $scope.showSpecificContinent = true;
+                $('#horbarEmigrants > svg').remove();
+
+                function filterContinent(element, index, array) {
+                    return (element.continent == $scope.selectedContinent);
+                }
+
+                var deisplayEmigrants = emigrants.filter(filterContinent);
+                genVerticalBarchart(deisplayEmigrants, "horbarEmigrants");
+            }
+        });
+
+        $scope.emigrantsButtonText = "Display by countinent";
         $scope.immigrantsButtonText = "Show more";
         $scope.showBarImmigrants = true;
-        $scope.showBarEmigrants = true;
+        // display different views
+        $scope.showTop5Emigrants = true;
+        $scope.showContinents = false;
+        $scope.showSpecificContinent = false;
 
         $scope.emigrantsButton = function() {
-            if ($scope.emigrantsButtonText == "Show more") {
-                $scope.emigrantsButtonText = "Show less";
-                $scope.showBarEmigrants = false;
+            if ($scope.showTop5Emigrants) {
+                $scope.showContinents = true;
+                $scope.showTop5Emigrants = false;
+                $scope.emigrantsButtonText = "Show top 5";
+            } else if ($scope.showContinents) {
+                $scope.showContinents = false;
+                $scope.showTop5Emigrants = true;
+                $scope.emigrantsButtonText = "Display by countinent";
             } else {
-                $scope.emigrantsButtonText = "Show more";
-                $scope.showBarEmigrants = true;
+                $scope.showContinents = true;
+                $scope.showTop5Emigrants = false;
+                $scope.emigrantsButtonText = "Show top 5";
+                $scope.selectedContinent = "";
+                $scope.showSpecificContinent = false;
             }
         };
+
         $scope.immigrantsButton = function() {
             if ($scope.immigrantsButtonText == "Show more") {
-                $scope.immigrantsButtonText = "Show less";
+                $scope.immigrantsButtonText = "Show top 5";
                 $scope.showBarImmigrants = false;
             } else {
                 $scope.immigrantsButtonText = "Show more";
@@ -43,7 +99,8 @@ angular.module('countriesModule', [])
                     return b.applicants - a.applicants;
                 });
                 /* put d3 functions here */
-                genHorizontalBarchart(displayImmigrants, "verbarImmigrants");
+                var top5countries = displayImmigrants.slice(0, 5);
+                genHorizontalBarchart(top5countries, "verbarImmigrants");
                 genVerticalBarchart(displayImmigrants, "horbarImmigrants");
             });
 
@@ -51,8 +108,26 @@ angular.module('countriesModule', [])
             .then(function(res) {
                 emigrants = res.data.data;
                 /* put d3 funtions here */
-                genHorizontalBarchart(emigrants, "verbarEmigrants");
-                genVerticalBarchart(emigrants, "horbarEmigrants");
+                var top5countries = emigrants.slice(0, 5);
+                genHorizontalBarchart(top5countries, "verbarEmigrants");
+                emigrants.forEach(function(country) {
+                    $scope.continents.forEach(function(continent) {
+                        if (country.continent == continent.continentCode) {
+                            continent.applicants += country.applicants;
+                        }
+                    });
+                });
+                $scope.continents.sort(function(a, b) {
+                    return b.applicants - a.applicants;
+                });
+
+                function isBigEnough(element, index, array) {
+                    return (element.applicants >= 5000);
+                }
+
+                $scope.continents = $scope.continents.filter(isBigEnough);
+                genHorizontalBarchart($scope.continents, "verbarContinents");
+
             });
 
         queue()
@@ -66,4 +141,18 @@ function genVisCountries(error, world, names) {
 
     genWorld(WorldType.EUROPE, world, names);
     genWorld(WorldType.EQUIRECTANGULAR, world, names);
+}
+
+function change(code) {
+    var scope = angular.element($("#verbarContinents")).scope();
+    scope.$apply(function() {
+        scope.selectedContinent = code;
+    });
+}
+
+function selectCountry(code) {
+    var scope = angular.element($("#verbarContinents")).scope();
+    scope.$apply(function() {
+        scope.selectedContinent = code;
+    });
 }
