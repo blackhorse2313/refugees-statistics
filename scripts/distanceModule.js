@@ -31,6 +31,7 @@ angular.module('distanceModule', [])
         var updateData = function() {
             var countryNameList = [];
             var displayData = [];
+            var list = [];
             for (i = 0; i < $scope.countryList.length; i++) {
                 if ($scope.countryList[i].selected) {
                     countryNameList.push($scope.countryList[i].country);
@@ -41,18 +42,17 @@ angular.module('distanceModule', [])
                     displayData.push(element);
                 }
             }
-            console.log($scope.countryList);
             for (i = 0; i < $scope.data.length; i++) {
                 var index = countryNameList.indexOf($scope.data[i].source);
                 if (index != -1) {
                     displayData[index].values.push($scope.data[i]);
                 }
             }
+
             genDistanceScatterplot(displayData);
         };
 
         $scope.check = function(iso) {
-            console.log(iso);
             for (i = 0; i < $scope.countryList.length; i++) {
                 if ($scope.countryList[i].iso2 == iso) {
                     if ($scope.countryList[i].selected) {
