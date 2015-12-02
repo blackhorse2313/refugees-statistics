@@ -59,9 +59,9 @@ var genHorizontalBarchart = function(data, chartID) {
         .attr("y", function(d) {
             return y(d.applicants);
         })
-        .style("cursor",function(d){
+        .style("cursor", function(d) {
             var cursor = "auto";
-            if (chartID === "verbarEmigrants" ||chartID === "verbarContinents"){
+            if (chartID === "verbarEmigrants" || chartID === "verbarContinents") {
                 cursor = "pointer";
             }
             return cursor;
@@ -71,14 +71,12 @@ var genHorizontalBarchart = function(data, chartID) {
             if (chartID === "verbarEmigrants") {
                 continents.forEach(function(continent) {
                     if (d.continent == continent.continentCode) {
-                        console.log(continent.color);
                         color = continent.color;
                     }
                 });
             } else if (chartID === "verbarContinents") {
                 continents.forEach(function(continent) {
                     if (d.continentCode == continent.continentCode) {
-                        console.log(continent.color);
                         color = continent.color;
                     }
                 });

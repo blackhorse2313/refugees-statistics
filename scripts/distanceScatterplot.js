@@ -76,6 +76,7 @@ var genDistanceScatterplot = function(dataset) {
 
         var totalxSeries = [];
         var totalySeries = [];
+        var xyTotalMap = [];
 
         // dots for every country
         for (var i = 0; i < dataset.length; i++) {
@@ -122,7 +123,7 @@ var genDistanceScatterplot = function(dataset) {
                 .style("opacity", 1)
                 .style("cursor", "pointer")
                 .on("click", function(d) {
-                    if ($(".d3-tip").css("opacity") == 0) {
+                    if ($(".d3-tip").css("opacity") !== 1) {
                         tip.show(d);
                     } else {
                         tip.hide(d);
@@ -153,8 +154,10 @@ var genDistanceScatterplot = function(dataset) {
                 xSeries.push(data[j].distance);
                 ySeries.push(data[j].applicants_population);
 
-                totalxSeries.push(x(data[j].distance));
-                totalySeries.push(y(data[j].applicants_population));
+                xyTotalMap.push({
+                    xvalue: x(data[j].distance),
+                    yvalue: y(data[j].applicants_population)
+                });
             }
             var linePoints = findLineByLeastSquares(xSeries, ySeries);
 
@@ -222,10 +225,16 @@ var genDistanceScatterplot = function(dataset) {
                     return y(y2) + 3;
                 });
         }
+        xyTotalMap.sort(function(a, b) {
+            return a.xvalue - b.xvalue;
+        });
+        xyTotalMap.forEach(function(entry) {
+            totalxSeries.push(entry.xvalue);
+            totalySeries.push(entry.yvalue);
+        });
 
         ///////////////// Trendline for all data ////////////////////////////////////////////
         var alllinePoints = findLineByLeastSquares(totalxSeries, totalySeries);
-        console.log(alllinePoints);
         var totalx1 = alllinePoints[0][0];
         var totaly1 = alllinePoints[1][0];
         var totalx2 = alllinePoints[0][alllinePoints[0].length - 1];
@@ -261,7 +270,7 @@ var genDistanceScatterplot = function(dataset) {
         var totalpearsonCorrel = getPearsonsCorrelation(totalxSeries, totalySeries);
         // correlation text
         svg.append("text")
-            .text("Overall Correlation: " + d3.round(totalpearsonCorrel, 3))
+            .text("Overall Correlation: " + -(d3.round(totalpearsonCorrel, 3)))
             .attr("class", "correlation_total")
             .style("fill", "black")
             .attr("x", function(d) {
