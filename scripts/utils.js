@@ -149,7 +149,9 @@ var WorldType = {
   EUROPE: 3,
 };
 
-function genWorld(worldType, world, names) {
+function World(worldType, world, names) {
+    var self = this;
+
     ////
     //// Projection
     ////
@@ -158,7 +160,7 @@ function genWorld(worldType, world, names) {
         projection,
         rotatable, // Rotates map on country selection
         attribute; // Page attribute to append map
-    
+
     // Task 4
     if (worldType == WorldType.EQUIDISTANT) {
         width = 500, height = 500;
@@ -189,17 +191,17 @@ function genWorld(worldType, world, names) {
 	        .rotate([-8, -50])
             .precision(.1);
     } else {
-        console.log("@genWorld: Invalid WorldType");
+        console.log("@World: Invalid WorldType");
     }
 
-    var svg = d3.select(attribute).append("svg")
+    this.svg = d3.select(attribute).append("svg")
         .attr("width", width)
         .attr("height", height);
 
-    var path = d3.geo.path().projection(projection);
+    this.path = d3.geo.path().projection(projection);
 
     // Define groups to enforce drawing order
-    var g = svg.append("g");
+    var g = this.svg.append("g");
     var graticulateGroup = g.append('g');
     var countryGroup = g.append('g');
     var arcGroup = g.append('g');
@@ -211,7 +213,7 @@ function genWorld(worldType, world, names) {
     graticulateGroup.append("defs").append("path")
         .datum({type: "Sphere"})
         .attr("id", "sphere")
-        .attr("d", path);
+        .attr("d", this.path);
 
     graticulateGroup.append("use")
         .attr("class", "stroke")
@@ -225,7 +227,7 @@ function genWorld(worldType, world, names) {
     graticulateGroup.append("path")
         .datum(graticule)
         .attr("class", "graticule")
-        .attr("d", path);
+        .attr("d", this.path);
 
     d3.select(self.frameElement).style("height", height + "px");
 
@@ -249,15 +251,15 @@ function genWorld(worldType, world, names) {
         .attr("class", "tooltip");
     
     // Assign country data, with key = id
-    var country = countryGroup.selectAll(".country").data(countries, function(d) {
+    this.country = countryGroup.selectAll(".country").data(countries, function(d) {
         return d.id;
     });
-    country
+    // Country selection
+    this.country
         .enter()
         .insert("path")
-        .attr("d", path)
+        .attr("d", this.path)
         .attr("class", "land")
-
         .on("click", function(d,i) {
             var p = d3.geo.centroid(countries[i]);
             var places = [
@@ -267,32 +269,23 @@ function genWorld(worldType, world, names) {
 
             // Rotate & draw immigration flux only if we are in the distanceModule
             if (worldType == WorldType.EQUIDISTANT) {
-                drawFlux(path, arcGroup, p, places);
+                drawFlux(this.path, arcGroup, p, places);
 
                 (function transition() {
                     d3.transition().duration(750).tween("rotate", function() {
                         var r = d3.interpolate(projection.rotate(), [-p[0], -p[1]]);
                         return function(t) {
                             projection.rotate(r(t));
-                            svg.selectAll("path")
-                                .attr("d", path)
-                                .classed("land-selected", function(d2, i) {
-                                    return d2.id == d.id;
-                                })
+                            self.selectCountryByID(d.id);
                         };
                     });
                 })();
             }
             // However, we always want the selected country to change appearance
             else {
-                svg.selectAll("path")
-                    .attr("d", path)
-                    .classed("land-selected", function(d2, i) {
-                        return d2.id == d.id;
-                    });
+                self.selectCountryByID(d.id);
             }
         })
-
         // Show tooltip
         .on("mousemove", function(d,i) {
             tooltip
@@ -308,6 +301,45 @@ function genWorld(worldType, world, names) {
             tooltip.classed("hidden", true)
         });
 }
+
+World.prototype.selectCountryByID = function(id) {
+    this.svg.selectAll("path")
+        .attr("d", this.path)
+        .classed("land-selected", function(d, i) {
+            return d.id == id;
+        });
+};
+
+World.prototype.selectCountryByName = function(countryName) {
+    this.svg.selectAll("path")
+        .attr("d", this.path)
+        .classed("land-selected", countryName === "" ? false : function(d, i) {
+            return d.name === countryName;
+        });
+};
+
+World.prototype.fillCountriesByApplicants = function(data) {
+    // Interpolate colors (between normal country fill and bar chart rect)
+    var length = data.length;
+    var colors = d3.scale.linear()
+        .domain([data[length - 1].applicants, data[0].applicants])
+        .interpolate(d3.interpolateRgb)
+        .range([d3.rgb("#ededed"), d3.rgb("#2c3e50")]);
+
+    // Add color to countries
+    this.country
+        .attr("d", this.path)
+        .attr("class", "land")
+        .style({fill: function(d) {
+            var i;
+            for (i = 0; i < length; i++) {
+                if (d.name === data[i].country) {
+                    return colors(data[i].applicants);
+                }
+            }
+            return "#fff";
+        }});
+};
 
 function drawFlux(path, arcGroup, origin, places) {
     var links = [];

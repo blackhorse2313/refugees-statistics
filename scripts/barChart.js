@@ -13,8 +13,7 @@ var continents = [{
 }];
 
 
-var genHorizontalBarchart = function(data, chartID) {
-
+var genHorizontalBarchart = function(data, chartID, map) {
     var delimiter = d3.format(",.0f");
 
     var height = 380,
@@ -71,14 +70,12 @@ var genHorizontalBarchart = function(data, chartID) {
             if (chartID === "verbarEmigrants") {
                 continents.forEach(function(continent) {
                     if (d.continent == continent.continentCode) {
-                        console.log(continent.color);
                         color = continent.color;
                     }
                 });
             } else if (chartID === "verbarContinents") {
                 continents.forEach(function(continent) {
                     if (d.continentCode == continent.continentCode) {
-                        console.log(continent.color);
                         color = continent.color;
                     }
                 });
@@ -96,6 +93,11 @@ var genHorizontalBarchart = function(data, chartID) {
             if (chartID === "verbarEmigrants") {
                 selectCountry(d.continent);
             }
+            console.log("VERT RECT");
+        }).on("mouseover", function(d) {
+            map.selectCountryByName(d.country);
+        }).on("mouseout", function(d) {
+            map.selectCountryByName("");
         });
 
     var xAxis = d3.svg.axis().scale(x)
@@ -181,13 +183,22 @@ var genHorizontalBarchart = function(data, chartID) {
             .attr("font-size", "11px")
             .attr("fill", "#737373")
             .text(function(d) {
-                return d.country;
+                return d.country; //Continent in Origin Countries
             });
     }
 };
 
-var genVerticalBarchart = function(data, chartID) {
+function processData(data) {
+    var processedData = [];
+    var i;
+    for (i = 0; i < data.length; i++)
+        if (data[i].applicants > 1000)
+            processedData.push(data[i]);
 
+    return processedData;
+}
+
+var genVerticalBarchart = function(data, chartID, map) {
     var height = 400,
         width = 400;
 
@@ -198,14 +209,13 @@ var genVerticalBarchart = function(data, chartID) {
         right: 60
     };
 
-    var dataEdit = [];
+    /*
     var others = {
         country: "Others",
         applicants: 0
     };
 
     var i;
-
     for (i = 0; i < data.length; i++) {
         if (data[i].applicants > 1000) {
             dataEdit.push(data[i]);
@@ -213,11 +223,11 @@ var genVerticalBarchart = function(data, chartID) {
             others.applicants += data[i].applicants;
         }
     }
+    
+    dataEdit.push(others);
+    */
 
-
-
-    //dataEdit.push(others);
-    data = dataEdit;
+    data = processData(data);
 
     var y = d3.scale.ordinal()
         .rangeBands([0, height])
@@ -255,7 +265,6 @@ var genVerticalBarchart = function(data, chartID) {
             if (chartID == "horbarEmigrants") {
                 continents.forEach(function(continent) {
                     if (d.continent == continent.continentCode) {
-                        console.log(continent.color);
                         color = continent.color;
                     }
                 });
@@ -267,6 +276,14 @@ var genVerticalBarchart = function(data, chartID) {
         })
         .attr("height", function(d) {
             return height / data.length;
+        })
+        // Country in map is also selected
+        .on("click", function(d) {
+            console.log("HORZ RECT");
+        }).on("mouseover", function(d) {
+            map.selectCountryByName(d.country);
+        }).on("mouseout", function(d) {
+            map.selectCountryByName("");
         });
 
     var yAxis = d3.svg.axis().scale(y)

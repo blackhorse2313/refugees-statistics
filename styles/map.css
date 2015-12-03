@@ -8,12 +8,13 @@
 path.land {
   stroke: steelblue;
   stroke-width: 1;
-  fill: #ddd;
+  fill: #ededed;
 }
 
+path.land:hover,
 path.land-selected {
-  fill: #22dd22;
-  stroke: #006600;
+  fill: #f39c12 !important;
+  stroke: #443300;
   stroke-width: 2px;
   stroke-opacity: 1;
 }
