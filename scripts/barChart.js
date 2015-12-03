@@ -58,9 +58,9 @@ var genHorizontalBarchart = function(data, chartID, map) {
         .attr("y", function(d) {
             return y(d.applicants);
         })
-        .style("cursor",function(d){
+        .style("cursor", function(d) {
             var cursor = "auto";
-            if (chartID === "verbarEmigrants" ||chartID === "verbarContinents"){
+            if (chartID === "verbarEmigrants" || chartID === "verbarContinents") {
                 cursor = "pointer";
             }
             return cursor;

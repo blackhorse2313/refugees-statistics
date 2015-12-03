@@ -228,7 +228,6 @@ angular.module('timelineModule', ['angularAwesomeSlider'])
                     $('.yearline_' + d).css('stroke', '#2C3E50');
                 }).on("click", function(d, i) {
                     var r = d + ";" + d;
-                    console.log(r);
                     $scope.rangeValue = r;
                     // $('#range').attr("value",r);
                 });
@@ -424,7 +423,6 @@ var genRadarChart = function(data, LegendOptions) {
         }
     }
     maxValue = Math.ceil(maxValue / 10000) * 10000;
-    console.log('maxValue: ' + maxValue);
 
     for (i = 0; i < data.length; i++) {
         if (data[i].length < 12) {

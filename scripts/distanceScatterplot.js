@@ -23,8 +23,9 @@ var genDistanceScatterplot = function(dataset) {
     svg = d3.select("#distanceScatterplot").append("svg").attr("width", width).attr("height", height).append("g")
         .attr("transform", "translate(" + margins.left + "," + margins.top + ")");
 
-    if (dataset.length !== 0) {
 
+    // draw axis only one time
+    if (dataset.length !== 0) {
         var x = d3.scale.linear()
             .domain(d3.extent(dataset[0].values, function(d) {
                 return d.distance;
@@ -72,8 +73,15 @@ var genDistanceScatterplot = function(dataset) {
             });
         svg.call(tip);
 
+
+        var totalxSeries = [];
+        var totalySeries = [];
+        var xyTotalMap = [];
+
+        // dots for every country
         for (var i = 0; i < dataset.length; i++) {
             var data = dataset[i].values;
+            data = data.slice(0, 10);
 
             var x = d3.scale.linear()
                 .domain(d3.extent(data, function(d) {
@@ -81,7 +89,7 @@ var genDistanceScatterplot = function(dataset) {
                 }))
                 .range([0, width - margins.left - margins.right]);
 
-            var y = d3.scale.log()
+            var y = d3.scale.linear()
                 .domain(d3.extent(data, function(d) {
                     return d.applicants_population;
                 }))
@@ -113,16 +121,26 @@ var genDistanceScatterplot = function(dataset) {
                     return dotColor(d.source);
                 })
                 .style("opacity", 1)
+                .style("cursor", "pointer")
+                .on("click", function(d) {
+                    if ($(".d3-tip").css("opacity") !== 1) {
+                        tip.show(d);
+                    } else {
+                        tip.hide(d);
+                    }
+
+                })
                 .on("mouseover", function(d) {
-                    tip.show(d);
                     $("circle").css("opacity", 0.1);
                     $("circle[id^='" + d.source_iso2 + "']").css("opacity", 1);
                     $(".trendline_" + d.source_iso2).css("visibility", "visible");
+                    $(".correlation_total").css("visibility", "hidden");
                 })
                 .on("mouseout", function(d) {
                     tip.hide(d);
                     $("circle").css("opacity", 1);
                     $(".trendline_" + d.source_iso2).css("visibility", "hidden");
+                    $(".correlation_total").css("visibility", "visible");
                 });
 
 
@@ -136,8 +154,13 @@ var genDistanceScatterplot = function(dataset) {
                 xSeries.push(data[j].distance);
                 ySeries.push(data[j].applicants_population);
 
+                xyTotalMap.push({
+                    xvalue: x(data[j].distance),
+                    yvalue: y(data[j].applicants_population)
+                });
             }
             var linePoints = findLineByLeastSquares(xSeries, ySeries);
+
 
             while (linePoints[1][linePoints[1].length - 1] < 0) {
                 linePoints[0].pop();
@@ -157,7 +180,7 @@ var genDistanceScatterplot = function(dataset) {
             var trendData = [
                 [x1, y1, x2, y2]
             ];
-            
+
 
             var trendline = svg.selectAll(".trendline")
                 .data(trendData);
@@ -180,24 +203,83 @@ var genDistanceScatterplot = function(dataset) {
                 .attr("y2", function(d) {
                     return y(d[3]);
                 })
-                .attr("stroke", "black")
-                .attr("stroke-width", 1);
+                .attr("stroke", function(d) {
+                    return dotColor(dataset[i].values[0].source);
+                })
+                .attr("stroke-width", 2);
 
-            /*svg.append("text")
+            // correlation text
+            svg.append("text")
                 .text("Correlation: " + d3.round(pearsonCorrel, 3))
-                .attr("class", "text-label")
-                .style("fill", "black")
+                .attr("class", function(d) {
+                    return "trendline_" + dataset[i].values[0].source_iso2;
+                })
+                .style("visibility", "hidden")
+                .style("fill", function(d) {
+                    return dotColor(dataset[i].values[0].source);
+                })
                 .attr("x", function(d) {
-                    return x(x2) - 8;
+                    return x(x2) + 5;
                 })
                 .attr("y", function(d) {
-                    return y(y2) + 23;
-                });*/
-
-            //Trentline
+                    return y(y2) + 3;
+                });
         }
+        xyTotalMap.sort(function(a, b) {
+            return a.xvalue - b.xvalue;
+        });
+        xyTotalMap.forEach(function(entry) {
+            totalxSeries.push(entry.xvalue);
+            totalySeries.push(entry.yvalue);
+        });
+
+        ///////////////// Trendline for all data ////////////////////////////////////////////
+        var alllinePoints = findLineByLeastSquares(totalxSeries, totalySeries);
+        var totalx1 = alllinePoints[0][0];
+        var totaly1 = alllinePoints[1][0];
+        var totalx2 = alllinePoints[0][alllinePoints[0].length - 1];
+        var totaly2 = alllinePoints[1][alllinePoints[0].length - 1];
+        var totaltrendData = [
+            [totalx1, totaly1, totalx2, totaly2]
+        ];
 
 
+        var toalttrendline = svg.selectAll(".trendline")
+            .data(totaltrendData);
+        toalttrendline.enter()
+            .append("line")
+            .attr("id", "trendline")
+            .attr("class", function(d) {
+                return "trendline_total";
+            })
+            .attr("x1", function(d) {
+                return d[0];
+            })
+            .attr("y1", function(d) {
+                return d[1];
+            })
+            .attr("x2", function(d) {
+                return d[2];
+            })
+            .attr("y2", function(d) {
+                return d[3];
+            })
+            .attr("stroke", "black")
+            .attr("stroke-width", 2);
+
+        var totalpearsonCorrel = getPearsonsCorrelation(totalxSeries, totalySeries);
+        // correlation text
+        svg.append("text")
+            .text("Overall Correlation: " + -(d3.round(totalpearsonCorrel, 3)))
+            .attr("class", "correlation_total")
+            .style("fill", "black")
+            .attr("x", function(d) {
+                return totalx2 + 5;
+            })
+            .attr("y", function(d) {
+                return totaly2 + 3;
+            });
+        ///////////////////////////////////////////////////////////////////////////////////////
 
 
         // add the tooltip area to the webpage
