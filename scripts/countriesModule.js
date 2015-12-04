@@ -13,6 +13,7 @@ var ctrl = angular.module('countriesModule', [])
             var equirectangularMap = new World(WorldType.EQUIRECTANGULAR, world, names);
 
             // Populate data for bar charts
+            // Dataset loading also sets the initial filled countries on the corresponding map
             $scope.continents = [{
                 continentCode: "AF",
                 country: "Africa",
@@ -90,10 +91,13 @@ var ctrl = angular.module('countriesModule', [])
 
                     $scope.continents = $scope.continents.filter(isBigEnough);
                     genHorizontalBarchart($scope.continents, "verbarContinents", equirectangularMap);
+                    
+                    equirectangularMap.fillCountriesByApplicants(emigrantsTop5Countries);
             });
             
             // Display different views
             // Button switching logic is also used for updating filled countries in maps
+            var displayEmigrants; 
             $scope.selectedContinent = "";
             $scope.$watch('selectedContinent', function(newVal, oldVal) {
                 if ($scope.selectedContinent !== "") {
@@ -107,31 +111,39 @@ var ctrl = angular.module('countriesModule', [])
                         return (element.continent == $scope.selectedContinent);
                     }
 
-                    var deisplayEmigrants = emigrants.filter(filterContinent);
-                    genVerticalBarchart(deisplayEmigrants, "horbarEmigrants", equirectangularMap);
+                    displayEmigrants = emigrants.filter(filterContinent);
+                    genVerticalBarchart(displayEmigrants, "horbarEmigrants", equirectangularMap);
+
+                    equirectangularMap.fillCountriesByApplicants(displayEmigrants);
                 }
             });
 
             $scope.showContinents = false;
             $scope.showTop5Emigrants = true;
             $scope.showSpecificContinent = false;
-            $scope.emigrantsButtonText = "Display by countinent";
+            $scope.emigrantsButtonText = "Display by continent";
 
             $scope.emigrantsButton = function() {
                 if ($scope.showTop5Emigrants) {
                     $scope.showContinents = true;
                     $scope.showTop5Emigrants = false;
                     $scope.emigrantsButtonText = "Show top 5";
+
+                    equirectangularMap.fillCountriesByApplicants(emigrantsTop5Countries);
                 } else if ($scope.showContinents) {
                     $scope.showContinents = false;
                     $scope.showTop5Emigrants = true;
-                    $scope.emigrantsButtonText = "Display by countinent";
+                    $scope.emigrantsButtonText = "Display by continent";
+
+                    equirectangularMap.fillCountriesByApplicants(emigrantsTop5Countries);
                 } else {
                     $scope.showContinents = true;
                     $scope.showTop5Emigrants = false;
                     $scope.selectedContinent = "";
                     $scope.showSpecificContinent = false;
                     $scope.emigrantsButtonText = "Show top 5";
+
+                    equirectangularMap.fillCountriesByApplicants(emigrants);
                 }
             };
 

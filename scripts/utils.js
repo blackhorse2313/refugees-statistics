@@ -174,12 +174,12 @@ function World(worldType, world, names) {
 
     // Task 1
     } else if (worldType == WorldType.EQUIRECTANGULAR) {
-        width = 600, height = 300;
+        width = 600, height = 400;
         rotatable = false;
         attribute = "#world-equirectangular";
         projection = d3.geo.equirectangular()
             .scale(130)
-            .translate([width / 2, height / 2])
+            .translate([(width / 2) - 25, (height / 2) + 60])
             .precision(.1);
     } else if (worldType == WorldType.EUROPE) {
         width = 500, height = 500;
@@ -188,7 +188,7 @@ function World(worldType, world, names) {
 	    projection = d3.geo.equirectangular()
 	        .scale(800)
 	        .translate([width/2, height/2])
-	        .rotate([-8, -50])
+	        .rotate([-8, -52])
             .precision(.1);
     } else {
         console.log("@World: Invalid WorldType");

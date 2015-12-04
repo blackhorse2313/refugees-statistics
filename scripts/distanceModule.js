@@ -36,36 +36,37 @@ angular.module('distanceModule', [])
                         });
                 });
 
-        var updateData = function() {
-            var countryNameList = [];
-            var displayData = [];
-            for (i = 0; i < $scope.countryList.length; i++) {
-                if ($scope.countryList[i].selected) {
-                    countryNameList.push($scope.countryList[i].country);
-                    var element = {
-                        country: $scope.countryList[i].country,
-                        values: []
-                    };
-                    displayData.push(element);
-                }
-            }
-            for (i = 0; i < $scope.data.length; i++) {
-                var index = countryNameList.indexOf($scope.data[i].source);
-                if (index != -1) {
-                    displayData[index].values.push($scope.data[i]);
-                }
-            }
-
-            genDistanceScatterplot(displayData);
-        };
-
-        $scope.check = function(iso) {
-            for (i = 0; i < $scope.countryList.length; i++) {
-                if ($scope.countryList[i].iso2 == iso) {
+            var updateData = function() {
+                var countryNameList = [];
+                var displayData = [];
+                for (i = 0; i < $scope.countryList.length; i++) {
                     if ($scope.countryList[i].selected) {
-                        $scope.countryList[i].selected = false;
-                    } else {
-                        $scope.countryList[i].selected = true;
+                        countryNameList.push($scope.countryList[i].country);
+                        var element = {
+                            country: $scope.countryList[i].country,
+                            values: []
+                        };
+                        displayData.push(element);
+                    }
+                }
+                for (i = 0; i < $scope.data.length; i++) {
+                    var index = countryNameList.indexOf($scope.data[i].source);
+                    if (index != -1) {
+                        displayData[index].values.push($scope.data[i]);
+                    }
+                }
+                genDistanceScatterplot(displayData);
+            };
+
+            $scope.check = function(iso) {
+                console.log(iso);
+                for (i = 0; i < $scope.countryList.length; i++) {
+                    if ($scope.countryList[i].iso2 == iso) {
+                        if ($scope.countryList[i].selected) {
+                            $scope.countryList[i].selected = false;
+                        } else {
+                            $scope.countryList[i].selected = true;
+                        }
                     }
                 }
                 updateData($scope.data);

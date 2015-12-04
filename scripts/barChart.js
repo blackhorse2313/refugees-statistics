@@ -84,19 +84,20 @@ var genHorizontalBarchart = function(data, chartID, map) {
         })
         .attr("width", width / data.length - 5)
         .attr("height", function(d) {
-
             return height - y(d.applicants);
-        }).on("click", function(d) {
+        })
+        .on("click", function(d) {
             if (chartID === "verbarContinents") {
                 change(d.continentCode);
             }
             if (chartID === "verbarEmigrants") {
                 selectCountry(d.continent);
             }
-            console.log("VERT RECT");
-        }).on("mouseover", function(d) {
+        })
+        .on("mouseover", function(d) {
             map.selectCountryByName(d.country);
-        }).on("mouseout", function(d) {
+        })
+        .on("mouseout", function(d) {
             map.selectCountryByName("");
         });
 
@@ -276,13 +277,12 @@ var genVerticalBarchart = function(data, chartID, map) {
         })
         .attr("height", function(d) {
             return height / data.length;
-        })
         // Country in map is also selected
-        .on("click", function(d) {
-            console.log("HORZ RECT");
-        }).on("mouseover", function(d) {
+        })
+        .on("mouseover", function(d) {
             map.selectCountryByName(d.country);
-        }).on("mouseout", function(d) {
+        })
+        .on("mouseout", function(d) {
             map.selectCountryByName("");
         });
 

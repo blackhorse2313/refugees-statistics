@@ -2,7 +2,7 @@ id	name
 -1	Northern Cyprus
 -2	Kosovo
 -3	Somaliland
-4	Afghanistan
+4	Afganistan
 8	Albania
 10	Antarctica
 12	Algeria
@@ -23,7 +23,7 @@ id	name
 60	Bermuda
 64	Bhutan
 68	Bolivia, Plurinational State of
-70	Bosnia and Herzegovina
+70	Bosnia-Herzegovina
 72	Botswana
 74	Bouvet Island
 76	Brazil
@@ -106,7 +106,7 @@ id	name
 352	Iceland
 356	India
 360	Indonesia
-364	Iran, Islamic Republic of
+364	Iran
 368	Iraq
 372	Ireland
 376	Israel
@@ -143,7 +143,7 @@ id	name
 484	Mexico
 492	Monaco
 496	Mongolia
-498	Moldova, Republic of
+498	Moldova
 499	Montenegro
 500	Montserrat
 504	Morocco
@@ -186,7 +186,7 @@ id	name
 634	Qatar
 638	Réunion
 642	Romania
-643	Russian Federation
+643	Russia
 646	Rwanda
 652	Saint Barthélemy
 654	Saint Helena, Ascension and Tristan da Cunha
@@ -205,7 +205,7 @@ id	name
 694	Sierra Leone
 702	Singapore
 703	Slovakia
-704	Viet Nam
+704	Vietnam
 705	Slovenia
 706	Somalia
 710	South Africa
@@ -219,7 +219,7 @@ id	name
 748	Swaziland
 752	Sweden
 756	Switzerland
-760	Syrian Arab Republic
+760	Syria
 762	Tajikistan
 764	Thailand
 768	Togo
@@ -234,7 +234,7 @@ id	name
 798	Tuvalu
 800	Uganda
 804	Ukraine
-807	Macedonia, the former Yugoslav Republic of
+807	Macedonia
 818	Egypt
 826	United Kingdom
 831	Guernsey
