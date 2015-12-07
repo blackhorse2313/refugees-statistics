@@ -9,7 +9,7 @@ angular.module('distanceModule', [])
             if (error) throw error;
 
             var equidistantMap = new World(WorldType.EQUIDISTANT, world, names);
- 
+
             var i, j;
             $scope.countryList = [];
             $scope.data = [];
@@ -70,6 +70,17 @@ angular.module('distanceModule', [])
                     }
                 }
                 updateData($scope.data);
+            };
+
+            $scope.focusButton = function(iso) {
+                console.log(iso);
+                for (i = 0; i < $scope.countryList.length; i++) {
+                    if ($scope.countryList[i].iso2 == iso) {
+                        $scope.countryList[i].focus = true;
+                    } else {
+                        $scope.countryList[i].focus = false;
+                    }
+                }
             };
         }
     }]);
