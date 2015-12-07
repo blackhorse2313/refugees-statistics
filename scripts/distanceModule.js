@@ -55,7 +55,7 @@ angular.module('distanceModule', [])
                         displayData[index].values.push($scope.data[i]);
                     }
                 }
-                genDistanceScatterplot(displayData);
+                genDistanceScatterplot(displayData, equidistantMap);
             };
 
             $scope.check = function(iso) {

@@ -156,8 +156,8 @@ function World(worldType, world, names) {
     //// Projection
     ////
 
+    this.projection;
     var width, height,
-        projection,
         rotatable, // Rotates map on country selection
         attribute; // Page attribute to append map
 
@@ -166,7 +166,7 @@ function World(worldType, world, names) {
         width = 450, height = 450;
         rotatable = true;
         attribute = "#world-equidistant";
-        projection = d3.geo.azimuthalEquidistant()
+        this.projection = d3.geo.azimuthalEquidistant()
             .scale(100)
             .translate([width / 2, height / 2])
             .clipAngle(180 - 1e-3)
@@ -177,7 +177,7 @@ function World(worldType, world, names) {
         width = 600, height = 400;
         rotatable = false;
         attribute = "#world-equirectangular";
-        projection = d3.geo.equirectangular()
+        this.projection = d3.geo.equirectangular()
             .scale(130)
             .translate([(width / 2) - 25, (height / 2) + 60])
             .precision(.1);
@@ -185,7 +185,7 @@ function World(worldType, world, names) {
         width = 500, height = 500;
         rotatable = false;
         attribute = "#europe";
-	    projection = d3.geo.equirectangular()
+	    this.projection = d3.geo.equirectangular()
 	        .scale(800)
 	        .translate([width/2, height/2])
 	        .rotate([-8, -52])
@@ -198,13 +198,13 @@ function World(worldType, world, names) {
         .attr("width", width)
         .attr("height", height);
 
-    this.path = d3.geo.path().projection(projection);
+    this.path = d3.geo.path().projection(this.projection);
 
     // Define groups to enforce drawing order
     var g = this.svg.append("g");
     var graticulateGroup = g.append('g');
     var countryGroup = g.append('g');
-    var arcGroup = g.append('g');
+    this.arcGroup = g.append('g');
 
     ////
     //// Globe lines (graticule)
@@ -214,14 +214,6 @@ function World(worldType, world, names) {
         .datum({type: "Sphere"})
         .attr("id", "sphere")
         .attr("d", this.path);
-
-    graticulateGroup.append("use")
-        .attr("class", "stroke")
-        .attr("xlink:href", "#sphere");
-
-    graticulateGroup.append("use")
-        .attr("class", "fill")
-        .attr("xlink:href", "#sphere");
 
     var graticule = d3.geo.graticule();
     graticulateGroup.append("path")
@@ -236,8 +228,8 @@ function World(worldType, world, names) {
     ////
 
     // Assign country names
-    var countries = topojson.feature(world, world.objects.countries).features;
-    countries.forEach(function(d) { 
+    this.countries = topojson.feature(world, world.objects.countries).features;
+    this.countries.forEach(function(d) { 
         var tryit = names.filter(function(n) { return d.id == n.id; })[0];
         if (typeof tryit === "undefined"){
           d.name = "Undefined";
@@ -251,7 +243,7 @@ function World(worldType, world, names) {
         .attr("class", "tooltip");
     
     // Assign country data, with key = id
-    this.country = countryGroup.selectAll(".country").data(countries, function(d) {
+    this.country = countryGroup.selectAll(".country").data(this.countries, function(d) {
         return d.id;
     });
     // Country selection
@@ -261,25 +253,15 @@ function World(worldType, world, names) {
         .attr("d", this.path)
         .attr("class", "land")
         .on("click", function(d,i) {
-            var p = d3.geo.centroid(countries[i]);
-            var places = [
-                [-103.57283669203011, 44.75581985576071],
-                [103.45274688320029, 36.683485526723125]
-            ];
-
             // Rotate & draw immigration flux only if we are in the distanceModule
             if (worldType == WorldType.EQUIDISTANT) {
-                drawFlux(this.path, arcGroup, p, places);
-
-                (function transition() {
-                    d3.transition().duration(750).tween("rotate", function() {
-                        var r = d3.interpolate(projection.rotate(), [-p[0], -p[1]]);
-                        return function(t) {
-                            projection.rotate(r(t));
-                            self.selectCountryByID(d.id);
-                        };
-                    });
-                })();
+                var p = d3.geo.centroid(self.countries[i]);
+                var places = [
+                    [-103.57283669203011, 44.75581985576071],
+                    [103.45274688320029, 36.683485526723125]
+                ];
+                self.drawFlux(p, places);
+                self.rotateToCountry(p, d.id);
             }
             // However, we always want the selected country to change appearance
             else {
@@ -301,6 +283,30 @@ function World(worldType, world, names) {
             tooltip.classed("hidden", true)
         });
 }
+
+World.prototype.rotateToCountry = function(p, id) {
+    var self = this;
+    (function transition() {
+        d3.transition().duration(750).tween("rotate", function() {
+            var r = d3.interpolate(self.projection.rotate(), [-p[0], -p[1]]);
+            return function(t) {
+                            self.projection.rotate(r(t));
+                            self.selectCountryByID(id);
+            };
+        });
+    })();
+};
+
+World.prototype.computeCentroidByName = function(country) {
+    var id = this.countries.forEach(function(d) { 
+        if (d.name === country){
+          return d.name;
+        }
+        return "";
+    });
+    
+    return d3.geo.centroid(this.countries[id]);
+};
 
 World.prototype.selectCountryByID = function(id) {
     this.svg.selectAll("path")
@@ -341,7 +347,7 @@ World.prototype.fillCountriesByApplicants = function(data) {
         }});
 };
 
-function drawFlux(path, arcGroup, origin, places) {
+World.prototype.drawFlux = function(origin, places) {
     var links = [];
     for (var i=0; i<2; i++) {
         links.push({
@@ -353,27 +359,24 @@ function drawFlux(path, arcGroup, origin, places) {
         });
     }
 
-    var pathArcs = arcGroup.selectAll(".arc").data(links);
+    var pathArcs = this.arcGroup.selectAll(".arc").data(links);
 
-    //enter
+    // enter
     pathArcs.enter()
-        .append("path").attr({
-            'class': 'arc'
-        }).style({ 
-            fill: 'none',
-        });
+        .append("path")
+        .attr({ 'class': 'arc' })
+        .style({ fill: 'none' });
 
-    //update
-    pathArcs.attr({
-            //d is the points attribute for this path, we'll draw
-            //  an arc between the points using the arc function
-            d: path
-        })
+    // update
+    // d is the points attribute for this path, we'll draw
+    // an arc between the points using the arc function
+    pathArcs
+        .attr({ d: this.path })
         .style({
             stroke: '#0000ff',
             'stroke-width': '2px'
         })
 
-    //exit
+    // exit
     pathArcs.exit().remove();
-}
+};

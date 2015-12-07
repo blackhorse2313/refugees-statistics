@@ -1,10 +1,8 @@
-var genDistanceScatterplot = function(dataset) {
+var genDistanceScatterplot = function(dataset, map) {
 
     d3.select("#distanceScatterplot").select("svg").remove();
 
-
-
-    var width = 500,
+    var width = 400,
         height = 400;
     var delimiter = d3.format(',.0f');
 
@@ -123,27 +121,37 @@ var genDistanceScatterplot = function(dataset) {
                 .style("opacity", 1)
                 .style("cursor", "pointer")
                 .on("click", function(d) {
-                    if ($(".d3-tip").css("opacity") !== 1) {
-                        tip.show(d);
-                    } else {
-                        tip.hide(d);
-                    }
-
+                    /*
+                    var p = d3.geo.centroid(countries[i]);
+                    var places = [
+                        [-103.57283669203011, 44.75581985576071],
+                        [103.45274688320029, 36.683485526723125]
+                    ];
+                    map.drawFlux(p, places);
+                    */
                 })
                 .on("mouseover", function(d) {
                     $("circle").css("opacity", 0.1);
                     $("circle[id^='" + d.source_iso2 + "']").css("opacity", 1);
                     $(".trendline_" + d.source_iso2).css("visibility", "visible");
                     $(".correlation_total").css("visibility", "hidden");
+
+                    if ($(".d3-tip").css("opacity") !== 1) {
+                        tip.show(d);
+                    } else {
+                        tip.hide(d);
+                    }
+
+                    map.selectCountryByName(d.destination);
                 })
                 .on("mouseout", function(d) {
                     tip.hide(d);
                     $("circle").css("opacity", 1);
                     $(".trendline_" + d.source_iso2).css("visibility", "hidden");
                     $(".correlation_total").css("visibility", "visible");
+
+                    map.selectCountryByName("");
                 });
-
-
 
             var xSeries = [];
             var ySeries = [];
@@ -267,8 +275,8 @@ var genDistanceScatterplot = function(dataset) {
             .attr("stroke", "black")
             .attr("stroke-width", 2);
 
-        var totalpearsonCorrel = getPearsonsCorrelation(totalxSeries, totalySeries);
         // correlation text
+        var totalpearsonCorrel = getPearsonsCorrelation(totalxSeries, totalySeries);
         svg.append("text")
             .text("Overall Correlation: " + -(d3.round(totalpearsonCorrel, 3)))
             .attr("class", "correlation_total")
@@ -279,17 +287,11 @@ var genDistanceScatterplot = function(dataset) {
             .attr("y", function(d) {
                 return totaly2 + 3;
             });
-        ///////////////////////////////////////////////////////////////////////////////////////
-
 
         // add the tooltip area to the webpage
         tooltip = d3.select("body").append("div")
             .attr("class", "tooltip")
             .style("opacity", 0);
-
-
-
-
 
         ////////////////////////////////////////////
         /////////// Initiate legend ////////////////
@@ -298,12 +300,12 @@ var genDistanceScatterplot = function(dataset) {
         var svg = d3.select('#distanceScatterplot')
             .selectAll('svg')
             .append('svg')
-            .attr("width", 1000)
-            .attr("height", 1000)
+            .attr("width", 400)
+            .attr("height", 400)
             .attr("stroke", "solid black");
 
-        var legendTop = 30;
         //Create the title for the legend
+        var legendTop = 30;
         var text = svg.append("text")
             .attr("class", "title")
             .attr('transform', 'translate(90,0)')
@@ -314,13 +316,13 @@ var genDistanceScatterplot = function(dataset) {
             .style("font-weight", "bold")
             .text("Countries");
 
-
         //Initiate Legend   
         var legend = svg.append("g")
             .attr("class", "legend")
             .attr("height", 100)
             .attr("width", 200)
             .attr('transform', 'translate(90,20)');
+
         //Create colour squares
         legend.selectAll('rect')
             .data(dataset)
@@ -335,6 +337,7 @@ var genDistanceScatterplot = function(dataset) {
             .style("fill", function(d, i) {
                 return dotColor(d.country);
             });
+
         //Create text next to squares
         legend.selectAll('text')
             .data(dataset)
