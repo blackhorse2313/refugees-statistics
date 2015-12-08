@@ -8,7 +8,7 @@
 path.land {
   stroke: steelblue;
   stroke-width: 1;
-  fill: #fff;
+  fill: #ededed;
 }
 
 path.land:hover,

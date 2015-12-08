@@ -167,8 +167,8 @@ function World(worldType, world, names) {
         rotatable = true;
         attribute = "#world-equidistant";
         this.projection = d3.geo.azimuthalEquidistant()
-            .scale(100)
-            .translate([this.width / 2, this.height / 2])
+            .scale(200)
+            .translate([(this.width / 2) - 40, (this.height / 2) + 50])
             .clipAngle(180 - 1e-3)
             .precision(.1);
 
@@ -248,18 +248,7 @@ function World(worldType, world, names) {
         .insert("path")
         .attr("d", this.path)
         .attr("class", "land")
-        .on("click", function(d,i) {
-            // Rotate & draw immigration flux only if we are in the distanceModule
-            if (worldType == WorldType.EQUIDISTANT) {
-                var p = d3.geo.centroid(self.countries[i]);
-                var places = [
-                    [-103.57283669203011, 44.75581985576071],
-                    [103.45274688320029, 36.683485526723125]
-                ];
-                self.drawFlux(p, places);
-                self.rotateToCountry(p, d.id);
-            }
-        })
+
         // Show tooltip
         .on("mousemove", function(d,i) {
             tooltip
@@ -283,7 +272,7 @@ World.prototype.zoomToRegion = function(x, y, scale) {
         .attr("transform", "translate(" + [x, y] + ")scale(" + scale + ")");
 };
 
-World.prototype.rotateToCountry = function(p, id) {
+World.prototype.rotateToCountryByID = function(p, id) {
     var self = this;
     (function transition() {
         d3.transition().duration(750).tween("rotate", function() {
@@ -296,13 +285,28 @@ World.prototype.rotateToCountry = function(p, id) {
     })();
 };
 
+World.prototype.rotateToCountryByName = function(p, name) {
+    var self = this;
+    (function transition() {
+        d3.transition().duration(750).tween("rotate", function() {
+            var r = d3.interpolate(self.projection.rotate(), [-p[0], -p[1]]);
+            return function(t) {
+                self.projection.rotate(r(t));
+                self.selectCountryByName(name);
+            };
+        });
+    })();
+};
+
 World.prototype.computeCentroidByName = function(country) {
-    var id = this.countries.forEach(function(d) { 
-        if (d.name === country){
-          return d.name;
+    var id = -1;
+    for (var i = 0, length = this.countries.length; i < length; i++) {
+        var indexedCountry = this.countries[i];
+        if (indexedCountry.name === country){
+          id = i;
+          break;
         }
-        return "";
-    });
+    };
     
     return d3.geo.centroid(this.countries[id]);
 };
@@ -346,14 +350,32 @@ World.prototype.fillCountriesByApplicants = function(data) {
         }});
 };
 
-World.prototype.drawFlux = function(origin, places) {
+World.prototype.drawFlux = function(origin, destinations) {
+    var destinationFluxes = [];
+    for (var i = 0; i < destinations.length; i++) {
+        destinationFluxes.push({
+            name: destinations[i].destination,
+            centroid: this.computeCentroidByName(destinations[i].destination)
+        }); 
+    }
+
+    // TODO: Use opacity instead, probably has a better effect
+    var colors = d3.scale.linear()
+        .domain([
+            destinations[destinations.length - 1].applicants_population,
+            destinations[0].applicants_population
+        ])
+        .interpolate(d3.interpolateRgb)
+        .range([d3.rgb("#afc8e0"), d3.rgb("#000")]);
+
     var links = [];
-    for (var i=0; i<2; i++) {
+    for (var i = 0; i < destinationFluxes.length; i++) {
         links.push({
+            name: destinationFluxes[i].name,
             type: "LineString",
             coordinates: [
                 origin,
-                places[i]
+                destinationFluxes[i].centroid
             ]
         });
     }
@@ -372,9 +394,17 @@ World.prototype.drawFlux = function(origin, places) {
     pathArcs
         .attr({ d: this.path })
         .style({
-            stroke: '#0000ff',
+            stroke: function(d) {
+                var i;
+                for (i = 0; i < destinations.length; i++) {
+                    if (d.name === destinations[i].destination) {
+                        return colors(destinations[i].applicants_population);
+                    }
+                }
+                return "none";
+            },
             'stroke-width': '2px'
-        })
+        });
 
     // exit
     pathArcs.exit().remove();

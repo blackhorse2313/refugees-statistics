@@ -13,6 +13,7 @@ angular.module('distanceModule', [])
             var i, j;
             $scope.countryList = [];
             $scope.data = [];
+            var displayData = [];
 
             $scope.colors = d3.scale.linear()
                 .range(["white", "#217DBB"]);
@@ -38,7 +39,7 @@ angular.module('distanceModule', [])
 
             var updateData = function() {
                 var countryNameList = [];
-                var displayData = [];
+                displayData = [];
                 for (i = 0; i < $scope.countryList.length; i++) {
                     if ($scope.countryList[i].selected) {
                         countryNameList.push($scope.countryList[i].country);
@@ -59,7 +60,6 @@ angular.module('distanceModule', [])
             };
 
             $scope.check = function(iso) {
-                console.log(iso);
                 for (i = 0; i < $scope.countryList.length; i++) {
                     if ($scope.countryList[i].iso2 == iso) {
                         if ($scope.countryList[i].selected) {
@@ -73,10 +73,27 @@ angular.module('distanceModule', [])
             };
 
             $scope.focusButton = function(iso) {
-                console.log(iso);
                 for (i = 0; i < $scope.countryList.length; i++) {
                     if ($scope.countryList[i].iso2 == iso) {
                         $scope.countryList[i].focus = true;
+                        
+                        // Retrieve origin country
+                        var originName = $scope.countryList[i].country;
+                        var originCentroid = equidistantMap.computeCentroidByName(originName);
+
+                        // Retrieve destination countries (adapted from distanceScatterplot)
+                        var destinations;
+                        for (var i = 0; i < displayData.length; i++) {
+                            if (displayData[i].country === originName) {
+                                destinations = displayData[i].values;
+                                destinations = destinations.slice(0, 10);
+                                break;
+                            }
+                        }
+
+                        // Rotate map to origin country
+                        equidistantMap.drawFlux(originCentroid, destinations);
+                        equidistantMap.rotateToCountryByName(originCentroid, originName);
                     } else {
                         $scope.countryList[i].focus = false;
                     }
