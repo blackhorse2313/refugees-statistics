@@ -17,28 +17,52 @@ var ctrl = angular.module('countriesModule', [])
             $scope.continents = [{
                 continentCode: "AF",
                 country: "Africa",
-                applicants: 0
+                applicants: 0,
+                x: -400,
+                y: -375,
+                scale: 2.25
             }, {
                 continentCode: "AS",
                 country: "Asia",
-                applicants: 0
+                applicants: 0,
+                x: -750,
+                y: -250,
+                scale: 2.25
             }, {
                 continentCode: "EU",
                 country: "Europe",
-                applicants: 0
+                applicants: 0,
+                x: -675,
+                y: -100,
+                scale: 2.25
             }, {
                 continentCode: "NA",
                 country: "North America",
-                applicants: 0
+                applicants: 0,
+                x: 0,
+                y: 0,
+                scale: 1
             }, {
                 continentCode: "OC",
                 country: "Oceania",
-                applicants: 0
+                applicants: 0,
+                x: 0,
+                y: 0,
+                scale: 1
             }, {
                 continentCode: "SA",
                 country: "South America",
-                applicants: 0
+                applicants: 0,
+                x: 0,
+                y: 0,
+                scale: 1
             }];
+
+            var zoomFactorsTop5 = {
+                x: -925,
+                y: -400,
+                scale: 3.25
+            };
 
             var emigrants;
             var immigrants;
@@ -93,6 +117,7 @@ var ctrl = angular.module('countriesModule', [])
                     genHorizontalBarchart($scope.continents, "verbarContinents", equirectangularMap);
                     
                     equirectangularMap.fillCountriesByApplicants(emigrantsTop5Countries);
+                    equirectangularMap.zoomToRegion(zoomFactorsTop5.x, zoomFactorsTop5.y, zoomFactorsTop5.scale);
             });
             
             // Display different views
@@ -115,6 +140,16 @@ var ctrl = angular.module('countriesModule', [])
                     genVerticalBarchart(displayEmigrants, "horbarEmigrants", equirectangularMap);
 
                     equirectangularMap.fillCountriesByApplicants(displayEmigrants);
+                    for (var i = 0; i < $scope.continents.length; i++) {
+                        var continent = $scope.continents[i];
+                        if ($scope.selectedContinent == continent.continentCode) {
+                            equirectangularMap.zoomToRegion(
+                                continent.x,
+                                continent.y,
+                                continent.scale);
+                            return;
+                        }
+                    };
                 }
             });
 
@@ -129,13 +164,15 @@ var ctrl = angular.module('countriesModule', [])
                     $scope.showTop5Emigrants = false;
                     $scope.emigrantsButtonText = "Show top 5";
 
-                    equirectangularMap.fillCountriesByApplicants(emigrantsTop5Countries);
+                    equirectangularMap.fillCountriesByApplicants(emigrants);
+                    equirectangularMap.zoomToRegion(0, 0, 1);
                 } else if ($scope.showContinents) {
                     $scope.showContinents = false;
                     $scope.showTop5Emigrants = true;
                     $scope.emigrantsButtonText = "Display by continent";
 
                     equirectangularMap.fillCountriesByApplicants(emigrantsTop5Countries);
+                    equirectangularMap.zoomToRegion(zoomFactorsTop5.x, zoomFactorsTop5.y, zoomFactorsTop5.scale);
                 } else {
                     $scope.showContinents = true;
                     $scope.showTop5Emigrants = false;
@@ -144,6 +181,7 @@ var ctrl = angular.module('countriesModule', [])
                     $scope.emigrantsButtonText = "Show top 5";
 
                     equirectangularMap.fillCountriesByApplicants(emigrants);
+                    equirectangularMap.zoomToRegion(0, 0, 1);
                 }
             };
 

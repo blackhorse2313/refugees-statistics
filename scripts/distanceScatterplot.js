@@ -121,14 +121,18 @@ var genDistanceScatterplot = function(dataset, map) {
                 .style("opacity", 1)
                 .style("cursor", "pointer")
                 .on("click", function(d) {
+                    //console.log("dot clicked: " + d.destination + " with source: " + d.source);
                     /*
-                    var p = d3.geo.centroid(countries[i]);
-                    var places = [
-                        [-103.57283669203011, 44.75581985576071],
-                        [103.45274688320029, 36.683485526723125]
-                    ];
-                    map.drawFlux(p, places);
+                     * TODO: call computeCentroidByName for each country
+                     */
+                    /*
+                    var origin = map.computeCentroidByName(d.source);
+                    var destinations = [];
+                    for(destination in destinationsFromSourceName) {
+                        destinations.push(destination);
+                    }
                     */
+                    //map.drawFlux(origin, destinations);
                 })
                 .on("mouseover", function(d) {
                     $("circle").css("opacity", 0.1);

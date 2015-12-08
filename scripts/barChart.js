@@ -16,7 +16,7 @@ var continents = [{
 var genHorizontalBarchart = function(data, chartID, map) {
     var delimiter = d3.format(",.0f");
 
-    var height = 380,
+    var height = 400,
         width = 530;
 
     var margin = {
@@ -201,11 +201,11 @@ function processData(data) {
 
 var genVerticalBarchart = function(data, chartID, map) {
     var height = 400,
-        width = 400;
+        width = 380;
 
     var margin = {
         top: 10,
-        bottom: 10,
+        bottom: 30,
         left: 110,
         right: 60
     };
@@ -289,11 +289,9 @@ var genVerticalBarchart = function(data, chartID, map) {
     var yAxis = d3.svg.axis().scale(y)
         .orient("left");
 
-    svg
-        .append("g")
+    svg.append("g")
         .attr("class", "y axis")
         .call(yAxis);
-
 
     svg.append("g").selectAll("text")
         .data(data)

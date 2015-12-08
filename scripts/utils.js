@@ -157,37 +157,37 @@ function World(worldType, world, names) {
     ////
 
     this.projection;
-    var width, height,
-        rotatable, // Rotates map on country selection
-        attribute; // Page attribute to append map
+    this.width, this.height;
+    var rotatable; // Rotates map on country selection
+    var attribute; // Page attribute to append map
 
     // Task 4
     if (worldType == WorldType.EQUIDISTANT) {
-        width = 450, height = 450;
+        this.width = 450, this.height = 450;
         rotatable = true;
         attribute = "#world-equidistant";
         this.projection = d3.geo.azimuthalEquidistant()
             .scale(100)
-            .translate([width / 2, height / 2])
+            .translate([this.width / 2, this.height / 2])
             .clipAngle(180 - 1e-3)
             .precision(.1);
 
     // Task 1
     } else if (worldType == WorldType.EQUIRECTANGULAR) {
-        width = 600, height = 400;
+        this.width = 600, this.height = 400;
         rotatable = false;
         attribute = "#world-equirectangular";
         this.projection = d3.geo.equirectangular()
             .scale(130)
-            .translate([(width / 2) - 25, (height / 2) + 60])
+            .translate([(this.width / 2) - 25, (this.height / 2) + 60])
             .precision(.1);
     } else if (worldType == WorldType.EUROPE) {
-        width = 500, height = 500;
+        this.width = 500, this.height = 500;
         rotatable = false;
         attribute = "#europe";
 	    this.projection = d3.geo.equirectangular()
 	        .scale(800)
-	        .translate([width/2, height/2])
+	        .translate([this.width/2, this.height/2])
 	        .rotate([-8, -52])
             .precision(.1);
     } else {
@@ -195,8 +195,8 @@ function World(worldType, world, names) {
     }
 
     this.svg = d3.select(attribute).append("svg")
-        .attr("width", width)
-        .attr("height", height);
+        .attr("width", this.width)
+        .attr("height", this.height);
 
     this.path = d3.geo.path().projection(this.projection);
 
@@ -209,19 +209,14 @@ function World(worldType, world, names) {
     ////
     //// Globe lines (graticule)
     ////
-
-    graticulateGroup.append("defs").append("path")
-        .datum({type: "Sphere"})
-        .attr("id", "sphere")
-        .attr("d", this.path);
-
-    var graticule = d3.geo.graticule();
-    graticulateGroup.append("path")
-        .datum(graticule)
-        .attr("class", "graticule")
-        .attr("d", this.path);
-
-    d3.select(self.frameElement).style("height", height + "px");
+    
+    if (worldType == WorldType.EQUIDISTANT) {
+        var graticule = d3.geo.graticule();
+        graticulateGroup.append("path")
+            .datum(graticule)
+            .attr("class", "graticule")
+            .attr("d", this.path);
+    }
 
     ////
     //// Countries
@@ -240,7 +235,8 @@ function World(worldType, world, names) {
     
     // Displays country name on the map
     var tooltip = d3.select("body").append("div")
-        .attr("class", "tooltip");
+        .attr("class", "tooltip")
+        .classed("hidden", true);
     
     // Assign country data, with key = id
     this.country = countryGroup.selectAll(".country").data(this.countries, function(d) {
@@ -263,10 +259,6 @@ function World(worldType, world, names) {
                 self.drawFlux(p, places);
                 self.rotateToCountry(p, d.id);
             }
-            // However, we always want the selected country to change appearance
-            else {
-                self.selectCountryByID(d.id);
-            }
         })
         // Show tooltip
         .on("mousemove", function(d,i) {
@@ -284,14 +276,21 @@ function World(worldType, world, names) {
         });
 }
 
+World.prototype.zoomToRegion = function(x, y, scale) {
+    this.svg.selectAll("path").transition()
+        .duration(750)
+        .style("stroke-width", 1 / scale + "px")
+        .attr("transform", "translate(" + [x, y] + ")scale(" + scale + ")");
+};
+
 World.prototype.rotateToCountry = function(p, id) {
     var self = this;
     (function transition() {
         d3.transition().duration(750).tween("rotate", function() {
             var r = d3.interpolate(self.projection.rotate(), [-p[0], -p[1]]);
             return function(t) {
-                            self.projection.rotate(r(t));
-                            self.selectCountryByID(id);
+                self.projection.rotate(r(t));
+                self.selectCountryByID(id);
             };
         });
     })();
@@ -330,7 +329,7 @@ World.prototype.fillCountriesByApplicants = function(data) {
     var colors = d3.scale.linear()
         .domain([data[length - 1].applicants, data[0].applicants])
         .interpolate(d3.interpolateRgb)
-        .range([d3.rgb("#ededed"), d3.rgb("#2c3e50")]);
+        .range([d3.rgb("#afc8e0"), d3.rgb("#2c3e50")]);
 
     // Add color to countries
     this.country
@@ -343,7 +342,7 @@ World.prototype.fillCountriesByApplicants = function(data) {
                     return colors(data[i].applicants);
                 }
             }
-            return "#fff";
+            return "url(#pattern-stripe)";
         }});
 };
 
