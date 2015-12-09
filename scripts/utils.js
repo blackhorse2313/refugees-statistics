@@ -182,11 +182,11 @@ function World(worldType, world, names) {
             .translate([(this.width / 2) - 25, (this.height / 2) + 60])
             .precision(.1);
     } else if (worldType == WorldType.EUROPE) {
-        this.width = 500, this.height = 500;
+        this.width = 400, this.height = 400;
         rotatable = false;
         attribute = "#europe";
 	    this.projection = d3.geo.equirectangular()
-	        .scale(800)
+	        .scale(600)
 	        .translate([this.width/2, this.height/2])
 	        .rotate([-8, -52])
             .precision(.1);
@@ -378,7 +378,7 @@ World.prototype.drawFlux = function(originName, destinations) {
             destinations[0].applicants_population
         ])
         .interpolate(d3.interpolateRgb)
-        .range([d3.rgb("#aaa"), d3.rgb("#000")]);
+        .range([d3.rgb("#afc8e0"), d3.rgb("#2c3e50")]);
 
     // Sort links so that links with higher number of applicants
     // are drawn on top of other links (i.e. better visibility)
