@@ -168,7 +168,7 @@ function World(worldType, world, names) {
         attribute = "#world-equidistant";
         this.projection = d3.geo.azimuthalEquidistant()
             .scale(200)
-            .translate([(this.width / 2) - 40, (this.height / 2) + 50])
+            .translate([(this.width / 2), (this.height / 2)])
             .clipAngle(180 - 1e-3)
             .precision(.1);
 
@@ -272,19 +272,6 @@ World.prototype.zoomToRegion = function(x, y, scale) {
         .attr("transform", "translate(" + [x, y] + ")scale(" + scale + ")");
 };
 
-World.prototype.rotateToCountryByID = function(p, id) {
-    var self = this;
-    (function transition() {
-        d3.transition().duration(750).tween("rotate", function() {
-            var r = d3.interpolate(self.projection.rotate(), [-p[0], -p[1]]);
-            return function(t) {
-                self.projection.rotate(r(t));
-                self.selectCountryByID(id);
-            };
-        });
-    })();
-};
-
 World.prototype.rotateToCountryByName = function(p, name) {
     var self = this;
     (function transition() {
@@ -292,7 +279,7 @@ World.prototype.rotateToCountryByName = function(p, name) {
             var r = d3.interpolate(self.projection.rotate(), [-p[0], -p[1]]);
             return function(t) {
                 self.projection.rotate(r(t));
-                self.selectCountryByName(name);
+                self.fillCountryByName(name);
             };
         });
     })();
@@ -350,16 +337,37 @@ World.prototype.fillCountriesByApplicants = function(data) {
         }});
 };
 
+World.prototype.fillCountryByName = function(name) {
+    this.country
+        .attr("d", this.path)
+        .attr("class", "land")
+        .style({fill: function(d) {
+            var i;
+            for (i = 0; i < length; i++) {
+                if (d.name === name) {
+                    return "#000";
+                }
+            }
+            return "#ededed";
+        }});
+    this.svg.selectAll("path")
+        .attr("d", this.path);
+};
+
 World.prototype.drawFlux = function(origin, destinations) {
-    var destinationFluxes = [];
+    var links = [];
     for (var i = 0; i < destinations.length; i++) {
-        destinationFluxes.push({
+        links.push({
             name: destinations[i].destination,
-            centroid: this.computeCentroidByName(destinations[i].destination)
+            applicants: destinations[i].applicants_population,
+            type: "LineString",
+            coordinates: [
+                origin,
+                this.computeCentroidByName(destinations[i].destination)
+            ]
         }); 
     }
 
-    // TODO: Use opacity instead, probably has a better effect
     var colors = d3.scale.linear()
         .domain([
             destinations[destinations.length - 1].applicants_population,
@@ -368,17 +376,11 @@ World.prototype.drawFlux = function(origin, destinations) {
         .interpolate(d3.interpolateRgb)
         .range([d3.rgb("#afc8e0"), d3.rgb("#000")]);
 
-    var links = [];
-    for (var i = 0; i < destinationFluxes.length; i++) {
-        links.push({
-            name: destinationFluxes[i].name,
-            type: "LineString",
-            coordinates: [
-                origin,
-                destinationFluxes[i].centroid
-            ]
-        });
-    }
+    // Sort links so that links with higher number of applicants
+    // are drawn on top of other links (i.e. better visibility)
+    links.sort(function(a, b) {
+        return d3.ascending(a.applicants, b.applicants);
+    });
 
     var pathArcs = this.arcGroup.selectAll(".arc").data(links);
 

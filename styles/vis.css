@@ -138,3 +138,27 @@ svg.e {
     left: 0;
     text-align: center;
 }
+
+.btn-distanceModule {
+    color: #000;
+    border-color: #aaa;
+    background-color: #fff;
+}
+
+.btn-distanceModule:focus,
+.btn-distanceModule:hover {
+    color: #000;
+    background-color: rgba(255, 255, 255, 0.8);
+}
+
+.btn-distanceModule-selected {
+    color: #fff;
+    border-color: #222;
+    background-color: #000;
+}
+
+.btn-distanceModule-selected:focus,
+.btn-distanceModule-selected:hover {
+    color: #fff;
+    background-color: rgba(0, 0, 0, 0.8);
+}

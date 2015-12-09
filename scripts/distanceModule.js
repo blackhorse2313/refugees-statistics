@@ -91,9 +91,10 @@ angular.module('distanceModule', [])
                             }
                         }
 
-                        // Rotate map to origin country
+                        // Update map
                         equidistantMap.drawFlux(originCentroid, destinations);
                         equidistantMap.rotateToCountryByName(originCentroid, originName);
+//                        equidistantMap.fillCountryByName(originName);
                     } else {
                         $scope.countryList[i].focus = false;
                     }
