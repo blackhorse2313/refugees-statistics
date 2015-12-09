@@ -1,4 +1,4 @@
-var genDistanceScatterplot = function(dataset, map) {
+var genDistanceScatterplot = function(dataset, map, NUM_DESTINATIONS) {
 
     d3.select("#distanceScatterplot").select("svg").remove();
 
@@ -79,7 +79,7 @@ var genDistanceScatterplot = function(dataset, map) {
         // dots for every country
         for (var i = 0; i < dataset.length; i++) {
             var data = dataset[i].values;
-            data = data.slice(0, 10);
+            data = data.slice(0, NUM_DESTINATIONS);
 
             var x = d3.scale.linear()
                 .domain(d3.extent(data, function(d) {
@@ -120,20 +120,6 @@ var genDistanceScatterplot = function(dataset, map) {
                 })
                 .style("opacity", 1)
                 .style("cursor", "pointer")
-                .on("click", function(d) {
-                    //console.log("dot clicked: " + d.destination + " with source: " + d.source);
-                    /*
-                     * TODO: call computeCentroidByName for each country
-                     */
-                    /*
-                    var origin = map.computeCentroidByName(d.source);
-                    var destinations = [];
-                    for(destination in destinationsFromSourceName) {
-                        destinations.push(destination);
-                    }
-                    */
-                    //map.drawFlux(origin, destinations);
-                })
                 .on("mouseover", function(d) {
                     $("circle").css("opacity", 0.1);
                     $("circle[id^='" + d.source_iso2 + "']").css("opacity", 1);
@@ -146,6 +132,7 @@ var genDistanceScatterplot = function(dataset, map) {
                         tip.hide(d);
                     }
 
+                    var origin = map.computeCentroidByName(d.source);
                     map.selectCountryByName(d.destination);
                 })
                 .on("mouseout", function(d) {

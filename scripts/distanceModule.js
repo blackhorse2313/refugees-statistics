@@ -1,5 +1,8 @@
 angular.module('distanceModule', [])
     .controller('distanceCtrl', ['$scope', '$http', function($scope, $http) {
+        // Number of destinations countries displayed per origin country
+        var NUM_DESTINATIONS = 7;
+
         queue()
             .defer(d3.json, "data/world-110m.json")
             .defer(d3.tsv, "data/world-country-names.tsv")
@@ -34,6 +37,10 @@ angular.module('distanceModule', [])
                         .then(function(res) {
                             $scope.data = res.data.data;
                             updateData($scope.data);
+
+                            // Initialize map with origin country
+                            // containing largest number of applicants
+                            $scope.focusButton("SY");
                         });
                 });
 
@@ -56,7 +63,7 @@ angular.module('distanceModule', [])
                         displayData[index].values.push($scope.data[i]);
                     }
                 }
-                genDistanceScatterplot(displayData, equidistantMap);
+                genDistanceScatterplot(displayData, equidistantMap, NUM_DESTINATIONS);
             };
 
             $scope.check = function(iso) {
@@ -83,21 +90,19 @@ angular.module('distanceModule', [])
                         
                         // Retrieve origin country
                         var originName = $scope.countryList[i].country;
-                        var originCentroid = equidistantMap.computeCentroidByName(originName);
 
                         // Retrieve destination countries (adapted from distanceScatterplot)
                         var destinations;
                         for (var i = 0; i < displayData.length; i++) {
                             if (displayData[i].country === originName) {
                                 destinations = displayData[i].values;
-                                destinations = destinations.slice(0, 10);
+                                destinations = destinations.slice(0, NUM_DESTINATIONS);
                             }
                         }
 
                         // Update map
-                        equidistantMap.drawFlux(originCentroid, destinations);
-                        equidistantMap.rotateToCountryByName(originCentroid, originName);
-//                        equidistantMap.fillCountryByName(originName);
+                        equidistantMap.drawFlux(originName, destinations);
+                        equidistantMap.rotateAndFillCountries(originName, destinations);
 
                         return;
                     }

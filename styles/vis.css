@@ -81,6 +81,12 @@ svg {
     border: 1px solid grey;
 }
 
+.equidistantMapLegend {
+    background: linear-gradient(to right, #aaa, #000);
+    height: 20px;
+    border: 1px solid grey;
+}
+
 .verticalBarAxis line,
 .verticalBarAxis path {
     fill: none;
@@ -141,24 +147,26 @@ svg.e {
 
 .btn-distanceModule {
     color: #000;
-    border-color: #aaa;
+    border-color: rgba(0, 0, 0, 0.5);
     background-color: #fff;
 }
 
 .btn-distanceModule:focus,
 .btn-distanceModule:hover {
     color: #000;
+    border-color: rgba(0, 0, 0, 0.8);
     background-color: rgba(255, 255, 255, 0.8);
 }
 
 .btn-distanceModule-selected {
     color: #fff;
-    border-color: #222;
+    border-color: rgba(0, 0, 0, 0.5);
     background-color: #000;
 }
 
 .btn-distanceModule-selected:focus,
 .btn-distanceModule-selected:hover {
     color: #fff;
+    border-color: rgba(0, 0, 0, 0.8);
     background-color: rgba(0, 0, 0, 0.8);
 }

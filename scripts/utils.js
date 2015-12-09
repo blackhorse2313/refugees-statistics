@@ -167,7 +167,7 @@ function World(worldType, world, names) {
         rotatable = true;
         attribute = "#world-equidistant";
         this.projection = d3.geo.azimuthalEquidistant()
-            .scale(200)
+            .scale(230)
             .translate([(this.width / 2), (this.height / 2)])
             .clipAngle(180 - 1e-3)
             .precision(.1);
@@ -272,14 +272,15 @@ World.prototype.zoomToRegion = function(x, y, scale) {
         .attr("transform", "translate(" + [x, y] + ")scale(" + scale + ")");
 };
 
-World.prototype.rotateToCountryByName = function(p, name) {
+World.prototype.rotateAndFillCountries = function(originName, destinations) {
+    var p = this.computeCentroidByName(originName);
     var self = this;
     (function transition() {
         d3.transition().duration(750).tween("rotate", function() {
             var r = d3.interpolate(self.projection.rotate(), [-p[0], -p[1]]);
             return function(t) {
                 self.projection.rotate(r(t));
-                self.fillCountryByName(name);
+                self.fillCountriesByName(originName, destinations);
             };
         });
     })();
@@ -337,24 +338,27 @@ World.prototype.fillCountriesByApplicants = function(data) {
         }});
 };
 
-World.prototype.fillCountryByName = function(name) {
+World.prototype.fillCountriesByName = function(originName, destinations) {
     this.country
         .attr("d", this.path)
         .attr("class", "land")
         .style({fill: function(d) {
-            var i;
-            for (i = 0; i < length; i++) {
-                if (d.name === name) {
-                    return "#000";
+            if (d.name === originName) {
+                return "#000";
+            }
+            for (var i = 0; i < destinations.length; i++) {
+                if (d.name === destinations[i].destination) {
+                    return "#ededed";
                 }
             }
-            return "#ededed";
+            return "#fff";
         }});
     this.svg.selectAll("path")
         .attr("d", this.path);
 };
 
-World.prototype.drawFlux = function(origin, destinations) {
+World.prototype.drawFlux = function(originName, destinations) {
+    var origin = this.computeCentroidByName(originName);
     var links = [];
     for (var i = 0; i < destinations.length; i++) {
         links.push({
@@ -374,7 +378,7 @@ World.prototype.drawFlux = function(origin, destinations) {
             destinations[0].applicants_population
         ])
         .interpolate(d3.interpolateRgb)
-        .range([d3.rgb("#afc8e0"), d3.rgb("#000")]);
+        .range([d3.rgb("#aaa"), d3.rgb("#000")]);
 
     // Sort links so that links with higher number of applicants
     // are drawn on top of other links (i.e. better visibility)
