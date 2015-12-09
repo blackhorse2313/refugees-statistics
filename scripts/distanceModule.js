@@ -73,6 +73,10 @@ angular.module('distanceModule', [])
             };
 
             $scope.focusButton = function(iso) {
+                // Angular is amazing...
+                for (i = 0; i < $scope.countryList.length; i++) {
+                    $scope.countryList[i].focus = false;
+                }
                 for (i = 0; i < $scope.countryList.length; i++) {
                     if ($scope.countryList[i].iso2 == iso) {
                         $scope.countryList[i].focus = true;
@@ -87,7 +91,6 @@ angular.module('distanceModule', [])
                             if (displayData[i].country === originName) {
                                 destinations = displayData[i].values;
                                 destinations = destinations.slice(0, 10);
-                                break;
                             }
                         }
 
@@ -95,8 +98,8 @@ angular.module('distanceModule', [])
                         equidistantMap.drawFlux(originCentroid, destinations);
                         equidistantMap.rotateToCountryByName(originCentroid, originName);
 //                        equidistantMap.fillCountryByName(originName);
-                    } else {
-                        $scope.countryList[i].focus = false;
+
+                        return;
                     }
                 }
             };
