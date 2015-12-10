@@ -152,6 +152,11 @@ var WorldType = {
 function World(worldType, world, names) {
     var self = this;
 
+    // Used for computing flux in scatterplot selection
+    this.destinationsOrigin = "";
+    this.destinationsData = [];
+    this.dotColor = undefined;
+
     ////
     //// Projection
     ////
@@ -328,8 +333,7 @@ World.prototype.fillCountriesByApplicants = function(data) {
         .attr("d", this.path)
         .attr("class", "land")
         .style({fill: function(d) {
-            var i;
-            for (i = 0; i < length; i++) {
+            for (var i = 0; i < length; i++) {
                 if (d.name === data[i].country) {
                     return colors(data[i].applicants);
                 }
@@ -338,7 +342,19 @@ World.prototype.fillCountriesByApplicants = function(data) {
         }});
 };
 
+World.prototype.updateDestinations = function(origin, data) {
+    this.destinationsOrigin = origin;
+    this.destinationsData = data;
+}
+
+World.prototype.restoreDestinations = function() {
+    this.drawFlux(this.destinationsOrigin, this.destinationsData);
+    this.rotateAndFillCountries(this.destinationsOrigin, this.destinationsData);
+}
+
 World.prototype.fillCountriesByName = function(originName, destinations) {
+    var self = this;
+
     this.country
         .attr("d", this.path)
         .attr("class", "land")
@@ -348,16 +364,31 @@ World.prototype.fillCountriesByName = function(originName, destinations) {
             }
             for (var i = 0; i < destinations.length; i++) {
                 if (d.name === destinations[i].destination) {
-                    return "#ededed";
+                    return self.dotColor(originName);
                 }
             }
-            return "#fff";
+            return "url(#pattern-stripe)";
         }});
     this.svg.selectAll("path")
         .attr("d", this.path);
 };
 
+World.prototype.computeFluxColor = function(applicants_population) {
+    var length = this.destinationsData.length;
+    var colors = d3.scale.linear()
+        .domain([
+            this.destinationsData[length - 1].applicants_population,
+            this.destinationsData[0].applicants_population
+        ])
+        .interpolate(d3.interpolateRgb)
+        .range([d3.rgb("#afc8e0"), d3.rgb("#2c3e50")]);
+    
+    return colors(applicants_population);
+};
+
 World.prototype.drawFlux = function(originName, destinations) {
+    var self = this;
+
     var origin = this.computeCentroidByName(originName);
     var links = [];
     for (var i = 0; i < destinations.length; i++) {
@@ -371,14 +402,6 @@ World.prototype.drawFlux = function(originName, destinations) {
             ]
         }); 
     }
-
-    var colors = d3.scale.linear()
-        .domain([
-            destinations[destinations.length - 1].applicants_population,
-            destinations[0].applicants_population
-        ])
-        .interpolate(d3.interpolateRgb)
-        .range([d3.rgb("#afc8e0"), d3.rgb("#2c3e50")]);
 
     // Sort links so that links with higher number of applicants
     // are drawn on top of other links (i.e. better visibility)
@@ -401,10 +424,9 @@ World.prototype.drawFlux = function(originName, destinations) {
         .attr({ d: this.path })
         .style({
             stroke: function(d) {
-                var i;
-                for (i = 0; i < destinations.length; i++) {
+                for (var i = 0; i < destinations.length; i++) {
                     if (d.name === destinations[i].destination) {
-                        return colors(destinations[i].applicants_population);
+                        return self.computeFluxColor(destinations[i].applicants_population);
                     }
                 }
                 return "none";

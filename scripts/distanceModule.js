@@ -101,6 +101,7 @@ angular.module('distanceModule', [])
                         }
 
                         // Update map
+                        equidistantMap.updateDestinations(originName, destinations);
                         equidistantMap.drawFlux(originName, destinations);
                         equidistantMap.rotateAndFillCountries(originName, destinations);
 

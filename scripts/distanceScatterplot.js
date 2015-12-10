@@ -9,6 +9,7 @@ var genDistanceScatterplot = function(dataset, map, NUM_DESTINATIONS) {
     var dotColor = d3.scale.category10().domain(d3.extent(dataset, function(d) {
         return d.country;
     }));
+    map.dotColor = dotColor;
 
     var margins = {
         "left": 40,
@@ -132,8 +133,18 @@ var genDistanceScatterplot = function(dataset, map, NUM_DESTINATIONS) {
                         tip.hide(d);
                     }
 
-                    var origin = map.computeCentroidByName(d.source);
-                    map.selectCountryByName(d.destination);
+                    // Draw flux only if origin country matches focused country
+                    if (d.source === map.destinationsOrigin) {
+                        var destination = [];
+                        for (var i = 0; i < map.destinationsData.length; i++) {
+                            if (map.destinationsData[i].destination === d.destination) {
+                                destination.push(map.destinationsData[i]);
+                                break;
+                            }
+                        }
+                        map.drawFlux(d.source, destination);
+                        map.rotateAndFillCountries(d.source, destination);
+                    }
                 })
                 .on("mouseout", function(d) {
                     tip.hide(d);
@@ -141,7 +152,8 @@ var genDistanceScatterplot = function(dataset, map, NUM_DESTINATIONS) {
                     $(".trendline_" + d.source_iso2).css("visibility", "hidden");
                     $(".correlation_total").css("visibility", "visible");
 
-                    map.selectCountryByName("");
+                    // Restore previous flux for origin and destination countries
+                    map.restoreDestinations();
                 });
 
             var xSeries = [];
