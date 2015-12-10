@@ -4,8 +4,6 @@ angular.module('gdpModule', ['angularAwesomeSlider'])
         var scale = [2008, 2009, 2010, 2011, 2012, 2013, 2014, 2015];
         var i, j, k; // the iterators
 
-
-
         $scope.dataset = [];
         $scope.countries = [];
         $scope.currentYear = 2015;
@@ -82,9 +80,6 @@ angular.module('gdpModule', ['angularAwesomeSlider'])
                         }
                     }
                 }
-
-
-
 
                 // list
                 for (i = 0; i < $scope.dataset.length; i++) {
@@ -188,8 +183,6 @@ angular.module('gdpModule', ['angularAwesomeSlider'])
             updateScatterplot(displayData, $scope.hideOutliers);
         };
 
-
-
         $scope.options = {
             from: 2008,
             to: 2015,
@@ -240,7 +233,6 @@ angular.module('gdpModule', ['angularAwesomeSlider'])
     }]);
 
 // just to have some space around items. 
-
 var delimiter = d3.format(",.0f");
 var width = 400;
 var height = 430;
@@ -1009,7 +1001,4 @@ var updateDotPlot = function(dataset) {
             }
         }
     };
-
-
-
 };

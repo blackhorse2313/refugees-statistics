@@ -52,12 +52,9 @@ path {
     shape-rendering: crispEdges;
 }
 
-
-/* replace by panels 
-svg {
-    border: 1px solid #999999;
+.lineChartMonth rect:hover {
+    fill: #ffdddd;
 }
-*/
 
 .helpLine:hover {
     opacity: 0.1 !important;
@@ -115,8 +112,6 @@ label.ng-binding {
 
 
 /* Creates a small triangle extender for the tooltip */
-
-
 }
 svg.e {
     margin-left: 200px;

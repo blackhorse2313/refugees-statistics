@@ -221,15 +221,14 @@ angular.module('timelineModule', ['angularAwesomeSlider'])
                 .attr("opacity", 0)
                 .on("mouseover", function(d, i) {
                     $('#yearIndex_' + i).css('fill-opacity', 0.5);
-                    $('.yearline_' + d).css('stroke', 'red');
+                    $('.yearline_' + d).css('stroke', '#f39c12').css('stroke-width', '4px');
                 })
                 .on("mouseout", function(d, i) {
                     $('#yearIndex_' + i).css('fill-opacity', 0);
-                    $('.yearline_' + d).css('stroke', '#2C3E50');
+                    $('.yearline_' + d).css('stroke', '#2C3E50').css('stroke-width', '2px');
                 }).on("click", function(d, i) {
                     var r = d + ";" + d;
                     $scope.rangeValue = r;
-                    // $('#range').attr("value",r);
                 });
 
             // Add the X Axis
@@ -253,9 +252,6 @@ angular.module('timelineModule', ['angularAwesomeSlider'])
         ////////////////////////////////////////////////////////////////////////////////////////////////////////
         ////////////////////////////////////////////////////////////////////////////////////////////////////////
 
-
-
-
     }]);
 
 function genVisYearlyLineChart(data) {
@@ -276,8 +272,6 @@ function genVisYearlyLineChart(data) {
         .range([0, width]);
     var y = d3.scale.linear()
         .range([height, 0]);
-
-
 
     // Define the axes
     var xAxis = d3.svg.axis().scale(x)
@@ -328,8 +322,6 @@ function genVisYearlyLineChart(data) {
         .call(xAxis);
 
     //Add the Y Axis
-
-
     svg
         .selectAll('circle')
         .data(data)
@@ -372,7 +364,7 @@ function genVisYearlyLineChart(data) {
             return x(d.year);
         })
         .attr('y', function(d) {
-            return y(d.applicants) - 10;
+            return y(d.applicants) - 15;
         })
         .attr('font-size', 300)
         .attr('font-family', 'Arial')
@@ -392,7 +384,7 @@ function genVisYearlyLineChart(data) {
         .attr("opacity", 0)
         .on("mouseover", function(d, i) {
             $('#yearIndex_' + i).css('fill-opacity', 0.5);
-            $('#dot_' + d.year).css('fill', '#18bc9c').css('r', '7');
+            $('#dot_' + d.year).css('fill', '#f39c12').css('r', '8');
         })
         .on("mouseout", function(d, i) {
             $('#yearIndex_' + i).css('fill-opacity', 0);

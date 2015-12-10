@@ -166,7 +166,7 @@ function World(worldType, world, names) {
     var rotatable; // Rotates map on country selection
     var attribute; // Page attribute to append map
 
-    // Task 4
+    // Distance module
     if (worldType == WorldType.EQUIDISTANT) {
         this.width = 450, this.height = 450;
         rotatable = true;
@@ -177,7 +177,7 @@ function World(worldType, world, names) {
             .clipAngle(180 - 1e-3)
             .precision(.1);
 
-    // Task 1
+    // Major Countries module
     } else if (worldType == WorldType.EQUIRECTANGULAR) {
         this.width = 600, this.height = 400;
         rotatable = false;
@@ -247,14 +247,13 @@ function World(worldType, world, names) {
     this.country = countryGroup.selectAll(".country").data(this.countries, function(d) {
         return d.id;
     });
+
     // Country selection
     this.country
         .enter()
         .insert("path")
         .attr("d", this.path)
         .attr("class", "land")
-
-        // Show tooltip
         .on("mousemove", function(d,i) {
             tooltip
                 .classed("hidden", false)
@@ -263,45 +262,20 @@ function World(worldType, world, names) {
                     + (d3.event.pageY - 40) +"px")
                 .html(d.name);
         })
-
-        // Hide tooltip
         .on("mouseout",  function(d,i) {
             tooltip.classed("hidden", true)
         });
 }
+
+//
+// Major Countries module functions
+//
 
 World.prototype.zoomToRegion = function(x, y, scale) {
     this.svg.selectAll("path").transition()
         .duration(750)
         .style("stroke-width", 1 / scale + "px")
         .attr("transform", "translate(" + [x, y] + ")scale(" + scale + ")");
-};
-
-World.prototype.rotateAndFillCountries = function(originName, destinations) {
-    var p = this.computeCentroidByName(originName);
-    var self = this;
-    (function transition() {
-        d3.transition().duration(750).tween("rotate", function() {
-            var r = d3.interpolate(self.projection.rotate(), [-p[0], -p[1]]);
-            return function(t) {
-                self.projection.rotate(r(t));
-                self.fillCountriesByName(originName, destinations);
-            };
-        });
-    })();
-};
-
-World.prototype.computeCentroidByName = function(country) {
-    var id = -1;
-    for (var i = 0, length = this.countries.length; i < length; i++) {
-        var indexedCountry = this.countries[i];
-        if (indexedCountry.name === country){
-          id = i;
-          break;
-        }
-    };
-    
-    return d3.geo.centroid(this.countries[id]);
 };
 
 World.prototype.selectCountryByID = function(id) {
@@ -342,6 +316,37 @@ World.prototype.fillCountriesByApplicants = function(data) {
         }});
 };
 
+//
+// Distance module functions
+//
+
+World.prototype.computeCentroidByName = function(country) {
+    var id = -1;
+    for (var i = 0, length = this.countries.length; i < length; i++) {
+        var indexedCountry = this.countries[i];
+        if (indexedCountry.name === country){
+          id = i;
+          break;
+        }
+    };
+    
+    return d3.geo.centroid(this.countries[id]);
+};
+
+World.prototype.rotateAndFillCountries = function(originName, destinations) {
+    var p = this.computeCentroidByName(originName);
+    var self = this;
+    (function transition() {
+        d3.transition().duration(750).tween("rotate", function() {
+            var r = d3.interpolate(self.projection.rotate(), [-p[0], -p[1]]);
+            return function(t) {
+                self.projection.rotate(r(t));
+                self.fillCountriesByDestinations(originName, destinations);
+            };
+        });
+    })();
+};
+
 World.prototype.updateDestinations = function(origin, data) {
     this.destinationsOrigin = origin;
     this.destinationsData = data;
@@ -352,7 +357,7 @@ World.prototype.restoreDestinations = function() {
     this.rotateAndFillCountries(this.destinationsOrigin, this.destinationsData);
 }
 
-World.prototype.fillCountriesByName = function(originName, destinations) {
+World.prototype.fillCountriesByDestinations = function(originName, destinations) {
     var self = this;
 
     this.country
