@@ -8,4 +8,6 @@ or
 
 python -m SimpleHTTPServer 8888
 
-Afterwards, just navigate to the main folder to run the index.html file
+Afterwards, just navigate to the main folder to run the index.html file.
+
+The project was tested in a recent version of Google Chrome.
