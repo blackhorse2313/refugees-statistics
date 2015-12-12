@@ -1,14 +1,16 @@
 <div class="page-header">
     <h1>Overview of major countries regarding the number of refugees</h1>
     <div>
-        <div class="panel panel-default" style="margin-left:30px; display:inline-block;width:auto">
+        <div class="panel panel-default" style="margin-left:30px;">
             <div class="panel-heading">
                 <h3 class="panel-title">Destination countries</h3>
             </div>
             <div class="panel-body">
                 <div style="display:inline-block;">
-                    <div id="verbarImmigrants" ng-show="showBarImmigrants"></div>
-                    <div id="horbarImmigrants" ng-hide="showBarImmigrants"></div>
+                    <div style="height:445px;width:550px; position:relative;">
+                        <div id="verbarImmigrants" ng-show="showBarImmigrants" class="cssFade" style="position:absolute;"></div>
+                        <div id="horbarImmigrants" ng-hide="showBarImmigrants" class="cssFade" style="position:absolute;"></div>
+                    </div>
                     <button class="btn btn-primary" ng-click="immigrantsButton()" style="width:200px;">{{immigrantsButtonText}}</button>
                 </div>
                 <div class="panel-body" style="margin-left:30px; display:inline-block;width:auto">
@@ -33,9 +35,16 @@
             </div>
             <div class="panel-body">
                 <div style="display:inline-block;">
-                    <div id="verbarEmigrants" ng-show="showTop5Emigrants"></div>
-                    <div id="verbarContinents" ng-show="showContinents"></div>
-                    <div id="horbarEmigrants" ng-show="showSpecificContinent"></div>
+                    <div style="height:445px;width:550px; position:relative;">
+                        <div id="verbarEmigrants" ng-show="showTop5Emigrants" class="cssFade" style="position:absolute;"></div>
+                        <div id="verbarContinents" ng-show="showContinents" class="cssFade" style="position:absolute;"></div>
+                        <!-- <div id="horbarEmigrants" ng-show="showSpecificContinent" class="cssFade" style="position:absolute;"></div> -->
+
+
+                        <div id="horbarAsia" ng-show="showAsia" class="cssFade" style="position:absolute;"></div>
+                        <div id="horbarEurope" ng-show="showEurope" class="cssFade" style="position:absolute;"></div>
+                        <div id="horbarAfrica" ng-show="showAfrica" class="cssFade" style="position:absolute;"></div>
+                    </div>
                     <div>
                         <button class="btn  btn-primary" ng-click="emigrantsButton()" style="display:inline-block;width:200px;">{{emigrantsButtonText}}</button>
                         <select ng-model="selectedContinent" class="form-control pull-right" placeholder="select a country" style="width:250px;display:inline-block;" ng-show="!showTop5Emigrants">

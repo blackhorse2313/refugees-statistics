@@ -30,6 +30,8 @@ angular.module('gdpModule', ['angularAwesomeSlider'])
             .then(function(res) {
                 $scope.dataset = res.data.data;
 
+
+
                 $scope.colors = d3.scale.linear()
                     .domain(d3.extent($scope.dataset, function(d) {
                         return d.population;
@@ -255,6 +257,21 @@ function genScatterPlotGDP(dataset, hideOutliers) {
         data = dataset;
     }
 
+
+    /////////////////////////////////////////////////////////
+    var unavailableStates = [];
+    var isoCodes = [];
+    dataset.forEach(function(country) {
+        isoCodes.push(country.iso2);
+    });
+    allCountries().forEach(function(country) {
+        if (isoCodes.indexOf(country.iso2) == -1) {
+            outliers.push(country);
+        }
+    });
+
+    /////////////////////////////////////////////////////////
+
     var margins = {
         "left": 40,
         "right": 85,
@@ -451,6 +468,12 @@ function genScatterPlotGDP(dataset, hideOutliers) {
 
 var genDotPlot = function(dataset) {
 
+    var isoCodes = [];
+    dataset.forEach(function(country) {
+        isoCodes.push(country.iso2);
+    });
+
+
     $('#dotPlotGDP > svg').remove();
     var data = [];
     var outliers = [];
@@ -461,6 +484,12 @@ var genDotPlot = function(dataset) {
             outliers.push(dataset[i]);
         }
     }
+
+    allCountries().forEach(function(country) {
+        if (isoCodes.indexOf(country.iso2) == -1) {
+            outliers.push(country);
+        }
+    });
 
 
     data.sort(function(a, b) {
@@ -684,7 +713,7 @@ var genDotPlot = function(dataset) {
 
 
     ///////////////////////////////Draw the legend ////////////////////////////////////////////
-    var top = height - margins.top - margins.bottom * 0.5+10;
+    var top = height - margins.top - margins.bottom * 0.5 + 10;
     var middle = 0;
     var legend = svg.append("g")
         .attr("class", "legend")
@@ -1002,3 +1031,8 @@ var updateDotPlot = function(dataset) {
         }
     };
 };
+
+function allCountries() {
+    var scope = angular.element($("#dotPlotGDP")).scope();
+    return scope.dataset;
+}

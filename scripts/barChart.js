@@ -263,7 +263,7 @@ var genVerticalBarchart = function(data, chartID, map) {
         })
         .attr("fill", function(d) {
             var color = "#2C3E50";
-            if (chartID == "horbarEmigrants") {
+            if (chartID == "horbarEurope"||chartID == "horbarAsia"||chartID == "horbarAfrica") {
                 continents.forEach(function(continent) {
                     if (d.continent == continent.continentCode) {
                         color = continent.color;

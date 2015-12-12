@@ -1,4 +1,4 @@
-angular.module('ivApp', ['ngRoute', 'angularAwesomeSlider', 'gdpModule','countriesModule','distanceModule','timelineModule'])
+angular.module('ivApp', ['ngRoute', 'angularAwesomeSlider', 'gdpModule','countriesModule','distanceModule','timelineModule','ngAnimate'])
     .config(function($routeProvider) {
         $routeProvider
             .when('/', {

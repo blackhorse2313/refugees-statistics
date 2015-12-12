@@ -86,7 +86,7 @@ var ctrl = angular.module('countriesModule', [])
                     immigrantsTop5Countries = displayImmigrants.slice(0, 5);
                     genHorizontalBarchart(immigrantsTop5Countries, "verbarImmigrants", europeMap);
                     genVerticalBarchart(displayImmigrants, "horbarImmigrants", europeMap);
-            
+
                     europeMap.fillCountriesByApplicants(immigrantsTop5Countries);
                 });
 
@@ -113,16 +113,43 @@ var ctrl = angular.module('countriesModule', [])
                         return (element.applicants >= 5000);
                     }
 
+
                     $scope.continents = $scope.continents.filter(isBigEnough);
                     genHorizontalBarchart($scope.continents, "verbarContinents", equirectangularMap);
-                    
+
+                    //////////////////////////
+                    var emigrantsEurope = [];
+                    var emigrantsAsia = [];
+                    var emigrantsAfrica = [];
+                    emigrants.forEach(function(country) {
+                        switch (country.continent) {
+                            case "EU":
+                                emigrantsEurope.push(country);
+                                break;
+                            case "AF":
+                                emigrantsAfrica.push(country);
+                                break;
+                            case "AS":
+                                emigrantsAsia.push(country);
+                                break;
+                            default:
+                                break;
+                        }
+                    });
+
+                    genVerticalBarchart(emigrantsEurope, "horbarEurope", equirectangularMap);
+                    genVerticalBarchart(emigrantsAsia, "horbarAsia", equirectangularMap);
+                    genVerticalBarchart(emigrantsAfrica, "horbarAfrica", equirectangularMap);
+
+                    //////////////////////////
+
                     equirectangularMap.fillCountriesByApplicants(emigrantsTop5Countries);
                     equirectangularMap.zoomToRegion(zoomFactorsTop5.x, zoomFactorsTop5.y, zoomFactorsTop5.scale);
-            });
-            
+                });
+
             // Display different views
             // Button switching logic is also used for updating filled countries in maps
-            var displayEmigrants; 
+            var displayEmigrants;
             $scope.selectedContinent = "";
             $scope.$watch('selectedContinent', function(newVal, oldVal) {
                 if ($scope.selectedContinent !== "") {
@@ -137,7 +164,24 @@ var ctrl = angular.module('countriesModule', [])
                     }
 
                     displayEmigrants = emigrants.filter(filterContinent);
-                    genVerticalBarchart(displayEmigrants, "horbarEmigrants", equirectangularMap);
+                    //genVerticalBarchart(displayEmigrants, "horbarEmigrants", equirectangularMap);
+
+                    ///////////////////////////////////////
+                    hideSpecificContinents();
+                    switch ($scope.selectedContinent) {
+                        case "EU":
+                            $scope.showEurope = true;
+                            break;
+                        case "AF":
+                            $scope.showAfrica = true;
+                            break;
+                        case "AS":
+                            $scope.showAsia = true;
+                            break;
+                        default:
+                            break;
+                    }
+                    //////////////////////////////////////////////
 
                     equirectangularMap.fillCountriesByApplicants(displayEmigrants);
                     for (var i = 0; i < $scope.continents.length; i++) {
@@ -152,6 +196,19 @@ var ctrl = angular.module('countriesModule', [])
                     };
                 }
             });
+
+            ///////////////////////////
+
+            $scope.showEurope = false;
+            $scope.showAfrica = false;
+            $scope.showAsia = false;
+            var hideSpecificContinents = function() {
+                $scope.showEurope = false;
+                $scope.showAfrica = false;
+                $scope.showAsia = false;
+            };
+
+            //////////////////////////
 
             $scope.showContinents = false;
             $scope.showTop5Emigrants = true;
@@ -177,7 +234,7 @@ var ctrl = angular.module('countriesModule', [])
                     $scope.showContinents = true;
                     $scope.showTop5Emigrants = false;
                     $scope.selectedContinent = "";
-                    $scope.showSpecificContinent = false;
+                    hideSpecificContinents();
                     $scope.emigrantsButtonText = "Show top 5";
 
                     equirectangularMap.fillCountriesByApplicants(emigrants);
