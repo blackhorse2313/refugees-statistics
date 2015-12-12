@@ -121,17 +121,18 @@ var genDistanceScatterplot = function(dataset, map, NUM_DESTINATIONS) {
                 })
                 .style("opacity", 1)
                 .style("cursor", "pointer")
-                .on("mouseover", function(d) {
-                    $("circle").css("opacity", 0.1);
-                    $("circle[id^='" + d.source_iso2 + "']").css("opacity", 1);
-                    $(".trendline_" + d.source_iso2).css("visibility", "visible");
-                    $(".correlation_total").css("visibility", "hidden");
-
+                .on("click", function(d) {
                     if ($(".d3-tip").css("opacity") !== 1) {
                         tip.show(d);
                     } else {
                         tip.hide(d);
                     }
+                })
+                .on("mouseover", function(d) {
+                    $("circle").css("opacity", 0.1);
+                    $("circle[id^='" + d.source_iso2 + "']").css("opacity", 1);
+                    $(".trendline_" + d.source_iso2).css("visibility", "visible");
+                    $(".correlation_total").css("visibility", "hidden");
 
                     // Draw flux only if origin country matches focused country
                     if (d.source === map.destinationsOrigin) {
