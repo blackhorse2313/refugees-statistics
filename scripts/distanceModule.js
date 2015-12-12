@@ -44,6 +44,21 @@ angular.module('distanceModule', [])
                         });
                 });
 
+            $scope.mapExpandet = false;
+            $scope.expandButtonText = "Expand map";
+            $scope.expandMap = function() {
+                if (!$scope.mapExpandet) {
+                    $scope.mapExpandet = true;
+                    // $("#world-equidistant > svg").attr("width", 900).attr("height", 900);
+                    equidistantMap.expandMap(true);
+                    $scope.expandButtonText = "Reduce map";
+                } else {
+                    $scope.mapExpandet = false;
+                    $("#world-equidistant > svg").attr("width", 450).attr("height", 450);
+                    $scope.expandButtonText = "Expand map";
+                }
+            };
+
             var updateData = function() {
                 var countryNameList = [];
                 displayData = [];
@@ -87,7 +102,7 @@ angular.module('distanceModule', [])
                 for (i = 0; i < $scope.countryList.length; i++) {
                     if ($scope.countryList[i].iso2 == iso) {
                         $scope.countryList[i].focus = true;
-                        
+
                         // Retrieve origin country
                         var originName = $scope.countryList[i].country;
 

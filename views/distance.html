@@ -14,7 +14,7 @@
                                 <label>
                                     <input type="checkbox" ng-checked="country.selected" ng-click="check(country.iso2)">
                                     <div style="width:36px;display: inline-block;text-align:center;margin-right:5px;"><img class="flag" ng-src="images/flags-normal/{{country.iso2 | lowercase}}.png" style="height:18px;"></div>{{country.country}}</label>
-                                    <button class="btn btn-sm pull-right btn-distanceModule" ng-show="country.selected" ng-class="{'btn-distanceModule-selected':country.focus}" style="line-height: 0.5;" ng-click="focusButton(country.iso2)">focus</button>
+                                <button class="btn btn-sm pull-right btn-distanceModule" ng-show="country.selected" ng-class="{'btn-distanceModule-selected':country.focus}" style="line-height: 0.5;" ng-click="focusButton(country.iso2)">focus</button>
                             </div>
                         </td>
                     </tr>
@@ -31,11 +31,11 @@
             </div>
         </div>
     </div>
-    <div class="panel panel-default" style="margin-left:30px; display:inline-block;width:auto">
+    <div class="panel panel-default" style="margin-left:30px; display:inline-block;width:auto" ng-hide="mapExpandet">
         <div class="panel-body">
             <div id="distanceScatterplot"></div>
             <div style="text-align: center;">
-                    Click on a dot to show detailed information for that country
+                Click on a dot to show detailed information for that country
             </div>
         </div>
     </div>
@@ -50,6 +50,10 @@
                         <div style="float: right; display: inline-block;">High</div>
                     </div>
                 </div>
+                <button class="btn btn-primary btn-sm" style="margin-top:30px;" ng-click="expandMap()">
+                    <span class="glyphicon glyphicon-resize-full" ng-hide="mapExpandet" aria-hidden="true" style="margin-right: 10px;"></span>
+                    <span class="glyphicon glyphicon-resize-small" ng-show="mapExpandet" aria-hidden="true"  style="margin-right: 10px;"></span>  {{expandButtonText}}
+                </button>
             </div>
         </div>
     </div>

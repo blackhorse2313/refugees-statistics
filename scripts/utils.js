@@ -144,10 +144,11 @@ var getMonthName = function(number) {
 ////
 
 var WorldType = {
-  EQUIDISTANT: 1,
-  EQUIRECTANGULAR: 2,
-  EUROPE: 3,
+    EQUIDISTANT: 1,
+    EQUIRECTANGULAR: 2,
+    EUROPE: 3,
 };
+
 
 function World(worldType, world, names) {
     var self = this;
@@ -177,7 +178,7 @@ function World(worldType, world, names) {
             .clipAngle(180 - 1e-3)
             .precision(.1);
 
-    // Major Countries module
+        // Major Countries module
     } else if (worldType == WorldType.EQUIRECTANGULAR) {
         this.width = 600, this.height = 400;
         rotatable = false;
@@ -190,10 +191,10 @@ function World(worldType, world, names) {
         this.width = 400, this.height = 400;
         rotatable = false;
         attribute = "#europe";
-	    this.projection = d3.geo.equirectangular()
-	        .scale(600)
-	        .translate([this.width/2, this.height/2])
-	        .rotate([-8, -52])
+        this.projection = d3.geo.equirectangular()
+            .scale(600)
+            .translate([this.width / 2, this.height / 2])
+            .rotate([-8, -52])
             .precision(.1);
     } else {
         console.log("@World: Invalid WorldType");
@@ -214,7 +215,7 @@ function World(worldType, world, names) {
     ////
     //// Globe lines (graticule)
     ////
-    
+
     if (worldType == WorldType.EQUIDISTANT) {
         var graticule = d3.geo.graticule();
         graticulateGroup.append("path")
@@ -229,20 +230,22 @@ function World(worldType, world, names) {
 
     // Assign country names
     this.countries = topojson.feature(world, world.objects.countries).features;
-    this.countries.forEach(function(d) { 
-        var tryit = names.filter(function(n) { return d.id == n.id; })[0];
-        if (typeof tryit === "undefined"){
-          d.name = "Undefined";
+    this.countries.forEach(function(d) {
+        var tryit = names.filter(function(n) {
+            return d.id == n.id;
+        })[0];
+        if (typeof tryit === "undefined") {
+            d.name = "Undefined";
         } else {
-          d.name = tryit.name; 
+            d.name = tryit.name;
         }
     });
-    
+
     // Displays country name on the map
     var tooltip = d3.select("body").append("div")
         .attr("class", "tooltip")
         .classed("hidden", true);
-    
+
     // Assign country data, with key = id
     this.country = countryGroup.selectAll(".country").data(this.countries, function(d) {
         return d.id;
@@ -254,15 +257,13 @@ function World(worldType, world, names) {
         .insert("path")
         .attr("d", this.path)
         .attr("class", "land")
-        .on("mousemove", function(d,i) {
+        .on("mousemove", function(d, i) {
             tooltip
                 .classed("hidden", false)
-                .attr("style", "left:"
-                    + (d3.event.pageX - 20) + "px;top:"
-                    + (d3.event.pageY - 40) +"px")
+                .attr("style", "left:" + (d3.event.pageX - 20) + "px;top:" + (d3.event.pageY - 40) + "px")
                 .html(d.name);
         })
-        .on("mouseout",  function(d,i) {
+        .on("mouseout", function(d, i) {
             tooltip.classed("hidden", true)
         });
 }
@@ -306,30 +307,78 @@ World.prototype.fillCountriesByApplicants = function(data) {
     this.country
         .attr("d", this.path)
         .attr("class", "land")
-        .style({fill: function(d) {
-            for (var i = 0; i < length; i++) {
-                if (d.name === data[i].country) {
-                    return colors(data[i].applicants);
+        .style({
+            fill: function(d) {
+                for (var i = 0; i < length; i++) {
+                    if (d.name === data[i].country) {
+                        return colors(data[i].applicants);
+                    }
                 }
+                return "url(#pattern-stripe)";
             }
-            return "url(#pattern-stripe)";
-        }});
+        });
 };
 
 //
 // Distance module functions
 //
 
+////////////////////////////////////////////////////////////
+World.prototype.expandMap = function(expand) {
+    if (expand) {
+        // Distance module
+        this.width = 900, this.height = 900;
+        rotatable = true;
+        attribute = "#world-equidistant";
+        this.projection = d3.geo.azimuthalEquidistant()
+            .scale(460)
+            .translate([(this.width / 2), (this.height / 2)])
+            .clipAngle(180 - 1e-3)
+            .precision(.1);
+
+
+        this.svg.attr("width", this.width)
+            .attr("height", this.height);
+
+        this.path = d3.geo.path().projection(this.projection);
+
+        this.country
+            .attr("d", this.path)
+            .attr("class", "land");
+    } else{
+        // Distance module
+        this.width = 450, this.height = 450;
+        rotatable = true;
+        attribute = "#world-equidistant";
+        this.projection = d3.geo.azimuthalEquidistant()
+            .scale(230)
+            .translate([(this.width / 2), (this.height / 2)])
+            .clipAngle(180 - 1e-3)
+            .precision(.1);
+
+
+        this.svg.attr("width", this.width)
+            .attr("height", this.height);
+
+        this.path = d3.geo.path().projection(this.projection);
+
+        this.country
+            .attr("d", this.path)
+            .attr("class", "land");
+    }
+};
+//////////////////////////////////////////////////////////////////////////////////
+
 World.prototype.computeCentroidByName = function(country) {
     var id = -1;
     for (var i = 0, length = this.countries.length; i < length; i++) {
         var indexedCountry = this.countries[i];
-        if (indexedCountry.name === country){
-          id = i;
-          break;
+        if (indexedCountry.name === country) {
+            id = i;
+            break;
         }
     };
-    
+
     return d3.geo.centroid(this.countries[id]);
 };
 
@@ -363,17 +412,19 @@ World.prototype.fillCountriesByDestinations = function(originName, destinations)
     this.country
         .attr("d", this.path)
         .attr("class", "land")
-        .style({fill: function(d) {
-            if (d.name === originName) {
-                return "#000";
-            }
-            for (var i = 0; i < destinations.length; i++) {
-                if (d.name === destinations[i].destination) {
-                    return self.dotColor(originName);
+        .style({
+            fill: function(d) {
+                if (d.name === originName) {
+                    return "#000";
                 }
+                for (var i = 0; i < destinations.length; i++) {
+                    if (d.name === destinations[i].destination) {
+                        return self.dotColor(originName);
+                    }
+                }
+                return "url(#pattern-stripe)";
             }
-            return "url(#pattern-stripe)";
-        }});
+        });
     this.svg.selectAll("path")
         .attr("d", this.path);
 };
@@ -387,7 +438,7 @@ World.prototype.computeFluxColor = function(applicants_population) {
         ])
         .interpolate(d3.interpolateRgb)
         .range([d3.rgb("#afc8e0"), d3.rgb("#2c3e50")]);
-    
+
     return colors(applicants_population);
 };
 
@@ -405,7 +456,7 @@ World.prototype.drawFlux = function(originName, destinations) {
                 origin,
                 this.computeCentroidByName(destinations[i].destination)
             ]
-        }); 
+        });
     }
 
     // Sort links so that links with higher number of applicants
@@ -419,14 +470,20 @@ World.prototype.drawFlux = function(originName, destinations) {
     // enter
     pathArcs.enter()
         .append("path")
-        .attr({ 'class': 'arc' })
-        .style({ fill: 'none' });
+        .attr({
+            'class': 'arc'
+        })
+        .style({
+            fill: 'none'
+        });
 
     // update
     // d is the points attribute for this path, we'll draw
     // an arc between the points using the arc function
     pathArcs
-        .attr({ d: this.path })
+        .attr({
+            d: this.path
+        })
         .style({
             stroke: function(d) {
                 for (var i = 0; i < destinations.length; i++) {
