@@ -49,14 +49,12 @@ angular.module('distanceModule', [])
             $scope.expandMap = function() {
                 if (!$scope.mapExpandet) {
                     $scope.mapExpandet = true;
-                    // $("#world-equidistant > svg").attr("width", 900).attr("height", 900);
-                    equidistantMap.expandMap(true);
                     $scope.expandButtonText = "Reduce map";
                 } else {
                     $scope.mapExpandet = false;
-                    $("#world-equidistant > svg").attr("width", 450).attr("height", 450);
                     $scope.expandButtonText = "Expand map";
                 }
+                equidistantMap.expandMap($scope.mapExpandet);
             };
 
             var updateData = function() {

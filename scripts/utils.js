@@ -325,8 +325,7 @@ World.prototype.fillCountriesByApplicants = function(data) {
 
 ////////////////////////////////////////////////////////////
 World.prototype.expandMap = function(expand) {
-    if (expand) {
-        // Distance module
+    if (expand == true) {
         this.width = 900, this.height = 900;
         rotatable = true;
         attribute = "#world-equidistant";
@@ -335,18 +334,7 @@ World.prototype.expandMap = function(expand) {
             .translate([(this.width / 2), (this.height / 2)])
             .clipAngle(180 - 1e-3)
             .precision(.1);
-
-
-        this.svg.attr("width", this.width)
-            .attr("height", this.height);
-
-        this.path = d3.geo.path().projection(this.projection);
-
-        this.country
-            .attr("d", this.path)
-            .attr("class", "land");
-    } else{
-        // Distance module
+    } else {
         this.width = 450, this.height = 450;
         rotatable = true;
         attribute = "#world-equidistant";
@@ -355,17 +343,17 @@ World.prototype.expandMap = function(expand) {
             .translate([(this.width / 2), (this.height / 2)])
             .clipAngle(180 - 1e-3)
             .precision(.1);
-
-
-        this.svg.attr("width", this.width)
-            .attr("height", this.height);
-
-        this.path = d3.geo.path().projection(this.projection);
-
-        this.country
-            .attr("d", this.path)
-            .attr("class", "land");
     }
+    this.svg.attr("width", this.width)
+        .attr("height", this.height);
+
+    this.path = d3.geo.path().projection(this.projection);
+
+    this.country
+        .attr("d", this.path)
+        .attr("class", "land");
+
+    this.restoreDestinations();
 };
 //////////////////////////////////////////////////////////////////////////////////
 
