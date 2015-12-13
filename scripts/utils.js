@@ -344,7 +344,7 @@ World.prototype.expandMap = function(expand) {
             .clipAngle(180 - 1e-3)
             .precision(.1);
     }
-    this.svg.attr("width", this.width)
+    this.svg.transition().duration(1000).attr("width", this.width)
         .attr("height", this.height);
 
     this.path = d3.geo.path().projection(this.projection);

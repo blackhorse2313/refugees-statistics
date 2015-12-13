@@ -13,7 +13,7 @@ var genDistanceScatterplot = function(dataset, map, NUM_DESTINATIONS) {
 
     var margins = {
         "left": 40,
-        "right": 180,
+        "right": 100,
         "top": 30,
         "bottom": 40
     };
@@ -282,7 +282,7 @@ var genDistanceScatterplot = function(dataset, map, NUM_DESTINATIONS) {
         // correlation text
         var totalpearsonCorrel = getPearsonsCorrelation(totalxSeries, totalySeries);
         svg.append("text")
-            .text("Overall Correlation: " + -(d3.round(totalpearsonCorrel, 3)))
+            .text("Correlation: " + -(d3.round(totalpearsonCorrel, 3)))
             .attr("class", "correlation_total")
             .style("fill", "black")
             .attr("x", function(d) {
@@ -312,7 +312,7 @@ var genDistanceScatterplot = function(dataset, map, NUM_DESTINATIONS) {
         var legendTop = 30;
         var text = svg.append("text")
             .attr("class", "title")
-            .attr('transform', 'translate(90,0)')
+            .attr('transform', 'translate(130,0)')
             .attr("x", width - 200)
             .attr("y", 10 + legendTop)
             .attr("font-size", "12px")
@@ -325,7 +325,7 @@ var genDistanceScatterplot = function(dataset, map, NUM_DESTINATIONS) {
             .attr("class", "legend")
             .attr("height", 100)
             .attr("width", 200)
-            .attr('transform', 'translate(90,20)');
+            .attr('transform', 'translate(130,20)');
 
         //Create colour squares
         legend.selectAll('rect')

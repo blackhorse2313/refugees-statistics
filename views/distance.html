@@ -1,7 +1,7 @@
 <div class="page-header">
     <h1>Correlation between number of refugees and distance between origin and destination country</h1>
     <div class="panel panel-default" style="margin-left:30px; display:inline-block;width:auto">
-        <div class="panel-body">
+        <div class="panel-body" style="height:593px;">
             <div class="right-inner-addon" style="margin-bottom:10px;">
                 <i class="glyphicon glyphicon-search"></i>
                 <input type="search" class="form-control" placeholder="Search for a country..." style="height:34px;" ng-model="searchText" />
@@ -31,15 +31,16 @@
             </div>
         </div>
     </div>
-    <div class="panel panel-default" style="margin-left:30px; display:inline-block;width:auto" ng-hide="mapExpandet">
-        <div class="panel-body">
-            <div id="distanceScatterplot"></div>
-            <div style="text-align: center;">
+    <div class="panel panel-default expanRemove" style="margin-left:30px; display:inline-block;width:430px" ng-hide="mapExpandet">
+        <div class="panel-body" style="height:593px;">
+            <div id="distanceScatterplot" style="padding-top:50px"></div>
+            <div style="text-align: center;" ng-hide="mapExpandet">
                 Click on a dot to show detailed information for that country
             </div>
         </div>
     </div>
-    <div class="panel panel-default" style="margin-left:30px; display:inline-block;width:auto">
+    
+    <div class="panel panel-default" style="margin-left:30px; display:inline-block;width:480px;-webkit-transition: width 1s; transition: width 1s" ng-class="{'expan':mapExpandet}">
         <div class="panel-body">
             <div id="world-equidistant"></div>
             <div style="text-align: center;">Number of refugees
@@ -52,7 +53,7 @@
                 </div>
                 <button class="btn btn-primary btn-sm" style="margin-top:30px;" ng-click="expandMap()">
                     <span class="glyphicon glyphicon-resize-full" ng-hide="mapExpandet" aria-hidden="true" style="margin-right: 10px;"></span>
-                    <span class="glyphicon glyphicon-resize-small" ng-show="mapExpandet" aria-hidden="true"  style="margin-right: 10px;"></span>  {{expandButtonText}}
+                    <span class="glyphicon glyphicon-resize-small" ng-show="mapExpandet" aria-hidden="true" style="margin-right: 10px;"></span> {{expandButtonText}}
                 </button>
             </div>
         </div>
