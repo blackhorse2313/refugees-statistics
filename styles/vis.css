@@ -78,8 +78,18 @@ path {
     border: 1px solid grey;
 }
 
-.mapLegend {
+/*.mapLegend {
     background: linear-gradient(to right, #afc8e0, #2c3e50);
+    height: 20px;
+    border: 1px solid grey;
+}*/
+.mapLegend {
+    background: linear-gradient(to right, #edf8b1, #2c7fb8);
+    height: 20px;
+    border: 1px solid grey;
+}
+.pathLegend {
+    background: linear-gradient(to right, #afc8e0, #000000);
     height: 20px;
     border: 1px solid grey;
 }

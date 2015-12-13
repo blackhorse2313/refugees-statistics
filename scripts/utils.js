@@ -301,7 +301,8 @@ World.prototype.fillCountriesByApplicants = function(data) {
     var colors = d3.scale.linear()
         .domain([data[length - 1].applicants, data[0].applicants])
         .interpolate(d3.interpolateRgb)
-        .range([d3.rgb("#afc8e0"), d3.rgb("#2c3e50")]);
+        // .range([d3.rgb("#afc8e0"), d3.rgb("#2c3e50")]);
+        .range([d3.rgb("#edf8b1"), d3.rgb("#2c7fb8")]);
 
     // Add color to countries
     this.country
@@ -425,7 +426,7 @@ World.prototype.computeFluxColor = function(applicants_population) {
             this.destinationsData[0].applicants_population
         ])
         .interpolate(d3.interpolateRgb)
-        .range([d3.rgb("#afc8e0"), d3.rgb("#2c3e50")]);
+        .range([d3.rgb("#afc8e0"), d3.rgb("#000")]);
 
     return colors(applicants_population);
 };
